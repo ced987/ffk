@@ -42,6 +42,51 @@
             margin-top: 24px;
         }
 
+        .demo-video-form {
+            display: flex;
+            align-items: flex-end;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 24px;
+            padding: 14px 16px;
+            border: 1px solid #cfd6df;
+            border-radius: 8px;
+            background: #ffffff;
+        }
+
+        .demo-video-form label {
+            display: grid;
+            gap: 4px;
+            color: #5f6b7a;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .demo-video-form textarea {
+            width: min(360px, calc(100vw - 64px));
+            min-height: 110px;
+            border: 1px solid #cfd6df;
+            border-radius: 6px;
+            padding: 8px 10px;
+            font: inherit;
+            resize: vertical;
+        }
+
+        .demo-video-form button {
+            min-height: 38px;
+            padding: 8px 12px;
+            border: 1px solid #cfd6df;
+            border-radius: 6px;
+            background: #ffffff;
+            font: inherit;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .demo-video-form button:hover {
+            border-color: #1d4ed8;
+        }
+
         .user-card {
             display: flex;
             align-items: center;
@@ -189,6 +234,18 @@
                 </div>
             @endforeach
         </div>
+
+        <form class="demo-video-form" method="POST" action="{{ route('demo.video.update') }}">
+            @csrf
+            <label>
+                Code iframe YouTube de l'aide
+                <textarea
+                    name="video_iframe"
+                    placeholder='<iframe width="100%" height="400" src="https://www.youtube.com/embed/VIDEO_ID" frameborder="0" allowfullscreen></iframe>'
+                >{{ session('help_video_iframe') }}</textarea>
+            </label>
+            <button type="submit">Changer vidéo</button>
+        </form>
     </main>
 @endsection
 

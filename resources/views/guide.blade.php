@@ -24,6 +24,18 @@
             background: #ffffff;
         }
 
+        .guide-video {
+            margin-bottom: 24px;
+        }
+
+        .guide-video iframe {
+            display: block;
+            width: 100%;
+            height: 400px;
+            border: 0;
+            border-radius: 8px;
+        }
+
         a {
             color: #1d4ed8;
         }
@@ -78,6 +90,12 @@
 @section('content')
 <main>
     <div class="guide">
+        @if (filled(session('help_video_iframe')))
+            <div class="guide-video">
+                {!! session('help_video_iframe') !!}
+            </div>
+        @endif
+
         {!! Str::markdown($guide) !!}
     </div>
 </main>

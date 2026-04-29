@@ -21,6 +21,27 @@ class GuidePageTest extends TestCase
             ->assertSee('Organisateur');
     }
 
+    public function test_help_video_can_be_changed_from_demo_user_page(): void
+    {
+        $iframe = '<iframe width="100%" height="400" src="https://www.youtube.com/embed/demo-video" frameborder="0" allowfullscreen></iframe>';
+
+        $this->get(route('demo.users.index'))
+            ->assertOk()
+            ->assertSee('action="'.route('demo.video.update').'"', false)
+            ->assertSeeText('Code iframe YouTube');
+
+        $this->post(route('demo.video.update'), [
+            'video_iframe' => $iframe,
+        ])
+            ->assertRedirect()
+            ->assertSessionHas('help_video_iframe', $iframe);
+
+        $this->withSession(['help_video_iframe' => $iframe])
+            ->get(route('guide'))
+            ->assertOk()
+            ->assertSee($iframe, false);
+    }
+
     public function test_home_page_links_to_guide(): void
     {
         $this->get(route('home'))

@@ -103,6 +103,12 @@ Route::get('/demo/users/{user}/select', function (User $user) {
     return redirect()->route('competitions.index');
 })->name('demo.users.select');
 
+Route::post('/demo/video', function (Request $request) {
+    session(['help_video_iframe' => $request->input('video_iframe')]);
+
+    return back()->with('status', 'Vidéo d’aide modifiée.');
+})->name('demo.video.update');
+
 Route::get('/guide', function () {
     return view('guide', [
         'guide' => file_get_contents(base_path('docs/guide.md')),
