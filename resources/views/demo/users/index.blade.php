@@ -242,7 +242,7 @@
                 <textarea
                     name="video_iframe"
                     placeholder='<iframe width="100%" height="400" src="https://www.youtube.com/embed/VIDEO_ID" frameborder="0" allowfullscreen></iframe>'
-                >{{ session('help_video_iframe') }}</textarea>
+                >{{ \App\Models\Setting::where('key', 'help_video_iframe')->value('value') }}</textarea>
             </label>
             <button type="submit">Changer vidéo</button>
         </form>

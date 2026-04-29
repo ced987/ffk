@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Setting;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -33,13 +34,28 @@ class GuidePageTest extends TestCase
         $this->post(route('demo.video.update'), [
             'video_iframe' => $iframe,
         ])
-            ->assertRedirect()
-            ->assertSessionHas('help_video_iframe', $iframe);
+            ->assertRedirect();
 
-        $this->withSession(['help_video_iframe' => $iframe])
-            ->get(route('guide'))
+        $this->assertDatabaseHas('settings', [
+            'key' => 'help_video_iframe',
+            'value' => $iframe,
+        ]);
+
+        $this->get(route('guide'))
             ->assertOk()
             ->assertSee($iframe, false);
+    }
+
+    public function test_guide_page_does_not_render_video_when_setting_is_empty(): void
+    {
+        Setting::create([
+            'key' => 'help_video_iframe',
+            'value' => null,
+        ]);
+
+        $this->get(route('guide'))
+            ->assertOk()
+            ->assertDontSee('<div class="guide-video">', false);
     }
 
     public function test_home_page_links_to_guide(): void

@@ -90,9 +90,9 @@
 @section('content')
 <main>
     <div class="guide">
-        @if (filled(session('help_video_iframe')))
+        @if (filled($helpVideoIframe))
             <div class="guide-video">
-                {!! session('help_video_iframe') !!}
+                {!! $helpVideoIframe !!}
             </div>
         @endif
 

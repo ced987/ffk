@@ -8,6 +8,7 @@ use App\Models\Invitation;
 use App\Models\Licencie;
 use App\Models\ParticipantSource;
 use App\Models\Poule;
+use App\Models\Setting;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -104,7 +105,10 @@ Route::get('/demo/users/{user}/select', function (User $user) {
 })->name('demo.users.select');
 
 Route::post('/demo/video', function (Request $request) {
-    session(['help_video_iframe' => $request->input('video_iframe')]);
+    Setting::updateOrCreate(
+        ['key' => 'help_video_iframe'],
+        ['value' => $request->input('video_iframe')],
+    );
 
     return back()->with('status', 'Vidéo d’aide modifiée.');
 })->name('demo.video.update');
@@ -112,6 +116,7 @@ Route::post('/demo/video', function (Request $request) {
 Route::get('/guide', function () {
     return view('guide', [
         'guide' => file_get_contents(base_path('docs/guide.md')),
+        'helpVideoIframe' => Setting::where('key', 'help_video_iframe')->value('value'),
     ]);
 })->name('guide');
 

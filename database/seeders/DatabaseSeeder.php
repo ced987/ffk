@@ -10,6 +10,7 @@ use App\Models\Invitation;
 use App\Models\Licencie;
 use App\Models\ParticipantSource;
 use App\Models\Poule;
+use App\Models\Setting;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Eloquent\Collection;
@@ -25,6 +26,11 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        Setting::create([
+            'key' => 'help_video_iframe',
+            'value' => null,
+        ]);
+
         $clubs = $this->createClubsAndUsers();
 
         $licencies = [
