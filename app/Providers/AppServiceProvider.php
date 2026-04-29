@@ -3,9 +3,9 @@
 namespace App\Providers;
 
 use App\Models\User;
-use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\View;
-use Illuminate\Support\Facades\URL; // ✅ AJOUT
+use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -16,8 +16,9 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        // ✅ FORCE HTTPS
-        URL::forceScheme('https');
+        if (app()->environment('production')) {
+            URL::forceScheme('https');
+        }
 
         View::composer('layouts.app', function ($view) {
             $layoutCurrentUser = session('current_user_id')
