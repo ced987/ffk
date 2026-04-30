@@ -14,12 +14,17 @@
         }
 
         main {
-            width: min(1180px, calc(100% - 32px));
+            width: 100%;
             margin: 0 auto 48px;
         }
 
         .app-page main.competition-page {
             margin-top: 0;
+        }
+
+        .competition-content {
+            width: min(1180px, calc(100% - 32px));
+            margin: 0 auto;
         }
 
         h1 {
@@ -1184,6 +1189,7 @@
             @endif
         </nav>
 
+        <div class="competition-content">
         <div class="competition-title-row">
             <div class="competition-name-display" data-competition-name-display>
                 <h1>{{ $competition->name }}</h1>
@@ -2153,6 +2159,7 @@
                 <p class="print-empty">Aucun combat généré</p>
             @endif
         </section>
+        </div>
     </main>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
