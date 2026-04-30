@@ -75,13 +75,16 @@
         }
 
         .app-header {
+            position: sticky;
+            top: 0;
+            z-index: 3000;
             min-height: 56px;
             display: flex;
             align-items: center;
             justify-content: space-between;
             gap: 16px;
             padding: 12px 24px;
-            border-bottom: 1px solid #dce1e7;
+            border-bottom: 1px solid #e5eaf0;
             background: #ffffff;
         }
 

@@ -15,7 +15,11 @@
 
         main {
             width: min(1180px, calc(100% - 32px));
-            margin: 48px auto;
+            margin: 0 auto 48px;
+        }
+
+        .app-page main.competition-page {
+            margin-top: 0;
         }
 
         h1 {
@@ -104,7 +108,7 @@
             position: fixed;
             top: 20px;
             right: 20px;
-            z-index: 50;
+            z-index: 1100;
             max-width: min(360px, calc(100vw - 40px));
             padding: 14px 16px;
             border: 1px solid #86efac;
@@ -131,14 +135,24 @@
         }
 
         .tabs {
+            position: sticky;
+            top: 56px;
+            z-index: 2000;
             display: flex;
             flex-wrap: wrap;
             gap: 8px;
-            margin-top: 24px;
-            padding: 8px;
+            margin-top: 0;
+            margin-bottom: 12px;
+            padding: 10px 0 10px 14px;
             border: 1px solid #dce1e7;
-            border-radius: 8px;
+            border-bottom: 1px solid #e5eaf0;
+            border-radius: 0 0 8px 8px;
             background: #ffffff;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .tabs + * {
+            margin-top: 12px;
         }
 
         .tab-button {
@@ -1128,7 +1142,7 @@
 @endpush
 
 @section('content')
-<main>
+<main class="competition-page">
         @php
             $allRegistrations = $isOrganizer
                 ? $registrationsByClub->flatten(1)->values()
@@ -1155,6 +1169,21 @@
             $roleLabel = $competition->roleLabelForClub($currentUser->club);
         @endphp
 
+        <nav class="tabs" aria-label="Navigation compétition">
+            <button class="tab-button" type="button" data-tab-target="suivi">
+                Suivi
+                @if ($pendingActions->isNotEmpty())
+                    ({{ $pendingActions->count() }})
+                @endif
+            </button>
+            <button class="tab-button" type="button" data-tab-target="clubs">Clubs</button>
+            <button class="tab-button" type="button" data-tab-target="participants">Participants</button>
+            @if ($isOrganizer)
+                <button class="tab-button" type="button" data-tab-target="poules">Poules</button>
+                <button class="tab-button" type="button" data-tab-target="combats">Combats</button>
+            @endif
+        </nav>
+
         <div class="competition-title-row">
             <div class="competition-name-display" data-competition-name-display>
                 <h1>{{ $competition->name }}</h1>
@@ -1173,6 +1202,7 @@
                 </form>
             @endif
         </div>
+
         <p>
             <span @class([
                 'role-badge',
@@ -1190,21 +1220,6 @@
         @if (session('status'))
             <div class="toast" data-toast>{{ session('status') }}</div>
         @endif
-
-        <nav class="tabs" aria-label="Navigation compétition">
-            <button class="tab-button" type="button" data-tab-target="suivi">
-                Suivi
-                @if ($pendingActions->isNotEmpty())
-                    ({{ $pendingActions->count() }})
-                @endif
-            </button>
-            <button class="tab-button" type="button" data-tab-target="clubs">Clubs</button>
-            <button class="tab-button" type="button" data-tab-target="participants">Participants</button>
-            @if ($isOrganizer)
-                <button class="tab-button" type="button" data-tab-target="poules">Poules</button>
-                <button class="tab-button" type="button" data-tab-target="combats">Combats</button>
-            @endif
-        </nav>
 
         <section id="actions" class="tab-panel" data-tab-panel="suivi">
             <h2>Actions à faire</h2>
@@ -2216,6 +2231,7 @@
             tabButtons.forEach((button) => {
                 button.addEventListener('click', () => {
                     activateTab(button.dataset.tabTarget);
+                    window.scrollTo(0, 0);
                 });
             });
 
