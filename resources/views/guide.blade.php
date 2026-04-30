@@ -89,14 +89,29 @@
 
 @section('content')
 <main>
-    <div class="guide">
-        @if (filled($helpVideoIframe))
-            <div class="guide-video">
-                {!! $helpVideoIframe !!}
-            </div>
-        @endif
+<div class="guide">
 
-        {!! Str::markdown($guide) !!}
+    @if (filled($helpVideoIframe))
+        <div class="guide-video">
+            {!! $helpVideoIframe !!}
+        </div>
+    @endif
+
+    {{-- IMAGE --}}
+    <div style="margin-bottom: 24px;">
+        <img src="/images/guide-preview.png" style="width:100%; border-radius:8px;">
     </div>
+
+    {{-- PDF --}}
+    <div style="margin-bottom: 24px;">
+        <a href="/docs/guide-utilisateur.pdf" target="_blank">
+            📄 Télécharger le guide complet (PDF)
+        </a>
+    </div>
+
+    {{-- MARKDOWN --}}
+    {!! Str::markdown($guide) !!}
+
+</div>
 </main>
 @endsection
