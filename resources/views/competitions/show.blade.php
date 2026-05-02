@@ -642,8 +642,29 @@
         .participant-actions {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 4px;
             flex-wrap: wrap;
+        }
+
+        .app-page .competition-page .participant-actions a,
+        .app-page .competition-page .participant-actions button {
+            min-height: 28px;
+            margin-top: 0;
+            padding: 4px 8px;
+            border: 1px solid #cbd5e1;
+            border-radius: 7px;
+            background: #ffffff;
+            color: #334155;
+            font-size: 12px;
+            font-weight: 750;
+            line-height: 1.1;
+            text-decoration: none;
+        }
+
+        .app-page .competition-page .participant-actions a:hover,
+        .app-page .competition-page .participant-actions button:hover {
+            border-color: #94a3b8;
+            background: #f8fafc;
         }
 
         .participant-name-line {
@@ -671,6 +692,30 @@
             font-size: 12px;
             font-weight: 700;
             line-height: 1.4;
+        }
+
+        .state-badge.validated {
+            border-color: #bbf7d0;
+            background: #f0fdf4;
+            color: #166534;
+        }
+
+        .state-badge.pending {
+            border-color: #bfdbfe;
+            background: #eff6ff;
+            color: #1d4ed8;
+        }
+
+        .state-badge.withdrawn {
+            border-color: #e2e8f0;
+            background: #f1f5f9;
+            color: #64748b;
+        }
+
+        .state-badge.poule {
+            border-color: #ddd6fe;
+            background: #f5f3ff;
+            color: #5b21b6;
         }
 
         .role-badge {
@@ -721,8 +766,13 @@
         .app-page .competition-page .withdraw-button {
             margin-top: 0;
             border-color: #fecaca;
-            background: #fff1f2;
+            background: #ffffff;
             color: #b91c1c;
+        }
+
+        .app-page .competition-page .withdraw-button:hover {
+            background: #fff1f2;
+            border-color: #fca5a5;
         }
 
         .app-page .competition-page .reactivate-button {
@@ -730,6 +780,54 @@
             border-color: #bbf7d0;
             background: #f0fdf4;
             color: #166534;
+        }
+
+        .participant-section-card {
+            margin-top: 18px;
+            padding: 0;
+            overflow: hidden;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            background: #ffffff;
+            box-shadow: 0 6px 18px rgba(15, 23, 42, 0.035);
+        }
+
+        .participant-section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 12px 14px;
+            border-bottom: 1px solid #e2e8f0;
+            background: #f8fafc;
+        }
+
+        .participant-section-header h3 {
+            margin: 0;
+            font-size: 16px;
+        }
+
+        .participant-section-count {
+            display: inline-flex;
+            align-items: center;
+            padding: 3px 9px;
+            border: 1px solid #cbd5e1;
+            border-radius: 999px;
+            background: #ffffff;
+            color: #334155;
+            font-size: 12px;
+            font-weight: 800;
+            white-space: nowrap;
+        }
+
+        .participant-section-body {
+            padding: 12px 14px 14px;
+        }
+
+        .participant-note {
+            margin-top: 14px;
+            color: #64748b;
+            font-size: 13px;
         }
 
         .summary-grid {
@@ -1366,18 +1464,26 @@
         .participant-table {
             width: 100%;
             border-collapse: collapse;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
         }
 
         .participant-table th,
         .participant-table td {
-            padding: 10px;
-            border: 1px solid #dce1e7;
+            padding: 6px 10px;
+            border-bottom: 1px solid #e2e8f0;
             text-align: left;
         }
 
         .participant-table th {
             background: #f8fafc;
             color: #334155;
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .participant-table tr:last-child td {
+            border-bottom: 0;
         }
 
         .section-intro {
@@ -2098,8 +2204,12 @@
                             default => null,
                         };
                     @endphp
-                    <div @if ($participantGroupId) id="{{ $participantGroupId }}" @endif class="subsection">
-                        <h3>{{ $groupTitle }}</h3>
+                    <div @if ($participantGroupId) id="{{ $participantGroupId }}" @endif class="participant-section-card">
+                        <div class="participant-section-header">
+                            <h3>{{ $groupTitle }}</h3>
+                            <span class="participant-section-count">{{ $groupRegistrations->count() }} participant(s)</span>
+                        </div>
+                        <div class="participant-section-body">
 
                         @if ($groupRegistrations->isNotEmpty())
                             <table class="participant-table">
@@ -2125,18 +2235,18 @@
                                             <td>
                                                 <span class="participant-name-line">
                                                     <strong>{{ $registration->participantSource->last_name }} {{ $registration->participantSource->first_name }}</strong>
-                                                    <span class="state-badges">
-                                                        @if (! $registration->is_active)
-                                                            <span class="state-badge">{{ $registration->participationStatusLabel() }}</span>
-                                                        @else
-                                                            <span class="state-badge">{{ $registration->participationStatusLabel() }}</span>
-                                                            @if ($registration->poule)
-                                                                <span class="state-badge">Poule : {{ $registration->poule->name }}</span>
-                                                                @if ($registration->poule->status === \App\Models\Poule::STATUS_FROZEN)
-                                                                    <span class="state-badge">Poule figée</span>
-                                                                @endif
-                                                            @endif
-                                                        @endif
+	                                                    <span class="state-badges">
+	                                                        @if (! $registration->is_active)
+	                                                            <span class="state-badge withdrawn">{{ $registration->participationStatusLabel() }}</span>
+	                                                        @else
+	                                                            <span @class(['state-badge', 'validated' => $registration->is_validated, 'pending' => ! $registration->is_validated])>{{ $registration->participationStatusLabel() }}</span>
+	                                                            @if ($registration->poule)
+	                                                                <span class="state-badge poule">Poule : {{ $registration->poule->name }}</span>
+	                                                                @if ($registration->poule->status === \App\Models\Poule::STATUS_FROZEN)
+	                                                                    <span class="state-badge poule">Poule figée</span>
+	                                                                @endif
+	                                                            @endif
+	                                                        @endif
                                                     </span>
                                                 </span>
                                             </td>
@@ -2144,43 +2254,40 @@
                                             <td>{{ $registration->participantSource->age }}</td>
                                             <td>{{ $registration->participantSource->approximate_weight }}</td>
                                             <td>{{ $registration->participantSource->license_number ?? '-' }}</td>
-                                            <td>
-                                                @if ($isOrganizer)
-                                                    @if ($registration->is_validated)
-                                                        @if (! $registration->unvalidateBlockedMessage())
-                                                            <form class="inline-form" method="POST" action="{{ route('competitions.participants.unvalidate', [$competition, $registration]) }}">
-                                                                @csrf
-                                                                @method('PATCH')
-                                                                <button class="withdraw-button" type="submit">Dévalider</button>
-                                                            </form>
-                                                        @else
-                                                            -
-                                                        @endif
-                                                    @else
-                                                        @if (! $registration->validateBlockedMessage())
-                                                            <form class="inline-form" method="POST" action="{{ route('competitions.participants.validate', [$competition, $registration]) }}">
-                                                                @csrf
-                                                                @method('PATCH')
-                                                                <button type="submit">Valider</button>
-                                                            </form>
-                                                        @else
-                                                            -
-                                                        @endif
-                                                    @endif
-                                                @else
-                                                    @if ($competition->inscriptions_closed)
-                                                        -
+	                                            <td>
+		                                                @if ($isOrganizer)
+	                                                        <div class="participant-actions">
+		                                                    @if (! $registration->is_active || ! $registration->is_validated)
+		                                                        @if (! $registration->validateBlockedMessage())
+		                                                            <form class="inline-form" method="POST" action="{{ route('competitions.participants.validate', [$competition, $registration]) }}">
+		                                                                @csrf
+	                                                                @method('PATCH')
+	                                                                <button type="submit">Valider</button>
+	                                                            </form>
+		                                                        @endif
+		                                                    @endif
+	                                                            @if (! $registration->withdrawBlockedMessage())
+                                                                <form class="inline-form" method="POST" action="{{ route('competitions.participants.withdraw', [$competition, $registration]) }}" onsubmit="return confirm('Retirer ce participant de la compétition ?')">
+                                                                    @csrf
+                                                                    @method('PATCH')
+                                                                    <button class="withdraw-button" type="submit">Retirer</button>
+                                                                </form>
+                                                            @endif
+                                                        </div>
+	                                                @else
+	                                                    @if ($competition->inscriptions_closed)
+	                                                        -
                                                     @else
                                                         <div class="participant-actions">
                                                             @if (! $registration->editBlockedMessage())
                                                                 <a href="{{ route('competitions.participants.edit', [$competition, $registration]) }}">Modifier</a>
                                                             @endif
 
-                                                            @if (! $registration->withdrawBlockedMessage())
-                                                                <form class="inline-form" method="POST" action="{{ route('competitions.participants.withdraw', [$competition, $registration]) }}">
-                                                                    @csrf
-                                                                    @method('PATCH')
-                                                                    <button class="withdraw-button" type="submit">Retirer</button>
+	                                                            @if (! $registration->withdrawBlockedMessage())
+	                                                                <form class="inline-form" method="POST" action="{{ route('competitions.participants.withdraw', [$competition, $registration]) }}" onsubmit="return confirm('Retirer ce participant de la compétition ?')">
+	                                                                    @csrf
+	                                                                    @method('PATCH')
+	                                                                    <button class="withdraw-button" type="submit">Retirer</button>
                                                                 </form>
                                                             @elseif (! $registration->reactivateBlockedMessage())
                                                                 <form class="inline-form" method="POST" action="{{ route('competitions.participants.reactivate', [$competition, $registration]) }}">
@@ -2200,8 +2307,10 @@
                         @else
                             <p class="empty-state">{{ $participantGroupEmptyMessages[$groupTitle] }}</p>
                         @endif
+                        </div>
                     </div>
                 @endforeach
+                <p class="participant-note">Un participant retiré n’apparaît plus dans les poules et n’est plus comptabilisé comme participant actif.</p>
             @else
                 <p class="empty-state">Aucun participant inscrit</p>
             @endif

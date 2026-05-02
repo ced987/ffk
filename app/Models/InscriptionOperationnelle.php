@@ -62,7 +62,7 @@ class InscriptionOperationnelle extends Model
     public function participationStatusLabel(): string
     {
         if (! $this->is_active) {
-            return 'Participation annulée';
+            return 'Retiré';
         }
 
         return $this->is_validated ? 'Participant validé' : 'En attente de validation';
@@ -117,12 +117,14 @@ class InscriptionOperationnelle extends Model
 
     public function validateBlockedMessage(): ?string
     {
-        if (! $this->is_active) {
-            return 'Impossible : participation annulée';
+        if ($this->is_active && $this->is_validated) {
+            return 'Impossible : participant déjà validé';
         }
 
-        if ($this->is_validated) {
-            return 'Impossible : participant déjà validé';
+        $this->loadMissing('poule');
+
+        if (! $this->is_active && $this->poule?->status === Poule::STATUS_FROZEN) {
+            return 'Impossible : participant dans une poule figée';
         }
 
         return null;

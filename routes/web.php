@@ -1085,13 +1085,15 @@ Route::patch('/competitions/{competition}/participants/{registration}/withdraw',
 
     abort_if($currentUser === null || $currentUser->club === null, 403);
     abort_unless($registration->competition_id === $competition->id, 404);
-    abort_unless($registration->club_id === $currentUser->club_id, 403);
+
+    $isOrganizer = $currentUser->club_id === $competition->organizer_club_id;
+
+    abort_unless($isOrganizer || $registration->club_id === $currentUser->club_id, 403);
 
     if ($message = $registration->withdrawBlockedMessage()) {
         return redirect_to_competition_fragment($competition, participant_work_section($registration), $message);
     }
 
-    $isOrganizer = $currentUser->club_id === $competition->organizer_club_id;
     $invitation = $isOrganizer
         ? null
         : $competition->invitations()
@@ -1128,9 +1130,14 @@ Route::patch('/competitions/{competition}/participants/{registration}/validate',
         return redirect_to_competition_fragment($competition, participant_work_section($registration), $message);
     }
 
-    $registration->update(['is_validated' => true]);
+    $fragment = participant_work_section($registration);
 
-    return redirect_to_competition_fragment($competition, 'participants-non-valides', 'Participant validé.');
+    $registration->update([
+        'is_active' => true,
+        'is_validated' => true,
+    ]);
+
+    return redirect_to_competition_fragment($competition, $fragment, 'Participant validé.');
 })->name('competitions.participants.validate');
 
 Route::get('/competitions/{competition}/participants/{registration}/unvalidate', function (Competition $competition) {

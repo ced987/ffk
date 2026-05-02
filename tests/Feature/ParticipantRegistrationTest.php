@@ -423,7 +423,8 @@ class ParticipantRegistrationTest extends TestCase
             ->get(route('competitions.show', $competition))
             ->assertOk()
             ->assertSee('Participant validé')
-            ->assertSee('Dévalider');
+            ->assertSee('Retirer')
+            ->assertDontSee('Dévalider');
 
         $this->withSession(['current_user_id' => $userA->id])
             ->patch(route('competitions.participants.unvalidate', [$competition, $registration]))
@@ -484,7 +485,7 @@ class ParticipantRegistrationTest extends TestCase
         $this->assertSame($poule->id, $registration->poule_id);
     }
 
-    public function test_only_organizer_can_validate_and_inactive_participant_redirects_with_explicit_message(): void
+    public function test_only_organizer_can_validate_and_reactivate_inactive_participant(): void
     {
         [, $clubB, , $userA, $userB, $userC, $competition] = $this->scenario(Invitation::STATUS_PARTICIPATION_CONFIRMED);
         $activeRegistration = $this->registerParticipant($competition, $clubB);
@@ -503,10 +504,12 @@ class ParticipantRegistrationTest extends TestCase
         $this->withSession(['current_user_id' => $userA->id])
             ->patch(route('competitions.participants.validate', [$competition, $inactiveRegistration]))
             ->assertRedirect(route('competitions.show', $competition).'#participants-retires')
-            ->assertSessionHas('status', 'Impossible : participation annulée');
+            ->assertSessionHas('status', 'Participant validé.');
 
         $this->assertFalse($activeRegistration->refresh()->is_validated);
-        $this->assertFalse($inactiveRegistration->refresh()->is_validated);
+        $inactiveRegistration->refresh();
+        $this->assertTrue($inactiveRegistration->is_active);
+        $this->assertTrue($inactiveRegistration->is_validated);
     }
 
     public function test_unvalidating_inactive_participant_redirects_with_explicit_message(): void
@@ -646,7 +649,7 @@ class ParticipantRegistrationTest extends TestCase
             ->assertSee('Participants de mon club :')
             ->assertSee('0 actif(s)')
             ->assertSee('Cache Basile')
-            ->assertSee('Participation annulée')
+            ->assertSee('Retiré')
             ->assertSee('Réactiver')
             ->assertDontSee('Modifier')
             ->assertDontSee('Retirer');
@@ -661,7 +664,7 @@ class ParticipantRegistrationTest extends TestCase
             ->assertSee('0 actif(s)')
             ->assertSee('Cache')
             ->assertSee('Basile')
-            ->assertSee('Participation annulée');
+            ->assertSee('Retiré');
 
         $this->assertTrue($organizerRegistration->refresh()->is_active);
     }
@@ -736,7 +739,7 @@ class ParticipantRegistrationTest extends TestCase
             ->assertSee('Retour Mina')
             ->assertSee('Modifier')
             ->assertSee('Retirer')
-            ->assertDontSee('Participation annulée')
+            ->assertDontSee('Retiré')
             ->assertDontSee('Réactiver');
 
         $this->withSession(['current_user_id' => $userA->id])
@@ -828,7 +831,7 @@ class ParticipantRegistrationTest extends TestCase
         ]);
     }
 
-    public function test_organizer_can_withdraw_only_own_participant_not_invited_club_participant(): void
+    public function test_organizer_can_withdraw_any_participant_in_competition(): void
     {
         [$clubA, $clubB, , $userA, , , $competition] = $this->scenario(Invitation::STATUS_PARTICIPATION_CONFIRMED);
         $organizerRegistration = $this->registerParticipant($competition, $clubA);
@@ -840,10 +843,10 @@ class ParticipantRegistrationTest extends TestCase
 
         $this->withSession(['current_user_id' => $userA->id])
             ->patch(route('competitions.participants.withdraw', [$competition, $invitedRegistration]))
-            ->assertForbidden();
+            ->assertRedirect(route('competitions.show', $competition).'#participants-non-valides');
 
         $this->assertFalse($organizerRegistration->refresh()->is_active);
-        $this->assertTrue($invitedRegistration->refresh()->is_active);
+        $this->assertFalse($invitedRegistration->refresh()->is_active);
     }
 
     public function test_invited_club_must_still_be_confirmed_to_withdraw_own_participant(): void
@@ -1182,7 +1185,7 @@ class ParticipantRegistrationTest extends TestCase
             ->assertSeeInOrder(['Nonvalide Boris', 'En attente de validation'])
             ->assertSeeInOrder(['Affecte Chloe', 'Participant validé', 'Poule : Poule Brouillon'])
             ->assertSeeInOrder(['Figee Dina', 'Participant validé', 'Poule : Poule Finale', 'Poule figée'])
-            ->assertSeeInOrder(['Retire Eli', 'Participation annulée']);
+            ->assertSeeInOrder(['Retire Eli', 'Retiré']);
 
         $clubViewContent = $clubView->getContent();
         $withdrawnPosition = strpos($clubViewContent, 'Retire Eli');
@@ -1194,7 +1197,7 @@ class ParticipantRegistrationTest extends TestCase
         $this->assertNotFalse($withdrawnRowEnd);
         $withdrawnRow = substr($clubViewContent, $withdrawnRowStart, $withdrawnRowEnd - $withdrawnRowStart);
 
-        $this->assertStringContainsString('Participation annulée', $withdrawnRow);
+        $this->assertStringContainsString('Retiré', $withdrawnRow);
         $this->assertStringNotContainsString('Participant validé', $withdrawnRow);
         $this->assertStringNotContainsString('En attente de validation', $withdrawnRow);
         $this->assertStringNotContainsString('Poule :', $withdrawnRow);
@@ -1205,7 +1208,7 @@ class ParticipantRegistrationTest extends TestCase
             ->assertOk()
             ->assertSeeInOrder(['Orga Fanny', 'Participant validé'])
             ->assertSeeInOrder(['Figee Dina', 'Participant validé', 'Poule : Poule Finale', 'Poule figée'])
-            ->assertSeeInOrder(['Retire Eli', 'Participation annulée']);
+            ->assertSeeInOrder(['Retire Eli', 'Retiré']);
 
         $this->assertFalse($withdrawn->refresh()->is_active);
         $this->assertTrue($validated->refresh()->is_validated);
