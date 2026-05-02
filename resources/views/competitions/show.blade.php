@@ -1060,36 +1060,47 @@
 
         .combat-list {
             display: grid;
-            gap: 8px;
+            gap: 3px;
         }
 
-        .combat-row {
+        .app-page .competition-page .combat-row {
             display: grid;
-            grid-template-columns: 52px minmax(130px, 1.15fr) 32px minmax(130px, 1.15fr) 44px 44px 78px 78px minmax(120px, 1fr) auto;
+            grid-template-columns: 58px minmax(120px, 1.15fr) 26px minmax(120px, 1.15fr) 38px 38px 64px 64px minmax(110px, 1fr) 104px;
             align-items: center;
-            gap: 8px;
-            padding: 8px;
-            border-bottom: 1px solid #e5eaf0;
+            gap: 4px;
+            margin-top: 0;
+            padding: 3px 6px 3px 8px;
+            border: 1px solid #e5eaf0;
+            border-left: 4px solid #2563eb;
+            border-radius: 8px;
             background: #ffffff;
             scroll-margin-top: 80px;
         }
 
-        .combat-row.is-finished {
+        .app-page .competition-page .combat-row.is-finished {
+            border-left-color: #22c55e;
             background: #f0fdf4;
         }
 
         .combat-number {
-            color: #64748b;
-            font-size: 13px;
-            font-weight: 700;
+            color: #334155;
+            font-size: 12px;
+            font-weight: 800;
+            line-height: 1.1;
         }
 
         .combat-status {
             display: block;
             margin-top: 2px;
-            color: #64748b;
-            font-size: 11px;
-            font-weight: 500;
+            color: #1d4ed8;
+            font-size: 10px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+        }
+
+        .combat-row.is-finished .combat-status {
+            color: #15803d;
         }
 
         .combat-vs {
@@ -1101,22 +1112,26 @@
         .app-page .competition-page .combat-choice-button {
             margin-top: 0;
             border: 1px solid #cfd6df;
-            border-radius: 8px;
+            border-radius: 7px;
             background: #ffffff;
             color: #17202a;
             text-align: left;
         }
 
         .app-page .competition-page .combat-choice-button {
-            padding: 8px;
+            min-height: 26px;
+            padding: 3px 6px;
             text-align: center;
         }
 
         .app-page .competition-page .combat-fighter-button {
             overflow: hidden;
             min-width: 0;
+            min-height: 26px;
+            padding: 3px 7px;
             text-overflow: ellipsis;
             white-space: nowrap;
+            font-size: 13px;
             font-weight: 500;
         }
 
@@ -1135,12 +1150,14 @@
             color: #1e3a8a;
         }
 
-        .combat-row input {
+        .app-page .competition-page .combat-row input {
             width: 100%;
             max-width: none;
-            padding: 8px;
+            min-height: 26px;
+            padding: 3px 6px;
             border: 1px solid #cfd6df;
-            border-radius: 8px;
+            border-radius: 7px;
+            font-size: 13px;
         }
 
         .combat-row input:disabled,
@@ -1152,14 +1169,16 @@
 
         .combat-actions {
             display: grid;
-            grid-template-columns: repeat(3, 38px);
-            gap: 6px;
+            grid-template-columns: repeat(3, 32px);
+            gap: 4px;
             justify-content: flex-end;
+            width: 104px;
         }
 
         .app-page .competition-page .combat-actions button {
+            min-height: 26px;
             margin-top: 0;
-            padding: 8px;
+            padding: 3px 6px;
             border-color: #cfd6df;
             background: #ffffff;
             color: #17202a;
@@ -1168,7 +1187,8 @@
         }
 
         .app-page .competition-page .combat-actions button:disabled {
-            opacity: 0.24;
+            visibility: hidden;
+            opacity: 0;
             cursor: not-allowed;
             pointer-events: none;
         }
@@ -2413,7 +2433,12 @@
                                                 @csrf
                                                 @method('PATCH')
 
-                                                <span class="combat-number">#{{ $combatIndex + 1 }}<span class="combat-status">{{ $combat->statusLabel() }}</span></span>
+                                                <span class="combat-number">
+                                                    #{{ $combatIndex + 1 }}
+                                                    <span class="combat-status">
+                                                        {{ $combat->statut === \App\Models\Combat::STATUS_FINISHED ? 'Terminé' : 'À saisir' }}
+                                                    </span>
+                                                </span>
                                                 <button @class(['combat-fighter-button', 'selected' => $combat->resultat === \App\Models\Combat::RESULT_LEFT_WIN, $leftState]) type="button" data-result-button data-result-value="{{ \App\Models\Combat::RESULT_LEFT_WIN }}" @disabled($combat->statut === \App\Models\Combat::STATUS_FINISHED)>
                                                     🟥 {{ $combat->inscriptionA->participantSource->last_name }} {{ $combat->inscriptionA->participantSource->first_name }}
                                                 </button>
@@ -2984,7 +3009,7 @@
                 }
 
                 if (status) {
-                    status.textContent = isFinished ? 'Combat terminé' : 'Score à saisir';
+                    status.textContent = isFinished ? 'Terminé' : 'À saisir';
                 }
             };
 

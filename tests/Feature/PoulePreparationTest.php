@@ -920,7 +920,7 @@ class PoulePreparationTest extends TestCase
             ->assertSee('Alpha Aline')
             ->assertSee('vs')
             ->assertSee('Bravo Boris')
-            ->assertSee('Score à saisir')
+            ->assertSee('À saisir')
             ->assertDontSee('Générer les combats');
     }
 
@@ -1248,7 +1248,7 @@ class PoulePreparationTest extends TestCase
             ->assertOk()
             ->assertSee('value="12"', false)
             ->assertSee('value="4"', false)
-            ->assertSee('Combat terminé')
+            ->assertSee('Terminé')
             ->assertSee('winner', false)
             ->assertSee('muted', false)
             ->assertSee('is-finished', false)
