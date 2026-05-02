@@ -110,7 +110,8 @@
             font: inherit;
         }
 
-        .competition-overview .title-icon-button,
+        .app-page .competition-page .title-icon-button,
+        .app-page .title-icon-button,
         .app-page .competition-title-row .title-icon-button {
             display: inline-flex;
             align-items: center;
@@ -137,6 +138,17 @@
         .title-icon-button.cancel:hover {
             border-color: #b91c1c;
             color: #b91c1c;
+        }
+
+        .app-page .competition-page .secondary-button {
+            border-color: #cbd5e1;
+            background: #ffffff;
+            color: #334155;
+        }
+
+        .app-page .competition-page .secondary-button:hover {
+            border-color: #94a3b8;
+            background: #f8fafc;
         }
 
         p {
@@ -218,7 +230,7 @@
             min-width: 0;
         }
 
-        .tab-button {
+        .app-page .competition-page .tab-button {
             appearance: none;
             position: relative;
             display: inline-flex;
@@ -236,7 +248,7 @@
             font-weight: 700;
         }
 
-        .tab-button svg {
+        .app-page .competition-page .tab-button svg {
             width: 16px;
             height: 16px;
             flex: 0 0 16px;
@@ -248,7 +260,7 @@
             fill: none;
         }
 
-        .tab-button::after {
+        .app-page .competition-page .tab-button::after {
             content: "";
             position: absolute;
             right: 10px;
@@ -259,17 +271,17 @@
             background: transparent;
         }
 
-        .tab-button:hover {
+        .app-page .competition-page .tab-button:hover {
             background: #f8fafc;
             color: #1e3a8a;
         }
 
-        .tab-button.is-active {
+        .app-page .competition-page .tab-button.is-active {
             background: #f8fbff;
             color: #1d4ed8;
         }
 
-        .tab-button.is-active::after {
+        .app-page .competition-page .tab-button.is-active::after {
             background: #2563eb;
         }
 
@@ -428,6 +440,7 @@
         }
 
         .additional-info {
+            position: relative;
             margin-top: 16px;
             padding: 12px 14px;
             border: 1px solid #e2e8f0;
@@ -443,6 +456,32 @@
             margin-bottom: 6px;
             color: #475569;
             font-size: 13px;
+        }
+
+        .additional-info-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 6px;
+        }
+
+        .additional-info-header strong {
+            margin-bottom: 0;
+        }
+
+        .additional-info-empty {
+            color: #94a3b8;
+            font-style: italic;
+        }
+
+        .additional-info-form {
+            display: none;
+            margin-top: 12px;
+        }
+
+        .additional-info-form.is-open {
+            display: block;
         }
 
         textarea {
@@ -495,16 +534,32 @@
             max-width: 460px;
         }
 
-        button {
+        .app-page .competition-page button,
+        .app-page .competition-page .primary-action,
+        .app-page .competition-page .poule-action-button,
+        .app-page .competition-page .print-combats-button {
+            min-height: 32px;
             margin-top: 12px;
-            padding: 10px 14px;
-            border: 1px solid #1d4ed8;
-            border-radius: 7px;
-            background: #1d4ed8;
+            padding: 7px 11px;
+            border: 1px solid #2563eb;
+            border-radius: 6px;
+            background: #2563eb;
             color: #ffffff;
             cursor: pointer;
-            font-weight: 700;
-            box-shadow: 0 1px 2px rgba(15, 23, 42, 0.08);
+            font: inherit;
+            font-weight: 750;
+            line-height: 1.2;
+            text-decoration: none;
+            box-shadow: none;
+            transition: background 120ms ease, border-color 120ms ease, color 120ms ease, opacity 120ms ease;
+        }
+
+        .app-page .competition-page button:hover,
+        .app-page .competition-page .primary-action:hover,
+        .app-page .competition-page .poule-action-button:hover,
+        .app-page .competition-page .print-combats-button:hover {
+            border-color: #1d4ed8;
+            background: #1d4ed8;
         }
 
         .error {
@@ -578,9 +633,10 @@
             margin-top: 0;
         }
 
-        .decline-button {
-            border-color: #b91c1c;
-            background: #b91c1c;
+        .app-page .competition-page .decline-button {
+            border-color: #fecaca;
+            background: #fff1f2;
+            color: #b91c1c;
         }
 
         .participant-actions {
@@ -662,16 +718,18 @@
             color: #166534;
         }
 
-        .withdraw-button {
+        .app-page .competition-page .withdraw-button {
             margin-top: 0;
-            border-color: #b91c1c;
-            background: #b91c1c;
+            border-color: #fecaca;
+            background: #fff1f2;
+            color: #b91c1c;
         }
 
-        .reactivate-button {
+        .app-page .competition-page .reactivate-button {
             margin-top: 0;
-            border-color: #166534;
-            background: #166534;
+            border-color: #bbf7d0;
+            background: #f0fdf4;
+            color: #166534;
         }
 
         .summary-grid {
@@ -782,16 +840,32 @@
             text-decoration: none;
         }
 
-        .inline-form .poule-action-button {
+        .app-page .competition-page .rename-poule-toggle,
+        .app-page .competition-page .rename-poule-cancel,
+        .app-page .competition-page .inline-form .poule-action-button {
             border-color: #cbd5e1;
             background: #ffffff;
             color: #334155;
         }
 
-        .inline-form .poule-action-button.danger {
+        .app-page .competition-page .rename-poule-toggle:hover,
+        .app-page .competition-page .rename-poule-cancel:hover,
+        .app-page .competition-page .inline-form .poule-action-button:hover {
+            border-color: #94a3b8;
+            background: #f8fafc;
+            color: #17202a;
+        }
+
+        .app-page .competition-page .inline-form .poule-action-button.danger {
             border-color: #fecaca;
             background: #ffffff;
             color: #b91c1c;
+        }
+
+        .app-page .competition-page .inline-form .poule-action-button.danger:hover {
+            border-color: #fca5a5;
+            background: #fff1f2;
+            color: #991b1b;
         }
 
         .rename-poule-form {
@@ -852,15 +926,29 @@
         .poule-assignment-layout {
             display: grid;
             grid-template-columns: minmax(280px, 0.9fr) minmax(360px, 1.4fr);
-            gap: 18px;
+            gap: 24px;
             align-items: start;
-            margin-top: 20px;
+            margin-top: 22px;
         }
 
         .poule-assignment-layout .subsection {
             margin-top: 0;
-            border-color: #d9e2ec;
-            background: #ffffff;
+            padding: 18px;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            background: #f8fafc;
+        }
+
+        .poule-assignment-layout .subsection + .subsection {
+            margin-top: 18px;
+        }
+
+        .poule-assignment-layout .subsection > h3 {
+            margin-bottom: 12px;
+            padding-left: 2px;
+            color: #17202a;
+            font-size: 15px;
+            font-weight: 850;
         }
 
         .assignment-column {
@@ -869,20 +957,20 @@
 
         .participant-card-list {
             display: grid;
-            gap: 10px;
-            margin: 12px 0 16px;
+            gap: 8px;
+            margin: 12px 0 0;
         }
 
         .participant-card {
             display: flex;
             align-items: flex-start;
             justify-content: space-between;
-            gap: 12px;
-            padding: 10px 12px;
-            border: 1px solid #d9e2ec;
+            gap: 10px;
+            padding: 9px 11px;
+            border: 1px solid #e2e8f0;
             border-radius: 8px;
             background: #ffffff;
-            box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+            box-shadow: none;
         }
 
         .participant-card[draggable="true"] {
@@ -934,7 +1022,7 @@
             font-size: 13px;
         }
 
-        .visual-remove-button {
+        .app-page .competition-page .visual-remove-button {
             flex: 0 0 auto;
             margin-top: 0;
             padding: 2px 6px;
@@ -946,17 +1034,17 @@
             line-height: 1;
         }
 
-        .visual-remove-button:hover {
+        .app-page .competition-page .visual-remove-button:hover {
             color: #b91c1c;
         }
 
         .poule-drop-zone {
-            padding: 16px;
-            border: 1px solid #d9e2ec;
+            padding: 20px;
+            border: 1px solid #e2e8f0;
             border-left: 4px solid #facc15;
-            border-radius: 10px;
+            border-radius: 12px;
             background: #ffffff;
-            box-shadow: 0 10px 24px rgba(15, 23, 42, 0.06);
+            box-shadow: 0 6px 16px rgba(15, 23, 42, 0.045);
         }
 
         .poule-drop-zone.frozen {
@@ -1009,8 +1097,8 @@
             text-align: center;
         }
 
-        .combat-fighter-button,
-        .combat-choice-button {
+        .app-page .competition-page .combat-fighter-button,
+        .app-page .competition-page .combat-choice-button {
             margin-top: 0;
             border: 1px solid #cfd6df;
             border-radius: 8px;
@@ -1019,12 +1107,12 @@
             text-align: left;
         }
 
-        .combat-choice-button {
+        .app-page .competition-page .combat-choice-button {
             padding: 8px;
             text-align: center;
         }
 
-        .combat-fighter-button {
+        .app-page .competition-page .combat-fighter-button {
             overflow: hidden;
             min-width: 0;
             text-overflow: ellipsis;
@@ -1032,18 +1120,19 @@
             font-weight: 500;
         }
 
-        .combat-fighter-button.winner {
+        .app-page .competition-page .combat-fighter-button.winner {
             font-weight: 800;
         }
 
-        .combat-fighter-button.muted {
+        .app-page .competition-page .combat-fighter-button.muted {
             color: #94a3b8;
         }
 
-        .combat-fighter-button.selected,
-        .combat-choice-button.selected {
+        .app-page .competition-page .combat-fighter-button.selected,
+        .app-page .competition-page .combat-choice-button.selected {
             border-color: #1d4ed8;
-            background: #dbeafe;
+            background: #eff6ff;
+            color: #1e3a8a;
         }
 
         .combat-row input {
@@ -1055,8 +1144,8 @@
         }
 
         .combat-row input:disabled,
-        .combat-fighter-button:disabled,
-        .combat-choice-button:disabled {
+        .app-page .competition-page .combat-fighter-button:disabled,
+        .app-page .competition-page .combat-choice-button:disabled {
             opacity: 1;
             cursor: default;
         }
@@ -1068,7 +1157,7 @@
             justify-content: flex-end;
         }
 
-        .combat-actions button {
+        .app-page .competition-page .combat-actions button {
             margin-top: 0;
             padding: 8px;
             border-color: #cfd6df;
@@ -1078,30 +1167,30 @@
             transition: background-color 140ms ease, border-color 140ms ease, opacity 140ms ease;
         }
 
-        .combat-actions button:disabled {
+        .app-page .competition-page .combat-actions button:disabled {
             opacity: 0.24;
             cursor: not-allowed;
             pointer-events: none;
         }
 
-        .combat-actions button:not(:disabled):hover {
+        .app-page .competition-page .combat-actions button:not(:disabled):hover {
             background: #f8fafc;
             border-color: #94a3b8;
         }
 
-        .combat-actions [data-combat-validate]:not(:disabled) {
+        .app-page .competition-page .combat-actions [data-combat-validate]:not(:disabled) {
             border-color: #86efac;
             background: #dcfce7;
             color: #166534;
             font-weight: 800;
         }
 
-        .combat-actions [data-combat-validate]:not(:disabled):hover {
+        .app-page .competition-page .combat-actions [data-combat-validate]:not(:disabled):hover {
             background: #bbf7d0;
             border-color: #4ade80;
         }
 
-        .combat-clear-button {
+        .app-page .competition-page .combat-clear-button {
             color: #b91c1c;
         }
 
@@ -1320,7 +1409,17 @@
                 margin: 0;
             }
 
-            main > :not(.print-sheet) {
+            .competition-page > :not(.competition-content) {
+                display: none !important;
+            }
+
+            .competition-content {
+                display: block !important;
+                width: auto;
+                margin: 0;
+            }
+
+            .competition-content > :not(.print-sheet) {
                 display: none !important;
             }
 
@@ -1410,27 +1509,56 @@
         <nav class="tabs" aria-label="Navigation compétition">
             <div class="tabs-list">
                 <button class="tab-button" type="button" data-tab-target="suivi">
-                    <span aria-hidden="true">📌</span>
+                    <svg aria-hidden="true" viewBox="0 0 24 24">
+                        <path d="M9 6h11"></path>
+                        <path d="M9 12h11"></path>
+                        <path d="M9 18h11"></path>
+                        <path d="m4 6 1 1 2-2"></path>
+                        <path d="m4 12 1 1 2-2"></path>
+                        <path d="m4 18 1 1 2-2"></path>
+                    </svg>
                     <span>Suivi</span>
                     @if ($pendingActions->isNotEmpty())
                         <span>({{ $pendingActions->count() }})</span>
                     @endif
                 </button>
                 <button class="tab-button" type="button" data-tab-target="clubs">
-                    <span aria-hidden="true">🏢</span>
+                    <svg aria-hidden="true" viewBox="0 0 24 24">
+                        <path d="M4 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16"></path>
+                        <path d="M16 8h2a2 2 0 0 1 2 2v11"></path>
+                        <path d="M8 7h4"></path>
+                        <path d="M8 11h4"></path>
+                        <path d="M8 15h4"></path>
+                        <path d="M3 21h18"></path>
+                    </svg>
                     <span>Clubs</span>
                 </button>
                 <button class="tab-button" type="button" data-tab-target="participants">
-                    <span aria-hidden="true">👥</span>
+                    <svg aria-hidden="true" viewBox="0 0 24 24">
+                        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="9" cy="7" r="4"></circle>
+                        <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                    </svg>
                     <span>Participants</span>
                 </button>
                 @if ($isOrganizer)
                     <button class="tab-button" type="button" data-tab-target="poules">
-                        <span aria-hidden="true">▦</span>
+                        <svg aria-hidden="true" viewBox="0 0 24 24">
+                            <rect x="3" y="3" width="7" height="7" rx="1"></rect>
+                            <rect x="14" y="3" width="7" height="7" rx="1"></rect>
+                            <rect x="3" y="14" width="7" height="7" rx="1"></rect>
+                            <rect x="14" y="14" width="7" height="7" rx="1"></rect>
+                        </svg>
                         <span>Poules</span>
                     </button>
                     <button class="tab-button" type="button" data-tab-target="combats">
-                        <span aria-hidden="true">⚔️</span>
+                        <svg aria-hidden="true" viewBox="0 0 24 24">
+                            <path d="M14.5 4.5 19 3l-1.5 4.5L7 18l-3 1 1-3 10.5-10.5Z"></path>
+                            <path d="M9.5 4.5 5 3l1.5 4.5L17 18l3 1-1-3L8.5 5.5Z"></path>
+                            <path d="M7.5 14.5 9.5 16.5"></path>
+                            <path d="M16.5 14.5 14.5 16.5"></path>
+                        </svg>
                         <span>Combats</span>
                     </button>
                 @endif
@@ -1522,17 +1650,24 @@
                     </div>
                 @endif
 
-                @if (filled($competition->informations_complementaires))
-                    <div class="additional-info">
+                <div class="additional-info">
+                    <div class="additional-info-header">
                         <strong>Informations complémentaires</strong>
-                        <p>{!! nl2br(e($competition->informations_complementaires)) !!}</p>
+                        @if ($isOrganizer)
+                            <button class="title-icon-button" type="button" title="Modifier les informations complémentaires" data-additional-info-edit>✏️</button>
+                        @endif
                     </div>
-                @endif
 
-                @if ($isOrganizer)
-                    <div class="subsection">
-                        <h3>Modifier les informations complémentaires</h3>
-                        <form method="POST" action="{{ route('competitions.informations-complementaires.update', $competition) }}">
+                    <div data-additional-info-display>
+                        @if (filled($competition->informations_complementaires))
+                            <p>{!! nl2br(e($competition->informations_complementaires)) !!}</p>
+                        @else
+                            <p class="additional-info-empty">Aucune information complémentaire renseignée.</p>
+                        @endif
+                    </div>
+
+                    @if ($isOrganizer)
+                        <form class="additional-info-form" method="POST" action="{{ route('competitions.informations-complementaires.update', $competition) }}" data-additional-info-form>
                             @csrf
                             @method('PATCH')
 
@@ -1544,9 +1679,10 @@
                             @enderror
 
                             <button type="submit">Enregistrer les informations</button>
+                            <button type="button" class="secondary-button" data-additional-info-cancel>Annuler</button>
                         </form>
-                    </div>
-                @endif
+                    @endif
+                </div>
             </div>
         </section>
 
@@ -2370,32 +2506,48 @@
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Combattant 1</th>
+                                    <th>Poule</th>
+                                    <th>Rouge</th>
                                     <th>vs</th>
-                                    <th>Combattant 2</th>
+                                    <th>Bleu</th>
                                     <th>Nul</th>
                                     <th>Non fait</th>
-                                    <th>Score</th>
+                                    <th>Score rouge</th>
+                                    <th>Score bleu</th>
                                     <th>Commentaire</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($pouleCombats as $combatIndex => $combat)
+                                    @php
+                                        $redChecked = $combat->resultat === \App\Models\Combat::RESULT_LEFT_WIN ? '[X]' : '[ ]';
+                                        $blueChecked = $combat->resultat === \App\Models\Combat::RESULT_RIGHT_WIN ? '[X]' : '[ ]';
+                                        $drawChecked = $combat->resultat === \App\Models\Combat::RESULT_DRAW ? '[X]' : '[ ]';
+                                        $noContestChecked = $combat->resultat === \App\Models\Combat::RESULT_NO_CONTEST ? '[X]' : '[ ]';
+                                    @endphp
                                     <tr>
                                         <td>{{ $combatIndex + 1 }}</td>
+                                        <td>{{ $poule->name }}</td>
                                         <td>
-                                            ☐ {{ $combat->inscriptionA->participantSource->last_name }}
-                                            {{ $combat->inscriptionA->participantSource->first_name }}
+                                            {{ $redChecked }}
+                                            @if ($combat->resultat === \App\Models\Combat::RESULT_LEFT_WIN)<strong>@endif
+                                                {{ $combat->inscriptionA->participantSource->last_name }}
+                                                {{ $combat->inscriptionA->participantSource->first_name }}
+                                            @if ($combat->resultat === \App\Models\Combat::RESULT_LEFT_WIN)</strong>@endif
                                         </td>
                                         <td class="print-center">vs</td>
                                         <td>
-                                            ☐ {{ $combat->inscriptionB->participantSource->last_name }}
-                                            {{ $combat->inscriptionB->participantSource->first_name }}
+                                            {{ $blueChecked }}
+                                            @if ($combat->resultat === \App\Models\Combat::RESULT_RIGHT_WIN)<strong>@endif
+                                                {{ $combat->inscriptionB->participantSource->last_name }}
+                                                {{ $combat->inscriptionB->participantSource->first_name }}
+                                            @if ($combat->resultat === \App\Models\Combat::RESULT_RIGHT_WIN)</strong>@endif
                                         </td>
-                                        <td class="print-center">☐</td>
-                                        <td class="print-center">☐</td>
-                                        <td>____ / ____</td>
-                                        <td>____________</td>
+                                        <td class="print-center">{{ $drawChecked }}</td>
+                                        <td class="print-center">{{ $noContestChecked }}</td>
+                                        <td>{{ $combat->score_a ?? '____' }}</td>
+                                        <td>{{ $combat->score_b ?? '____' }}</td>
+                                        <td>{{ $combat->commentaire ?: '____________' }}</td>
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -2429,6 +2581,10 @@
             const competitionNameForm = document.querySelector('[data-competition-name-form]');
             const competitionNameEdit = document.querySelector('[data-competition-name-edit]');
             const competitionNameCancel = document.querySelector('[data-competition-name-cancel]');
+            const additionalInfoDisplay = document.querySelector('[data-additional-info-display]');
+            const additionalInfoForm = document.querySelector('[data-additional-info-form]');
+            const additionalInfoEdit = document.querySelector('[data-additional-info-edit]');
+            const additionalInfoCancel = document.querySelector('[data-additional-info-cancel]');
 
             if (competitionNameDisplay && competitionNameForm && competitionNameEdit) {
                 competitionNameEdit.addEventListener('click', () => {
@@ -2442,6 +2598,21 @@
                 competitionNameCancel.addEventListener('click', () => {
                     competitionNameDisplay.style.display = '';
                     competitionNameForm.classList.remove('is-open');
+                });
+            }
+
+            if (additionalInfoDisplay && additionalInfoForm && additionalInfoEdit) {
+                additionalInfoEdit.addEventListener('click', () => {
+                    additionalInfoDisplay.style.display = 'none';
+                    additionalInfoForm.classList.add('is-open');
+                    additionalInfoForm.querySelector('textarea')?.focus();
+                });
+            }
+
+            if (additionalInfoDisplay && additionalInfoForm && additionalInfoCancel) {
+                additionalInfoCancel.addEventListener('click', () => {
+                    additionalInfoDisplay.style.display = '';
+                    additionalInfoForm.classList.remove('is-open');
                 });
             }
 

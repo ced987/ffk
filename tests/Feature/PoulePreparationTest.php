@@ -1030,18 +1030,21 @@ class PoulePreparationTest extends TestCase
             ->assertSee(route('competitions.poules.print', [$competition, $pouleA]), false)
             ->assertSee('Imprimer la feuille combats')
             ->assertSee('Feuille combats - '.$competition->name)
-            ->assertSee('<th>Combattant 1</th>', false)
-            ->assertSee('<th>Combattant 2</th>', false)
+            ->assertSee('<th>Poule</th>', false)
+            ->assertSee('<th>Rouge</th>', false)
+            ->assertSee('<th>Bleu</th>', false)
             ->assertSee('<th>Nul</th>', false)
             ->assertSee('<th>Non fait</th>', false)
-            ->assertSee('<th>Score</th>', false)
+            ->assertSee('<th>Score rouge</th>', false)
+            ->assertSee('<th>Score bleu</th>', false)
             ->assertSee('<th>Commentaire</th>', false)
-            ->assertSee('☐ Aone')
+            ->assertSee('[ ]')
             ->assertSee('Alpha')
-            ->assertSee('☐ Atwo')
-            ->assertSee('____ / ____')
+            ->assertSee('Aone')
+            ->assertSee('Atwo')
+            ->assertSee('____')
             ->assertSee('____________')
-            ->assertDontSee('<th>Poule</th>', false);
+            ->assertSee('Poule Alpha');
 
         $html = $response->getContent();
         $combatsSectionPosition = strpos($html, '<section id="combats"');
