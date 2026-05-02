@@ -27,6 +27,51 @@
             margin: 0 auto;
         }
 
+        .competition-overview {
+            display: grid;
+            gap: 10px;
+            margin-bottom: 20px;
+            padding: 16px;
+            border: 1px solid #d9e2ec;
+            border-radius: 10px;
+            background: #f8fafc;
+        }
+
+        .competition-overview-heading {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .competition-overview-title {
+            display: grid;
+            gap: 6px;
+            min-width: 0;
+        }
+
+        .competition-overview-title .competition-name-display {
+            align-items: center;
+        }
+
+        .competition-overview-title h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .competition-overview-meta {
+            color: #64748b;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .competition-overview-badges {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
         h1 {
             margin: 0 0 8px;
             font-size: 28px;
@@ -135,23 +180,25 @@
             margin-top: 24px;
             padding: 24px;
             background: #ffffff;
-            border: 1px solid #dce1e7;
-            border-radius: 8px;
+            border: 1px solid #d9e2ec;
+            border-radius: 10px;
+            box-shadow: 0 8px 18px rgba(15, 23, 42, 0.04);
         }
 
         .tabs {
             position: sticky;
-            top: 56px;
+            top: 58px;
             z-index: 2000;
             display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
             margin-top: 0;
             margin-bottom: 12px;
-            padding: 10px 0 10px 14px;
-            border: 1px solid #dce1e7;
+            padding: 10px 18px;
+            border: 0;
             border-bottom: 1px solid #e5eaf0;
-            border-radius: 0 0 8px 8px;
+            border-radius: 0;
             background: #ffffff;
             box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
         }
@@ -160,17 +207,31 @@
             margin-top: 12px;
         }
 
+        .tabs-list {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            min-width: 0;
+        }
+
+        .tabs-status {
+            flex: 0 0 auto;
+        }
+
         .tab-button {
             margin-top: 0;
-            border-color: #cfd6df;
-            background: #f8fafc;
+            min-height: 34px;
+            border-color: transparent;
+            background: transparent;
             color: #334155;
+            box-shadow: none;
         }
 
         .tab-button.is-active {
-            border-color: #1d4ed8;
-            background: #1d4ed8;
-            color: #ffffff;
+            border-color: #bfdbfe;
+            background: #eff6ff;
+            color: #1d4ed8;
         }
 
         .tab-panel[hidden] {
@@ -198,6 +259,7 @@
         }
 
         .poule-guidance p {
+            border: 1px solid #dbeafe;
             background: #f8fafc;
             color: #475569;
         }
@@ -218,6 +280,26 @@
             background: #fffbeb;
             color: #92400e;
             font-size: 12px;
+        }
+
+        .poule-validation-alert {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin: 0 0 16px;
+            padding: 12px 14px;
+            border: 1px solid #fde68a;
+            border-radius: 8px;
+            background: #fffbeb;
+            color: #92400e;
+            font-weight: 700;
+        }
+
+        .poule-validation-alert a {
+            flex: 0 0 auto;
+            color: #92400e;
+            font-weight: 800;
         }
 
         .compact-info {
@@ -303,11 +385,12 @@
             margin-top: 12px;
             padding: 10px 14px;
             border: 1px solid #1d4ed8;
-            border-radius: 8px;
+            border-radius: 7px;
             background: #1d4ed8;
             color: #ffffff;
             cursor: pointer;
             font-weight: 700;
+            box-shadow: 0 1px 2px rgba(15, 23, 42, 0.08);
         }
 
         .error {
@@ -511,7 +594,9 @@
             align-items: flex-start;
             justify-content: space-between;
             gap: 12px;
-            margin-bottom: 12px;
+            margin: -2px -2px 14px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #e5eaf0;
             min-width: 0;
         }
 
@@ -519,6 +604,9 @@
             margin: 0;
             min-width: 0;
             overflow-wrap: anywhere;
+            color: #111827;
+            font-size: 17px;
+            font-weight: 850;
         }
 
         .poule-header-main {
@@ -558,11 +646,11 @@
         .poule-action-button {
             flex: 0 0 auto;
             margin-top: 0;
-            padding: 8px 12px;
-            border: 1px solid #cfd6df;
-            border-radius: 8px;
+            padding: 7px 10px;
+            border: 1px solid #cbd5e1;
+            border-radius: 7px;
             background: #ffffff;
-            color: #17202a;
+            color: #334155;
             cursor: pointer;
             font-weight: 700;
         }
@@ -581,9 +669,9 @@
         }
 
         .inline-form .poule-action-button {
-            border-color: #cfd6df;
+            border-color: #cbd5e1;
             background: #ffffff;
-            color: #17202a;
+            color: #334155;
         }
 
         .inline-form .poule-action-button.danger {
@@ -619,7 +707,7 @@
             display: inline-flex;
             align-items: center;
             padding: 4px 10px;
-            border: 1px solid #cfd6df;
+            border: 1px solid #d9e2ec;
             border-radius: 999px;
             background: #f8fafc;
             color: #334155;
@@ -650,13 +738,15 @@
         .poule-assignment-layout {
             display: grid;
             grid-template-columns: minmax(280px, 0.9fr) minmax(360px, 1.4fr);
-            gap: 20px;
+            gap: 18px;
             align-items: start;
             margin-top: 20px;
         }
 
         .poule-assignment-layout .subsection {
             margin-top: 0;
+            border-color: #d9e2ec;
+            background: #ffffff;
         }
 
         .assignment-column {
@@ -674,10 +764,11 @@
             align-items: flex-start;
             justify-content: space-between;
             gap: 12px;
-            padding: 12px 14px;
-            border: 1px solid #dce1e7;
+            padding: 10px 12px;
+            border: 1px solid #d9e2ec;
             border-radius: 8px;
             background: #ffffff;
+            box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
         }
 
         .participant-card[draggable="true"] {
@@ -705,11 +796,11 @@
 
         .participant-card.compact {
             align-items: center;
-            padding: 8px 6px;
-            border: 0;
-            border-bottom: 1px solid #e5eaf0;
-            border-radius: 0;
-            background: transparent;
+            padding: 8px 10px;
+            border: 1px solid #e5eaf0;
+            border-radius: 7px;
+            background: #ffffff;
+            box-shadow: none;
         }
 
         .participant-card.compact .participant-card-main {
@@ -746,18 +837,22 @@
         }
 
         .poule-drop-zone {
-            padding: 14px;
-            border: 1px solid #dce1e7;
-            border-radius: 8px;
-            background: #fbfdff;
+            padding: 16px;
+            border: 1px solid #d9e2ec;
+            border-left: 4px solid #facc15;
+            border-radius: 10px;
+            background: #ffffff;
+            box-shadow: 0 10px 24px rgba(15, 23, 42, 0.06);
         }
 
         .poule-drop-zone.frozen {
+            border-left-color: #22c55e;
             background: #f8fafc;
         }
 
         .poule-drop-zone.is-drag-over {
             border-color: #1d4ed8;
+            border-left-color: #1d4ed8;
             background: #eff6ff;
         }
 
@@ -928,10 +1023,23 @@
         }
 
         @media (max-width: 768px) {
+            .tabs {
+                gap: 10px;
+            }
+
+            .tabs-list {
+                overflow-x: auto;
+                flex-wrap: nowrap;
+            }
+
+            .tab-button {
+                flex: 0 0 auto;
+            }
+
             .poule-header {
                 align-items: stretch;
                 flex-direction: column;
-                gap: 8px;
+                gap: 10px;
             }
 
             .poule-header-actions {
@@ -1174,60 +1282,72 @@
             $roleLabel = $competition->roleLabelForClub($currentUser->club);
         @endphp
 
-        <nav class="tabs" aria-label="Navigation compétition">
-            <button class="tab-button" type="button" data-tab-target="suivi">
-                Suivi
-                @if ($pendingActions->isNotEmpty())
-                    ({{ $pendingActions->count() }})
-                @endif
-            </button>
-            <button class="tab-button" type="button" data-tab-target="clubs">Clubs</button>
-            <button class="tab-button" type="button" data-tab-target="participants">Participants</button>
-            @if ($isOrganizer)
-                <button class="tab-button" type="button" data-tab-target="poules">Poules</button>
-                <button class="tab-button" type="button" data-tab-target="combats">Combats</button>
-            @endif
-        </nav>
-
-        <div class="competition-content">
-        <div class="competition-title-row">
-            <div class="competition-name-display" data-competition-name-display>
-                <h1>{{ $competition->name }}</h1>
-                @if ($isOrganizer)
-                    <button class="title-icon-button" type="button" title="Modifier le nom de la compétition" data-competition-name-edit>✏️</button>
-                @endif
-            </div>
-
-            @if ($isOrganizer)
-                <form class="competition-name-form" method="POST" action="{{ route('competitions.update', $competition) }}" data-competition-name-form>
-                    @csrf
-                    @method('PATCH')
-                    <input type="text" name="name" value="{{ old('name', $competition->name) }}" required maxlength="255" aria-label="Nom de la compétition">
-                    <button class="title-icon-button" type="submit" title="Enregistrer">✔</button>
-                    <button class="title-icon-button cancel" type="button" title="Annuler" data-competition-name-cancel>✖</button>
-                </form>
-            @endif
-        </div>
-
-        <p>
-            <span @class([
-                'role-badge',
-                'organizer' => $roleLabel === 'Organisateur',
-                'participant' => $roleLabel === 'Participant',
-            ])>{{ $roleLabel }}</span>
-        </p>
-        <p>
-            <span @class(['inscriptions-badge', 'open' => ! $competition->inscriptions_closed])>
-                {{ $competition->inscriptions_closed ? 'Inscriptions fermées' : 'Inscriptions ouvertes' }}
-            </span>
-        </p>
-        <p>{{ $currentUser->name }} - {{ $currentUser->club?->name }}</p>
-
         @if (session('status'))
             <div class="toast" data-toast>{{ session('status') }}</div>
         @endif
 
+        <nav class="tabs" aria-label="Navigation compétition">
+            <div class="tabs-list">
+                <button class="tab-button" type="button" data-tab-target="suivi">
+                    Suivi
+                    @if ($pendingActions->isNotEmpty())
+                        ({{ $pendingActions->count() }})
+                    @endif
+                </button>
+                <button class="tab-button" type="button" data-tab-target="clubs">Clubs</button>
+                <button class="tab-button" type="button" data-tab-target="participants">Participants</button>
+                @if ($isOrganizer)
+                    <button class="tab-button" type="button" data-tab-target="poules">Poules</button>
+                    <button class="tab-button" type="button" data-tab-target="combats">Combats</button>
+                @endif
+            </div>
+            <span @class(['inscriptions-badge', 'open' => ! $competition->inscriptions_closed, 'tabs-status'])>
+                {{ $competition->inscriptions_closed ? 'Inscriptions fermées' : 'Inscriptions ouvertes' }}
+            </span>
+        </nav>
+
+        <div class="competition-content">
+
         <section id="actions" class="tab-panel" data-tab-panel="suivi">
+            <div class="competition-overview">
+                <div class="competition-overview-heading">
+                    <div class="competition-overview-title">
+                        <div class="competition-name-display" data-competition-name-display>
+                            <h1>{{ $competition->name }}</h1>
+                            @if ($isOrganizer)
+                                <button class="title-icon-button" type="button" title="Modifier le nom de la compétition" data-competition-name-edit>✏️</button>
+                            @endif
+                        </div>
+
+                        @if ($isOrganizer)
+                            <form class="competition-name-form" method="POST" action="{{ route('competitions.update', $competition) }}" data-competition-name-form>
+                                @csrf
+                                @method('PATCH')
+                                <input type="text" name="name" value="{{ old('name', $competition->name) }}" required maxlength="255" aria-label="Nom de la compétition">
+                                <button class="title-icon-button" type="submit" title="Enregistrer">✔</button>
+                                <button class="title-icon-button cancel" type="button" title="Annuler" data-competition-name-cancel>✖</button>
+                            </form>
+                        @endif
+
+                        <p class="competition-overview-meta">
+                            {{ $competition->date_competition?->format('d/m/Y') ?? 'Date non renseignée' }}
+                            · organisé par {{ $competition->organizerClub->name }}
+                        </p>
+                    </div>
+
+                    <div class="competition-overview-badges">
+                        <span @class([
+                            'role-badge',
+                            'organizer' => $roleLabel === 'Organisateur',
+                            'participant' => $roleLabel === 'Participant',
+                        ])>{{ $roleLabel }}</span>
+                        <span @class(['inscriptions-badge', 'open' => ! $competition->inscriptions_closed])>
+                            {{ $competition->inscriptions_closed ? 'Inscriptions fermées' : 'Inscriptions ouvertes' }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+
             <h2>Actions à faire</h2>
 
             <ul>
@@ -1746,6 +1866,12 @@
         @if ($isOrganizer)
             <section id="poules" class="tab-panel" data-tab-panel="poules">
                 <h2>Organisation des poules</h2>
+                @if ($participantValidationSummary['global']['not_validated'] > 0)
+                    <div class="poule-validation-alert">
+                        <span>⚠️ {{ $participantValidationSummary['global']['not_validated'] }} participant(s) non validé(s) — continuer quand même ?</span>
+                        <a href="#participants" data-tab-link-target="participants">👉 Voir les participants</a>
+                    </div>
+                @endif
                 @if ($eligiblePouleRegistrations->isNotEmpty())
                     <p class="tab-hint">{{ $eligiblePouleRegistrations->count() }} participant(s) non affecté(s)</p>
                 @endif
@@ -2238,6 +2364,14 @@
             tabButtons.forEach((button) => {
                 button.addEventListener('click', () => {
                     activateTab(button.dataset.tabTarget);
+                    window.scrollTo(0, 0);
+                });
+            });
+
+            document.querySelectorAll('[data-tab-link-target]').forEach((link) => {
+                link.addEventListener('click', (event) => {
+                    event.preventDefault();
+                    activateTab(link.dataset.tabLinkTarget);
                     window.scrollTo(0, 0);
                 });
             });

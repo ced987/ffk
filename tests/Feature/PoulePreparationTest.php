@@ -718,11 +718,16 @@ class PoulePreparationTest extends TestCase
         ]);
         $available = $this->registerParticipant($competition, $clubA, 'Disponible', 'Alice', true, true);
         $assigned = $this->registerParticipant($competition, $clubA, 'Affecte', 'Boris', true, true);
+        $this->registerParticipant($competition, $clubA, 'Attente', 'Nora', true, false);
         $assigned->update(['poule_id' => $frozenPoule->id]);
 
         $this->withSession(['current_user_id' => $userA->id])
             ->get(route('competitions.show', $competition))
             ->assertOk()
+            ->assertSee('⚠️ 1 participant(s) non validé(s) — continuer quand même ?')
+            ->assertSee('👉 Voir les participants')
+            ->assertSee('href="#participants"', false)
+            ->assertSee('data-tab-link-target="participants"', false)
             ->assertSee('1 participant(s) non affecté(s)')
             ->assertSee('1 poule(s) en préparation (non figée(s))')
             ->assertDontSee('Poules prêtes — tous les participants sont affectés et les poules sont figées');

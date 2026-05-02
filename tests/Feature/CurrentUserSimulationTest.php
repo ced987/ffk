@@ -54,9 +54,8 @@ class CurrentUserSimulationTest extends TestCase
             ->assertSee('Actions à faire')
             ->assertSee('Prochaines compétitions')
             ->assertSee('Résumé')
-            ->assertSee($userA->name)
             ->assertSee($clubA->name)
-            ->assertSee($userA->name.' - '.$clubA->name)
+            ->assertDontSee($userA->name.' - '.$clubA->name)
             ->assertDontSee('Vous êtes')
             ->assertDontSee('Organisateur - Club A')
             ->assertSee('href="'.route('switch-user').'"', false)
@@ -81,9 +80,8 @@ class CurrentUserSimulationTest extends TestCase
 
         $this->get('/')
             ->assertOk()
-            ->assertSee($userB->name)
             ->assertSee($clubB->name)
-            ->assertSee($userB->name.' - '.$clubB->name)
+            ->assertDontSee($userB->name.' - '.$clubB->name)
             ->assertDontSee('Participant - Club B')
             ->assertSee('Tableau de bord')
             ->assertDontSee('Voir la compétition de démonstration');
