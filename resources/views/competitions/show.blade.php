@@ -1125,6 +1125,7 @@
         }
 
         .app-page .competition-page .combat-fighter-button {
+            display: block;
             overflow: hidden;
             min-width: 0;
             min-height: 26px;
@@ -1132,6 +1133,16 @@
             text-overflow: ellipsis;
             white-space: nowrap;
             font-size: 13px;
+            font-weight: 500;
+        }
+
+        .combat-fighter-name {
+            font-weight: 750;
+        }
+
+        .combat-fighter-club {
+            color: #64748b;
+            font-size: 12px;
             font-weight: 500;
         }
 
@@ -2440,11 +2451,15 @@
                                                     </span>
                                                 </span>
                                                 <button @class(['combat-fighter-button', 'selected' => $combat->resultat === \App\Models\Combat::RESULT_LEFT_WIN, $leftState]) type="button" data-result-button data-result-value="{{ \App\Models\Combat::RESULT_LEFT_WIN }}" @disabled($combat->statut === \App\Models\Combat::STATUS_FINISHED)>
-                                                    🟥 {{ $combat->inscriptionA->participantSource->last_name }} {{ $combat->inscriptionA->participantSource->first_name }}
+                                                    🟥
+                                                    <span class="combat-fighter-name">{{ $combat->inscriptionA->participantSource->last_name }} {{ $combat->inscriptionA->participantSource->first_name }}</span>
+                                                    <span class="combat-fighter-club">({{ $combat->inscriptionA->club->name }})</span>
                                                 </button>
                                                 <strong class="combat-vs">vs</strong>
                                                 <button @class(['combat-fighter-button', 'selected' => $combat->resultat === \App\Models\Combat::RESULT_RIGHT_WIN, $rightState]) type="button" data-result-button data-result-value="{{ \App\Models\Combat::RESULT_RIGHT_WIN }}" @disabled($combat->statut === \App\Models\Combat::STATUS_FINISHED)>
-                                                    🟦 {{ $combat->inscriptionB->participantSource->last_name }} {{ $combat->inscriptionB->participantSource->first_name }}
+                                                    🟦
+                                                    <span class="combat-fighter-name">{{ $combat->inscriptionB->participantSource->last_name }} {{ $combat->inscriptionB->participantSource->first_name }}</span>
+                                                    <span class="combat-fighter-club">({{ $combat->inscriptionB->club->name }})</span>
                                                 </button>
                                                 <button @class(['combat-choice-button', 'combat-result-draw', 'selected' => $combat->resultat === \App\Models\Combat::RESULT_DRAW]) type="button" data-result-button data-result-value="{{ \App\Models\Combat::RESULT_DRAW }}" title="Nul" @disabled($combat->statut === \App\Models\Combat::STATUS_FINISHED)>🤝</button>
                                                 <button @class(['combat-choice-button', 'combat-result-none', 'selected' => $combat->resultat === \App\Models\Combat::RESULT_NO_CONTEST]) type="button" data-result-button data-result-value="{{ \App\Models\Combat::RESULT_NO_CONTEST }}" title="Pas de combat" @disabled($combat->statut === \App\Models\Combat::STATUS_FINISHED)>🚫</button>
