@@ -923,6 +923,25 @@
             color: #166534;
         }
 
+        .poule-progress-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 10px;
+            border: 1px solid #fde68a;
+            border-radius: 999px;
+            background: #fffbeb;
+            color: #92400e;
+            font-size: 12px;
+            font-weight: 800;
+            white-space: nowrap;
+        }
+
+        .poule-progress-badge.complete {
+            border-color: #bbf7d0;
+            background: #dcfce7;
+            color: #166534;
+        }
+
         .poule-assignment-layout {
             display: grid;
             grid-template-columns: minmax(280px, 0.9fr) minmax(360px, 1.4fr);
@@ -1065,7 +1084,7 @@
 
         .app-page .competition-page .combat-row {
             display: grid;
-            grid-template-columns: 58px minmax(120px, 1.15fr) 26px minmax(120px, 1.15fr) 38px 38px 64px 64px minmax(110px, 1fr) 104px;
+            grid-template-columns: 58px minmax(120px, 1.15fr) 26px minmax(120px, 1.15fr) 38px 38px 64px 64px minmax(110px, 1fr) 148px;
             align-items: center;
             gap: 4px;
             margin-top: 0;
@@ -1080,6 +1099,11 @@
         .app-page .competition-page .combat-row.is-finished {
             border-left-color: #22c55e;
             background: #f0fdf4;
+        }
+
+        .app-page .competition-page .combat-row.is-editing {
+            border-left-color: #f59e0b;
+            background: #fffdf6;
         }
 
         .combat-number {
@@ -1101,6 +1125,10 @@
 
         .combat-row.is-finished .combat-status {
             color: #15803d;
+        }
+
+        .combat-row.is-editing .combat-status {
+            color: #c2410c;
         }
 
         .combat-vs {
@@ -1161,6 +1189,28 @@
             color: #1e3a8a;
         }
 
+        .app-page .competition-page .combat-row:not(.is-finished) .combat-fighter-button:not(:disabled):hover {
+            border-color: #1d4ed8;
+            background: #eff6ff;
+            color: #1e3a8a;
+        }
+
+        .app-page .competition-page .combat-row.is-finished .combat-fighter-button:hover {
+            border-color: #cfd6df;
+            background: #ffffff;
+            color: #17202a;
+        }
+
+        .app-page .competition-page .combat-row.is-finished .combat-fighter-button.muted:hover {
+            color: #94a3b8;
+        }
+
+        .app-page .competition-page .combat-row.is-finished .combat-fighter-button.selected:hover {
+            border-color: #1d4ed8;
+            background: #eff6ff;
+            color: #1e3a8a;
+        }
+
         .app-page .competition-page .combat-row input {
             width: 100%;
             max-width: none;
@@ -1180,10 +1230,10 @@
 
         .combat-actions {
             display: grid;
-            grid-template-columns: repeat(3, 32px);
+            grid-template-columns: repeat(4, 34px);
             gap: 4px;
             justify-content: flex-end;
-            width: 104px;
+            width: 148px;
         }
 
         .app-page .competition-page .combat-actions button {
@@ -1223,6 +1273,10 @@
 
         .app-page .competition-page .combat-clear-button {
             color: #b91c1c;
+        }
+
+        .app-page .competition-page [data-combat-cancel]:not(:disabled) {
+            color: #475569;
         }
 
         .print-sheet {
@@ -1523,7 +1577,7 @@
             ];
             $draftPoules = $competition->poules->where('status', \App\Models\Poule::STATUS_DRAFT)->values();
             $frozenPoules = $competition->poules->where('status', \App\Models\Poule::STATUS_FROZEN)->values();
-            $allCombats = $competition->poules->flatMap(fn ($poule) => $poule->combats)->values();
+            $allCombats = $frozenPoules->flatMap(fn ($poule) => $poule->combats)->values();
             $combatsToEnter = $allCombats->where('statut', \App\Models\Combat::STATUS_TO_ENTER)->values();
             $finishedCombats = $allCombats->where('statut', \App\Models\Combat::STATUS_FINISHED)->values();
             $pendingActions = collect($actionsToDo)->reject(fn ($actionToDo) => $actionToDo === 'Aucune action urgente')->values();
@@ -2415,15 +2469,26 @@
                     @foreach ($competition->poules as $poule)
                         @php
                             $pouleCombats = $poule->combats->sortBy('ordre_combat')->values();
+                            $pouleCombatsToEnter = $pouleCombats->filter(fn ($combat) => $combat->resultat === null)->count();
+                            $pouleCombatsComplete = $pouleCombats->isNotEmpty() && $pouleCombatsToEnter === 0;
+                            $pouleCombatsToEnterLabel = $pouleCombatsToEnter.' '.($pouleCombatsToEnter > 1 ? 'combats' : 'combat').' à saisir';
+                            $isFrozenPoule = $poule->status === \App\Models\Poule::STATUS_FROZEN;
                         @endphp
                         <div class="subsection">
-	                            <div class="poule-title-row">
-                                    <h3>{{ $poule->name }}</h3>
-                                    <a class="poule-action-button" href="{{ route('competitions.poules.print', [$competition, $poule]) }}" target="_blank" rel="noopener">Imprimer poule</a>
-                                </div>
-	
-	                            @if ($pouleCombats->isNotEmpty())
-                                    <div class="combat-list">
+			                            <div class="poule-title-row">
+		                                    <h3>{{ $poule->name }}</h3>
+                                            @if ($isFrozenPoule)
+                                                <span @class(['poule-progress-badge', 'complete' => $pouleCombatsComplete])>
+                                                    {{ $pouleCombatsComplete ? '✅ Terminée' : '⚠️ En cours — '.$pouleCombatsToEnterLabel }}
+                                                </span>
+                                                <a class="poule-action-button" href="{{ route('competitions.poules.print', [$competition, $poule]) }}" target="_blank" rel="noopener">Imprimer résultat poule</a>
+                                            @endif
+		                                </div>
+		
+                                    @if (! $isFrozenPoule)
+                                        <p class="empty-state">Aucun combat généré, poule non figée</p>
+		                            @elseif ($pouleCombats->isNotEmpty())
+	                                    <div class="combat-list">
 	                                    @foreach ($pouleCombats as $combatIndex => $combat)
                                             @php
                                                 $leftState = '';
@@ -2468,11 +2533,12 @@
                                                 <input class="combat-score-blue" id="score_b_{{ $combat->id }}" name="score_b" type="number" min="0" inputmode="numeric" placeholder="Bleu" value="{{ old('score_b', $combat->score_b) }}" data-combat-control @disabled($combat->statut === \App\Models\Combat::STATUS_FINISHED)>
                                                 <input class="combat-comment" id="commentaire_{{ $combat->id }}" name="commentaire" type="text" placeholder="Commentaire" value="{{ old('commentaire', $combat->commentaire) }}" data-combat-control @disabled($combat->statut === \App\Models\Combat::STATUS_FINISHED)>
 
-                                                <div class="combat-actions">
-                                                    <button type="submit" title="Valider" aria-label="Valider" data-combat-validate @disabled($combat->statut === \App\Models\Combat::STATUS_FINISHED)>✔</button>
-                                                    <button type="button" title="Modifier" aria-label="Modifier" data-combat-edit @disabled($combat->statut !== \App\Models\Combat::STATUS_FINISHED)>✏️</button>
-                                                    <button class="combat-clear-button" type="submit" name="action" value="clear" formnovalidate title="Effacer" aria-label="Effacer" data-combat-clear @disabled($combat->statut !== \App\Models\Combat::STATUS_FINISHED)>🗑️</button>
-                                                </div>
+	                                                <div class="combat-actions">
+	                                                    <button type="submit" title="Valider" aria-label="Valider" data-combat-validate @disabled($combat->statut === \App\Models\Combat::STATUS_FINISHED)>✔</button>
+	                                                    <button type="button" title="Modifier" aria-label="Modifier" data-combat-edit @disabled($combat->statut !== \App\Models\Combat::STATUS_FINISHED)>✏️</button>
+	                                                    <button class="combat-clear-button" type="submit" name="action" value="clear" formnovalidate title="Effacer" aria-label="Effacer" data-combat-clear @disabled($combat->statut !== \App\Models\Combat::STATUS_FINISHED)>🗑️</button>
+                                                        <button type="button" title="Annuler" aria-label="Annuler" data-combat-cancel disabled>✖</button>
+	                                                </div>
                                             </form>
 	                                    @endforeach
                                     </div>
@@ -2482,28 +2548,46 @@
                         </div>
                     @endforeach
                 @else
-                    <p class="empty-state">Aucun combat généré</p>
+                    <p class="empty-state">Aucune poule créée</p>
+                    <button class="poule-action-button" type="button" data-tab-link-target="poules">Aller aux poules</button>
                 @endif
             </section>
 
-            <section class="tab-panel" data-tab-panel="combats">
-                <h2>Classement</h2>
+            @if ($frozenPoules->isNotEmpty())
+                <section class="tab-panel" data-tab-panel="combats">
+                    <h2>Classement</h2>
 
-                @if ($finishedCombats->isEmpty())
-                    <p class="empty-state">Aucun score saisi</p>
-                @endif
+                    @if ($finishedCombats->isEmpty())
+                        <p class="empty-state">Aucun score saisi</p>
+                    @endif
 
-                @if ($competition->poules->where(fn ($poule) => $poule->registrations->isNotEmpty())->isNotEmpty())
-                    @foreach ($competition->poules as $poule)
-                        @if ($poule->registrations->isNotEmpty())
+                    @if ($frozenPoules->where(fn ($poule) => $poule->registrations->isNotEmpty())->isNotEmpty())
+                        @foreach ($frozenPoules as $poule)
+                            @if ($poule->registrations->isNotEmpty())
+                            @php
+                                $pouleCombats = $poule->combats->sortBy('ordre_combat')->values();
+                                $pouleCombatsToEnter = $pouleCombats->filter(fn ($combat) => $combat->resultat === null)->count();
+                                $pouleCombatsComplete = $pouleCombats->isNotEmpty() && $pouleCombatsToEnter === 0;
+                                $pouleCombatsToEnterLabel = $pouleCombatsToEnter.' '.($pouleCombatsToEnter > 1 ? 'combats' : 'combat').' à saisir';
+                            @endphp
                             <div class="subsection">
-                                <h3>{{ $poule->name }}</h3>
+                                <div class="poule-title-row">
+                                    <h3>{{ $poule->name }}</h3>
+                                    <span @class(['poule-progress-badge', 'complete' => $pouleCombatsComplete])>
+                                        {{ $pouleCombatsComplete ? '✅ Terminée' : '⚠️ En cours — '.$pouleCombatsToEnterLabel }}
+                                    </span>
+                                </div>
                                 <table class="participant-table">
                                     <thead>
                                         <tr>
                                             <th>Rang</th>
                                             <th>Participant</th>
                                             <th>Club</th>
+                                            <th>J</th>
+                                            <th>V</th>
+                                            <th>N</th>
+                                            <th>D</th>
+                                            <th>NF</th>
                                             <th>Points</th>
                                         </tr>
                                     </thead>
@@ -2516,26 +2600,33 @@
                                                     {{ $rankingRow['registration']->participantSource->first_name }}
                                                 </td>
                                                 <td>{{ $rankingRow['registration']->club->name }}</td>
+                                                <td>{{ $rankingRow['played'] }}</td>
+                                                <td>{{ $rankingRow['wins'] }}</td>
+                                                <td>{{ $rankingRow['draws'] }}</td>
+                                                <td>{{ $rankingRow['losses'] }}</td>
+                                                <td>{{ $rankingRow['no_contests'] }}</td>
                                                 <td>{{ $rankingRow['points'] }}</td>
                                             </tr>
                                         @endforeach
                                     </tbody>
                                 </table>
+                                <p class="tab-hint">J = joués · V = victoires · N = nuls · D = défaites · NF = non faits</p>
                             </div>
-                        @endif
-                    @endforeach
-                @else
-                    <p class="empty-state">Aucune poule créée</p>
-                @endif
-            </section>
+                            @endif
+                        @endforeach
+                    @else
+                        <p class="empty-state">Aucune poule figée pour le moment.</p>
+                    @endif
+                </section>
+            @endif
         @endif
 
         <section class="print-sheet" aria-label="Feuille combats imprimable">
             <h1>Feuille combats - {{ $competition->name }}</h1>
             <p>Organisateur : {{ $competition->organizerClub->name }}</p>
 
-            @if ($competition->poules->isNotEmpty())
-                @foreach ($competition->poules as $poule)
+            @if ($frozenPoules->isNotEmpty())
+                @foreach ($frozenPoules as $poule)
                     @php
                         $pouleCombats = $poule->combats->sortBy('ordre_combat')->values();
                     @endphp
@@ -2970,8 +3061,8 @@
                     });
             });
 
-            const setCombatResult = (row, result) => {
-                const input = row.querySelector('[data-result-input]');
+	            const setCombatResult = (row, result, markAsModified = true) => {
+	                const input = row.querySelector('[data-result-input]');
 
                 if (! input) {
                     return;
@@ -2993,23 +3084,81 @@
                 } else if (result === '{{ \App\Models\Combat::RESULT_RIGHT_WIN }}') {
                     leftButton?.classList.add('muted');
                     rightButton?.classList.add('winner');
-                } else if (result === '{{ \App\Models\Combat::RESULT_NO_CONTEST }}') {
-                    leftButton?.classList.add('muted');
-                    rightButton?.classList.add('muted');
-                }
-            };
+	                } else if (result === '{{ \App\Models\Combat::RESULT_NO_CONTEST }}') {
+	                    leftButton?.classList.add('muted');
+	                    rightButton?.classList.add('muted');
+		                }
 
-            const setCombatFinished = (row, isFinished) => {
-                row.classList.toggle('is-finished', isFinished);
+	                if (markAsModified) {
+	                    setCombatEditing(row, true);
+	                }
+		            };
 
-                row.querySelectorAll('[data-combat-control], [data-result-button]').forEach((control) => {
-                    control.disabled = isFinished;
+	            const getCombatState = (row) => ({
+	                result: row.querySelector('[data-result-input]')?.value || '',
+	                scoreA: row.querySelector('[name="score_a"]')?.value || '',
+	                scoreB: row.querySelector('[name="score_b"]')?.value || '',
+	                comment: row.querySelector('[name="commentaire"]')?.value || '',
+	                isFinished: row.classList.contains('is-finished'),
+	            });
+
+	            const storeCombatState = (row) => {
+	                row.dataset.savedState = JSON.stringify(getCombatState(row));
+	            };
+
+	            const setCombatEditing = (row, isEditing) => {
+	                row.classList.toggle('is-editing', isEditing);
+
+	                const validateButton = row.querySelector('[data-combat-validate]');
+	                const editButton = row.querySelector('[data-combat-edit]');
+	                const cancelButton = row.querySelector('[data-combat-cancel]');
+	                const status = row.querySelector('.combat-status');
+
+	                if (validateButton) {
+	                    validateButton.textContent = '✔';
+	                    validateButton.title = isEditing ? 'Enregistrer' : 'Valider';
+	                    validateButton.setAttribute('aria-label', isEditing ? 'Enregistrer' : 'Valider');
+	                }
+
+	                if (editButton && isEditing) {
+	                    editButton.disabled = true;
+	                }
+
+	                if (cancelButton) {
+	                    cancelButton.disabled = ! isEditing;
+	                }
+
+	                if (status && isEditing) {
+	                    status.textContent = 'Modifié';
+	                }
+		            };
+
+	            const restoreCombatState = (row) => {
+	                if (! row.dataset.savedState) {
+	                    return;
+	                }
+
+	                const state = JSON.parse(row.dataset.savedState);
+		                row.querySelector('[name="score_a"]').value = state.scoreA;
+		                row.querySelector('[name="score_b"]').value = state.scoreB;
+		                row.querySelector('[name="commentaire"]').value = state.comment;
+		                setCombatResult(row, state.result, false);
+		                setCombatFinished(row, state.isFinished);
+		            };
+
+	            const setCombatFinished = (row, isFinished) => {
+	                row.classList.toggle('is-finished', isFinished);
+	                setCombatEditing(row, false);
+
+	                row.querySelectorAll('[data-combat-control], [data-result-button]').forEach((control) => {
+	                    control.disabled = isFinished;
                 });
 
-                const validateButton = row.querySelector('[data-combat-validate]');
-                const editButton = row.querySelector('[data-combat-edit]');
-                const clearButton = row.querySelector('[data-combat-clear]');
-                const status = row.querySelector('.combat-status');
+	                const validateButton = row.querySelector('[data-combat-validate]');
+	                const editButton = row.querySelector('[data-combat-edit]');
+	                const clearButton = row.querySelector('[data-combat-clear]');
+	                const cancelButton = row.querySelector('[data-combat-cancel]');
+	                const status = row.querySelector('.combat-status');
 
                 if (validateButton) {
                     validateButton.disabled = isFinished;
@@ -3019,9 +3168,13 @@
                     editButton.disabled = ! isFinished;
                 }
 
-                if (clearButton) {
-                    clearButton.disabled = ! isFinished;
-                }
+	                if (clearButton) {
+	                    clearButton.disabled = ! isFinished;
+	                }
+
+	                if (cancelButton) {
+	                    cancelButton.disabled = true;
+	                }
 
                 if (status) {
                     status.textContent = isFinished ? 'Terminé' : 'À saisir';
@@ -3039,8 +3192,9 @@
                     control.value = '';
                 });
 
-                setCombatFinished(row, false);
-            };
+	                setCombatFinished(row, false);
+	                storeCombatState(row);
+	            };
 
             document.querySelectorAll('[data-result-button]').forEach((button) => {
                 button.addEventListener('click', () => {
@@ -3054,13 +3208,25 @@
                         return;
                     }
 
-                    setCombatResult(row, button.dataset.resultValue);
-                });
-            });
+	                    setCombatResult(row, button.dataset.resultValue);
+	                });
+	            });
 
-            document.querySelectorAll('[data-combat-edit]').forEach((button) => {
-                button.addEventListener('click', () => {
-                    const row = button.closest('[data-combat-row]');
+	            document.querySelectorAll('[data-combat-control]').forEach((control) => {
+	                control.addEventListener('input', () => {
+	                    const row = control.closest('[data-combat-row]');
+
+	                    if (! row || control.disabled) {
+	                        return;
+	                    }
+
+	                    setCombatEditing(row, true);
+	                });
+	            });
+
+	            document.querySelectorAll('[data-combat-edit]').forEach((button) => {
+	                button.addEventListener('click', () => {
+	                    const row = button.closest('[data-combat-row]');
 
                     if (! row) {
                         return;
@@ -3070,14 +3236,28 @@
                         control.disabled = false;
                     });
 
-                    row.querySelector('[data-combat-validate]').disabled = false;
-                    row.querySelector('[data-combat-clear]').disabled = false;
-                    button.disabled = true;
-                });
-            });
+	                    row.querySelector('[data-combat-validate]').disabled = false;
+	                    row.querySelector('[data-combat-clear]').disabled = false;
+	                    setCombatEditing(row, true);
+	                });
+	            });
 
-            document.querySelectorAll('[data-combat-row]').forEach((row) => {
-                row.addEventListener('submit', (event) => {
+	            document.querySelectorAll('[data-combat-cancel]').forEach((button) => {
+	                button.addEventListener('click', () => {
+	                    const row = button.closest('[data-combat-row]');
+
+	                    if (! row) {
+	                        return;
+	                    }
+
+	                    restoreCombatState(row);
+	                });
+	            });
+
+	            document.querySelectorAll('[data-combat-row]').forEach((row) => {
+	                storeCombatState(row);
+
+	                row.addEventListener('submit', (event) => {
                     event.preventDefault();
 
                     const submitter = event.submitter;
@@ -3126,14 +3306,16 @@
                             return response.json();
                         })
                         .then((data) => {
-                            if (isClearAction) {
-                                resetCombatRow(row);
-                                showToast(data.message || 'Résultat du combat effacé.');
-                                return;
-                            }
+	                            if (isClearAction) {
+	                                resetCombatRow(row);
+	                                storeCombatState(row);
+	                                showToast(data.message || 'Résultat du combat effacé.');
+	                                return;
+	                            }
 
-                            setCombatFinished(row, true);
-                            showToast(data.message || 'Résultat du combat enregistré.');
+	                            setCombatFinished(row, true);
+	                            storeCombatState(row);
+	                            showToast(data.message || 'Résultat du combat enregistré.');
                         })
                         .catch((error) => {
                             showToast(error.message || 'Enregistrement impossible.');

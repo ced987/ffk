@@ -115,6 +115,11 @@
                         <th>#</th>
                         <th>Participant</th>
                         <th>Club</th>
+                        <th>J</th>
+                        <th>V</th>
+                        <th>N</th>
+                        <th>D</th>
+                        <th>NF</th>
                         <th>Points</th>
                     </tr>
                 </thead>
@@ -127,6 +132,11 @@
                                 {{ $rankingRow['registration']->participantSource->first_name }}
                             </td>
                             <td>{{ $rankingRow['registration']->club->name }}</td>
+                            <td>{{ $rankingRow['played'] }}</td>
+                            <td>{{ $rankingRow['wins'] }}</td>
+                            <td>{{ $rankingRow['draws'] }}</td>
+                            <td>{{ $rankingRow['losses'] }}</td>
+                            <td>{{ $rankingRow['no_contests'] }}</td>
                             <td>{{ $rankingRow['points'] }}</td>
                         </tr>
                     @endforeach

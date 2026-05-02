@@ -177,10 +177,22 @@ class Poule extends Model
             ->mapWithKeys(fn (InscriptionOperationnelle $registration) => [$registration->id => 0])
             ->all();
 
+        $statsByRegistrationId = $registrations
+            ->mapWithKeys(fn (InscriptionOperationnelle $registration) => [
+                $registration->id => [
+                    'wins' => 0,
+                    'draws' => 0,
+                    'losses' => 0,
+                    'no_contests' => 0,
+                    'played' => 0,
+                ],
+            ])
+            ->all();
+
         $this->combats()
             ->where('statut', Combat::STATUS_FINISHED)
             ->get()
-            ->each(function (Combat $combat) use (&$pointsByRegistrationId) {
+            ->each(function (Combat $combat) use (&$pointsByRegistrationId, &$statsByRegistrationId) {
                 if (! array_key_exists($combat->inscription_a_id, $pointsByRegistrationId)
                     || ! array_key_exists($combat->inscription_b_id, $pointsByRegistrationId)) {
                     return;
@@ -188,11 +200,28 @@ class Poule extends Model
 
                 if ($combat->resultat === Combat::RESULT_LEFT_WIN) {
                     $pointsByRegistrationId[$combat->inscription_a_id] += 3;
+                    $statsByRegistrationId[$combat->inscription_a_id]['wins']++;
+                    $statsByRegistrationId[$combat->inscription_b_id]['losses']++;
+                    $statsByRegistrationId[$combat->inscription_a_id]['played']++;
+                    $statsByRegistrationId[$combat->inscription_b_id]['played']++;
                 } elseif ($combat->resultat === Combat::RESULT_RIGHT_WIN) {
                     $pointsByRegistrationId[$combat->inscription_b_id] += 3;
+                    $statsByRegistrationId[$combat->inscription_b_id]['wins']++;
+                    $statsByRegistrationId[$combat->inscription_a_id]['losses']++;
+                    $statsByRegistrationId[$combat->inscription_a_id]['played']++;
+                    $statsByRegistrationId[$combat->inscription_b_id]['played']++;
                 } elseif ($combat->resultat === Combat::RESULT_DRAW) {
                     $pointsByRegistrationId[$combat->inscription_a_id] += 1;
                     $pointsByRegistrationId[$combat->inscription_b_id] += 1;
+                    $statsByRegistrationId[$combat->inscription_a_id]['draws']++;
+                    $statsByRegistrationId[$combat->inscription_b_id]['draws']++;
+                    $statsByRegistrationId[$combat->inscription_a_id]['played']++;
+                    $statsByRegistrationId[$combat->inscription_b_id]['played']++;
+                } elseif ($combat->resultat === Combat::RESULT_NO_CONTEST) {
+                    $statsByRegistrationId[$combat->inscription_a_id]['no_contests']++;
+                    $statsByRegistrationId[$combat->inscription_b_id]['no_contests']++;
+                    $statsByRegistrationId[$combat->inscription_a_id]['played']++;
+                    $statsByRegistrationId[$combat->inscription_b_id]['played']++;
                 }
             });
 
@@ -211,7 +240,7 @@ class Poule extends Model
         $currentRank = 0;
 
         return $rankedRows
-            ->map(function (array $row, int $index) use (&$previousPoints, &$currentRank) {
+            ->map(function (array $row, int $index) use (&$previousPoints, &$currentRank, $statsByRegistrationId) {
                 if ($previousPoints !== $row['points']) {
                     $currentRank = $index + 1;
                     $previousPoints = $row['points'];
@@ -220,6 +249,11 @@ class Poule extends Model
                 return [
                     'rank' => $currentRank,
                     'registration' => $row['registration'],
+                    'played' => $statsByRegistrationId[$row['registration']->id]['played'],
+                    'wins' => $statsByRegistrationId[$row['registration']->id]['wins'],
+                    'draws' => $statsByRegistrationId[$row['registration']->id]['draws'],
+                    'losses' => $statsByRegistrationId[$row['registration']->id]['losses'],
+                    'no_contests' => $statsByRegistrationId[$row['registration']->id]['no_contests'],
                     'points' => $row['points'],
                 ];
             });

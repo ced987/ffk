@@ -1024,11 +1024,12 @@ class PoulePreparationTest extends TestCase
             ->assertSee('Btwo')
             ->assertSee('value="3"', false)
             ->assertSee('value="1"', false)
-            ->assertSee('Aucun combat généré')
             ->assertSee('🟥')
-            ->assertSee('Imprimer poule')
+            ->assertSee('Imprimer résultat poule')
+            ->assertDontSee('Imprimer poule')
             ->assertSee(route('competitions.poules.print', [$competition, $pouleA]), false)
             ->assertSee('Imprimer la feuille combats')
+            ->assertSee('⚠️ En cours — 1 combat à saisir')
             ->assertSee('Feuille combats - '.$competition->name)
             ->assertSee('<th>Poule</th>', false)
             ->assertSee('<th>Rouge</th>', false)
@@ -1053,7 +1054,7 @@ class PoulePreparationTest extends TestCase
         $alphaSecondCombatPosition = strpos($html, 'Athree', $alphaPosition);
         $betaPosition = strpos($html, 'Poule Beta', $combatsSectionPosition);
         $betaCombatPosition = strpos($html, 'Bone', $betaPosition);
-        $emptyPoulePosition = strpos($html, 'Poule Vide', $combatsSectionPosition);
+        $rankingSectionPosition = strpos($html, '<section class="tab-panel" data-tab-panel="combats">', $combatsSectionPosition + 1);
 
         $this->assertLessThan($alphaFirstCombatPosition, $alphaPosition);
         $this->assertLessThan($alphaSecondCombatPosition, $alphaFirstCombatPosition);
@@ -1061,13 +1062,43 @@ class PoulePreparationTest extends TestCase
         $this->assertLessThan($betaCombatPosition, $betaPosition);
 
         $alphaSection = substr($html, $alphaPosition, $betaPosition - $alphaPosition);
-        $betaSection = substr($html, $betaPosition, $emptyPoulePosition - $betaPosition);
+        $betaSection = substr($html, $betaPosition, $rankingSectionPosition - $betaPosition);
+        $combatsSection = substr($html, $combatsSectionPosition, $rankingSectionPosition - $combatsSectionPosition);
 
         $this->assertStringContainsString('#1', $alphaSection);
         $this->assertStringContainsString('#2', $alphaSection);
         $this->assertStringContainsString('#1', $betaSection);
         $this->assertStringNotContainsString('Bone', $alphaSection);
         $this->assertStringNotContainsString('Aone', $betaSection);
+        $this->assertStringContainsString('Poule Vide', $combatsSection);
+        $this->assertStringContainsString('Aucun combat généré, poule non figée', $combatsSection);
+    }
+
+    public function test_competition_detail_combats_tab_shows_draft_poules_without_ranking_results(): void
+    {
+        [$clubA, , , $userA, , , $competition] = $this->scenario();
+        Poule::create([
+            'competition_id' => $competition->id,
+            'name' => 'Poule En Préparation',
+            'status' => Poule::STATUS_DRAFT,
+        ]);
+
+        $response = $this->withSession(['current_user_id' => $userA->id])
+            ->get(route('competitions.show', $competition))
+            ->assertOk()
+            ->assertSee('Poule En Préparation')
+            ->assertSee('Aucun combat généré, poule non figée');
+
+        $html = $response->getContent();
+        $combatsSectionPosition = strpos($html, '<section id="combats"');
+        $rankingSectionPosition = strpos($html, '<section class="tab-panel" data-tab-panel="combats">', $combatsSectionPosition + 1);
+        $printSheetPosition = strpos($html, '<section class="print-sheet"', $combatsSectionPosition);
+        $combatsSectionEnd = $rankingSectionPosition === false ? $printSheetPosition : $rankingSectionPosition;
+        $combatsSection = substr($html, $combatsSectionPosition, $combatsSectionEnd - $combatsSectionPosition);
+        $afterCombatsSection = substr($html, $combatsSectionEnd, $printSheetPosition - $combatsSectionEnd);
+
+        $this->assertStringContainsString('Poule En Préparation', $combatsSection);
+        $this->assertStringNotContainsString('Poule En Préparation', $afterCombatsSection);
     }
 
     public function test_poule_print_page_shows_ranking_and_field_fight_sheet(): void
@@ -1088,6 +1119,11 @@ class PoulePreparationTest extends TestCase
             ->assertSee('<th>#</th>', false)
             ->assertSee('<th>Participant</th>', false)
             ->assertSee('<th>Club</th>', false)
+            ->assertSee('<th>J</th>', false)
+            ->assertSee('<th>V</th>', false)
+            ->assertSee('<th>N</th>', false)
+            ->assertSee('<th>D</th>', false)
+            ->assertSee('<th>NF</th>', false)
             ->assertSee('<th>Points</th>', false)
             ->assertSee('Combats')
             ->assertSee('<th>Combattant 1</th>', false)
@@ -1368,6 +1404,11 @@ class PoulePreparationTest extends TestCase
         $this->assertSame([$first->id, $third->id, $second->id], $ranking->pluck('registration.id')->all());
         $this->assertSame([4, 4, 0], $ranking->pluck('points')->all());
         $this->assertSame([1, 1, 3], $ranking->pluck('rank')->all());
+        $this->assertSame([2, 2, 2], $ranking->pluck('played')->all());
+        $this->assertSame([1, 1, 0], $ranking->pluck('wins')->all());
+        $this->assertSame([1, 1, 0], $ranking->pluck('draws')->all());
+        $this->assertSame([0, 0, 2], $ranking->pluck('losses')->all());
+        $this->assertSame([0, 0, 0], $ranking->pluck('no_contests')->all());
     }
 
     public function test_poule_ranking_uses_result_not_optional_score(): void
@@ -1390,6 +1431,18 @@ class PoulePreparationTest extends TestCase
         $this->assertSame([$first->id, $second->id, $third->id], $ranking->pluck('registration.id')->all());
         $this->assertSame([3, 0, 0], $ranking->pluck('points')->all());
         $this->assertSame([1, 2, 2], $ranking->pluck('rank')->all());
+        $this->assertSame([1, 1, 0], $ranking->pluck('played')->all());
+        $this->assertSame([1, 0, 0], $ranking->pluck('wins')->all());
+        $this->assertSame([0, 0, 0], $ranking->pluck('draws')->all());
+        $this->assertSame([0, 1, 0], $ranking->pluck('losses')->all());
+
+        $this->createCombat($poule, $first, $third, null, null, Combat::STATUS_FINISHED)
+            ->update(['resultat' => Combat::RESULT_NO_CONTEST]);
+
+        $ranking = $poule->ranking();
+
+        $this->assertSame([2, 1, 1], $ranking->pluck('played')->all());
+        $this->assertSame([1, 0, 1], $ranking->pluck('no_contests')->all());
     }
 
     public function test_poule_ranking_is_stable_by_registration_id_and_ignores_unfinished_combats(): void
@@ -1424,6 +1477,7 @@ class PoulePreparationTest extends TestCase
             ->get(route('competitions.show', $competition))
             ->assertOk()
             ->assertSee('Classement')
+            ->assertSee('J = joués · V = victoires · N = nuls · D = défaites · NF = non faits')
             ->assertSee('Alpha Aline')
             ->assertSee('Bravo Boris')
             ->assertSee('Charlie Chloe')
