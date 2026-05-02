@@ -445,7 +445,7 @@ class CompetitionShowTest extends TestCase
             ->assertSee('Competition Sprint 1')
             ->assertDontSee('Retour à l’accueil')
             ->assertDontSee('Retour mes compétitions')
-            ->assertSee('role-badge organizer', false)
+            ->assertSee('app-header-badge organizer', false)
             ->assertSee('Organisateur')
             ->assertSee('Club A');
 
@@ -459,7 +459,7 @@ class CompetitionShowTest extends TestCase
             ->get(route('competitions.show', $competition))
             ->assertOk()
             ->assertSee('Competition Sprint 1')
-            ->assertSee('role-badge', false)
+            ->assertSee('app-header-badge invited', false)
             ->assertSee('id="invitation"', false)
             ->assertSee('Invité')
             ->assertDontSee('role-badge participant', false)
@@ -471,8 +471,8 @@ class CompetitionShowTest extends TestCase
             ->get(route('competitions.show', $competition))
             ->assertOk()
             ->assertSee('Competition Sprint 1')
-            ->assertSee('role-badge participant', false)
-            ->assertSee('Participant')
+            ->assertSee('app-header-badge invited', false)
+            ->assertSee('Invité')
             ->assertSee('Club A');
 
         $this->withSession(['current_user_id' => $userC->id])

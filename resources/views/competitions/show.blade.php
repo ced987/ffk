@@ -29,24 +29,23 @@
 
         .competition-overview {
             display: grid;
-            gap: 10px;
-            margin-bottom: 20px;
-            padding: 16px;
-            border: 1px solid #d9e2ec;
-            border-radius: 10px;
-            background: #f8fafc;
+            gap: 6px;
+            margin-bottom: 18px;
+            padding: 0 0 16px;
+            border-bottom: 1px solid #e5eaf0;
+            background: transparent;
         }
 
         .competition-overview-heading {
             display: flex;
-            align-items: flex-start;
+            align-items: center;
             justify-content: space-between;
             gap: 12px;
         }
 
         .competition-overview-title {
             display: grid;
-            gap: 6px;
+            gap: 4px;
             min-width: 0;
         }
 
@@ -57,19 +56,13 @@
         .competition-overview-title h1 {
             margin: 0;
             font-size: 24px;
+            line-height: 1.15;
         }
 
         .competition-overview-meta {
             color: #64748b;
             font-size: 14px;
             font-weight: 600;
-        }
-
-        .competition-overview-badges {
-            display: flex;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 8px;
         }
 
         h1 {
@@ -117,6 +110,7 @@
             font: inherit;
         }
 
+        .competition-overview .title-icon-button,
         .app-page .competition-title-row .title-icon-button {
             display: inline-flex;
             align-items: center;
@@ -185,6 +179,15 @@
             box-shadow: 0 8px 18px rgba(15, 23, 42, 0.04);
         }
 
+        .competition-page .tab-panel {
+            margin-top: 16px;
+            padding: 0;
+            border: 0;
+            border-radius: 0;
+            background: transparent;
+            box-shadow: none;
+        }
+
         .tabs {
             position: sticky;
             top: 58px;
@@ -192,10 +195,10 @@
             display: flex;
             align-items: center;
             justify-content: flex-start;
-            gap: 8px;
+            gap: 0;
             margin-top: 0;
-            margin-bottom: 12px;
-            padding: 8px 18px;
+            margin-bottom: 10px;
+            padding: 0 18px;
             border: 0;
             border-bottom: 1px solid #e5eaf0;
             border-radius: 0;
@@ -211,28 +214,63 @@
             display: flex;
             align-items: center;
             flex-wrap: wrap;
-            gap: 8px;
+            gap: 0;
             min-width: 0;
         }
 
         .tab-button {
+            appearance: none;
+            position: relative;
             display: inline-flex;
             align-items: center;
-            gap: 7px;
+            gap: 6px;
             margin-top: 0;
-            min-height: 36px;
-            padding: 8px 12px;
-            border-color: #e2e8f0;
-            border-radius: 999px;
-            background: #f8fafc;
-            color: #334155;
+            min-height: 34px;
+            padding: 0 11px;
+            border: 0 !important;
+            border-radius: 3px 3px 0 0;
+            background: transparent;
+            color: #475569;
             box-shadow: none;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .tab-button svg {
+            width: 16px;
+            height: 16px;
+            flex: 0 0 16px;
+            color: currentColor;
+            stroke: currentColor;
+            stroke-width: 1.9;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            fill: none;
+        }
+
+        .tab-button::after {
+            content: "";
+            position: absolute;
+            right: 10px;
+            bottom: 0;
+            left: 10px;
+            height: 2px;
+            border-radius: 999px 999px 0 0;
+            background: transparent;
+        }
+
+        .tab-button:hover {
+            background: #f8fafc;
+            color: #1e3a8a;
         }
 
         .tab-button.is-active {
-            border-color: #bfdbfe;
-            background: #eff6ff;
+            background: #f8fbff;
             color: #1d4ed8;
+        }
+
+        .tab-button.is-active::after {
+            background: #2563eb;
         }
 
         .tab-panel[hidden] {
@@ -303,33 +341,108 @@
             font-weight: 800;
         }
 
-        .compact-info {
+        .actions-summary {
+            margin-bottom: 20px;
+            padding-bottom: 18px;
+            border-bottom: 1px solid #e5eaf0;
+        }
+
+        .actions-summary h2,
+        .info-summary h2 {
+            margin: 0 0 10px;
+            color: #17202a;
+            font-size: 18px;
+            line-height: 1.2;
+        }
+
+        .actions-todo-list {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 10px;
+            gap: 8px;
             margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .actions-todo-list li {
+            position: relative;
+            padding-left: 18px;
+            color: #334155;
+            font-size: 14px;
+            font-weight: 650;
+        }
+
+        .actions-todo-list li::before {
+            content: "";
+            position: absolute;
+            top: 0.62em;
+            left: 0;
+            width: 6px;
+            height: 6px;
+            border-radius: 999px;
+            background: #2563eb;
+        }
+
+        .info-summary {
+            margin-top: 0;
+            padding: 0 0 18px;
+            border-top: 0;
+            border-bottom: 1px solid #e5eaf0;
+        }
+
+        .compact-info {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px 14px;
+            margin: 0;
+            padding: 12px 14px;
+            border: 1px solid #e2e8f0;
+            border-radius: 9px;
+            background: #ffffff;
+            color: #334155;
+            box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+            font-size: 13px;
         }
 
         .compact-info div {
-            padding: 12px 14px;
-            border: 1px solid #dce1e7;
-            border-radius: 8px;
-            background: #f8fafc;
+            display: inline-flex;
+            align-items: baseline;
+            gap: 5px;
+        }
+
+        .compact-info div + div::before {
+            content: "|";
+            margin-right: 14px;
+            color: #cbd5e1;
         }
 
         .compact-info dt {
-            margin-bottom: 4px;
+            color: #64748b;
+            font-weight: 800;
+        }
+
+        .compact-info dd {
+            margin: 0;
+            color: #17202a;
+            font-weight: 700;
         }
 
         .additional-info {
             margin-top: 16px;
-            padding: 14px 16px;
-            border: 1px solid #dce1e7;
+            padding: 12px 14px;
+            border: 1px solid #e2e8f0;
             border-radius: 8px;
-            background: #f8fafc;
+            background: #ffffff;
             color: #334155;
             line-height: 1.5;
             white-space: normal;
+        }
+
+        .additional-info strong {
+            display: block;
+            margin-bottom: 6px;
+            color: #475569;
+            font-size: 13px;
         }
 
         textarea {
@@ -1103,6 +1216,13 @@
             border-top: 1px solid #e5eaf0;
         }
 
+        .subsection.info-summary {
+            margin-top: 0;
+            padding: 0 0 18px;
+            border-top: 0;
+            border-bottom: 1px solid #e5eaf0;
+        }
+
         .subsection h3 {
             margin: 0 0 12px;
             font-size: 16px;
@@ -1346,47 +1466,39 @@
                         </p>
                     </div>
 
-                    <div class="competition-overview-badges">
-                        <span @class([
-                            'role-badge',
-                            'organizer' => $roleLabel === 'Organisateur',
-                            'participant' => $roleLabel === 'Participant',
-                        ])>{{ $roleLabel }}</span>
-                        <span @class(['inscriptions-badge', 'open' => ! $competition->inscriptions_closed])>
-                            {{ $competition->inscriptions_closed ? 'Inscriptions fermées' : 'Inscriptions ouvertes' }}
-                        </span>
-                    </div>
                 </div>
             </div>
 
-            <h2>Actions à faire</h2>
+            <div class="actions-summary">
+                <h2>Actions à faire</h2>
 
-            <ul>
-                @foreach ($actionsToDo as $actionToDo)
-                    <li>{{ $actionToDo }}</li>
-                @endforeach
-            </ul>
+                <ul class="actions-todo-list">
+                    @foreach ($actionsToDo as $actionToDo)
+                        <li>{{ $actionToDo }}</li>
+                    @endforeach
+                </ul>
+            </div>
 
-            <div class="subsection">
+            <div class="subsection info-summary">
                 <h2>Informations compétition</h2>
                 <dl class="compact-info">
                     <div>
-                        <dt>Organisateur</dt>
+                        <dt>Organisateur :</dt>
                         <dd>{{ $competition->organizerClub->name }}</dd>
                     </div>
 
                     <div>
-                        <dt>Date</dt>
+                        <dt>Date :</dt>
                         <dd>{{ $competition->date_competition?->format('d/m/Y') ?? 'Date non renseignée' }}</dd>
                     </div>
 
                     <div>
-                        <dt>Clubs confirmés</dt>
+                        <dt>Clubs confirmés :</dt>
                         <dd>{{ $invitationSummary[\App\Models\Invitation::STATUS_PARTICIPATION_CONFIRMED] }}</dd>
                     </div>
 
                     <div>
-                        <dt>Participants actifs</dt>
+                        <dt>Participants actifs :</dt>
                         <dd>{{ $participantTotal }}</dd>
                     </div>
                 </dl>
