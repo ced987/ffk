@@ -102,8 +102,8 @@ class CompetitionIndexTest extends TestCase
             ->assertSee('badge-role-organizer', false)
             ->assertSee('Organisateur')
             ->assertSee('Actions : 1')
-            ->assertSee('href="'.route('competitions.show', $competition).'#actions"', false)
-            ->assertSee('href="'.route('competitions.show', $demoCompetition).'#poules"', false)
+            ->assertSee('href="'.route('competitions.show', $competition).'"', false)
+            ->assertSee('href="'.route('competitions.show', $demoCompetition).'"', false)
             ->assertSee('Gérer')
             ->assertDontSee('Participant')
             ->assertDontSee('Voir / gérer mes participants');
@@ -119,7 +119,7 @@ class CompetitionIndexTest extends TestCase
             ->assertSee('Competition Sprint 1')
             ->assertSee('badge-role-invited', false)
             ->assertSee('Invité')
-            ->assertSee('href="'.route('competitions.show', $competition).'#invitation"', false);
+            ->assertSee('href="'.route('competitions.show', $competition).'"', false);
 
         $invitation->markAsSent();
 
@@ -130,7 +130,7 @@ class CompetitionIndexTest extends TestCase
             ->assertSee('🏢 Club A')
             ->assertSee('badge-role-invited', false)
             ->assertSee('Invité')
-            ->assertSee('href="'.route('competitions.show', $competition).'#invitation"', false)
+            ->assertSee('href="'.route('competitions.show', $competition).'"', false)
             ->assertSee('Actions : 1')
             ->assertSee('Voir')
             ->assertDontSee('Gérer');
@@ -144,7 +144,7 @@ class CompetitionIndexTest extends TestCase
             ->assertSee('🏢 Club A')
             ->assertSee('badge-role-participant', false)
             ->assertSee('Participant')
-            ->assertSee('href="'.route('competitions.show', $competition).'#participants"', false)
+            ->assertSee('href="'.route('competitions.show', $competition).'"', false)
             ->assertSee('Actions : 1')
             ->assertSee('Voir')
             ->assertDontSee('Gérer');

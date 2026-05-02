@@ -263,7 +263,7 @@
                         @php($isDemoCompetition = $competition->name === $demoCompetitionName)
                         @php($roleLabel = $competition->roleLabelForClub($currentUser->club))
                         @php($actionsCount = collect($competition->actionsToDoForClub($currentUser->club))->reject(fn ($action) => $action === 'Aucune action urgente')->count())
-                        @php($competitionUrl = route('competitions.show', $competition).'#'.$competition->detailFragmentForClub($currentUser->club))
+                        @php($competitionUrl = route('competitions.show', $competition))
                         @php($isPastCompetition = $competition->date_competition !== null && $competition->date_competition->lessThan($today))
                         @php($statusLabel = $isPastCompetition ? '✅ clôturé' : ($competition->inscriptions_closed ? '🔒 fermé' : '🔓 ouvert'))
                         <li @class(['demo-competition' => $isDemoCompetition])>

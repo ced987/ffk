@@ -191,16 +191,16 @@
             z-index: 2000;
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            gap: 16px;
+            justify-content: flex-start;
+            gap: 8px;
             margin-top: 0;
             margin-bottom: 12px;
-            padding: 10px 18px;
+            padding: 8px 18px;
             border: 0;
             border-bottom: 1px solid #e5eaf0;
             border-radius: 0;
             background: #ffffff;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 1px 0 rgba(15, 23, 42, 0.03);
         }
 
         .tabs + * {
@@ -215,15 +215,16 @@
             min-width: 0;
         }
 
-        .tabs-status {
-            flex: 0 0 auto;
-        }
-
         .tab-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
             margin-top: 0;
-            min-height: 34px;
-            border-color: transparent;
-            background: transparent;
+            min-height: 36px;
+            padding: 8px 12px;
+            border-color: #e2e8f0;
+            border-radius: 999px;
+            background: #f8fafc;
             color: #334155;
             box-shadow: none;
         }
@@ -1289,21 +1290,31 @@
         <nav class="tabs" aria-label="Navigation compétition">
             <div class="tabs-list">
                 <button class="tab-button" type="button" data-tab-target="suivi">
-                    Suivi
+                    <span aria-hidden="true">📌</span>
+                    <span>Suivi</span>
                     @if ($pendingActions->isNotEmpty())
-                        ({{ $pendingActions->count() }})
+                        <span>({{ $pendingActions->count() }})</span>
                     @endif
                 </button>
-                <button class="tab-button" type="button" data-tab-target="clubs">Clubs</button>
-                <button class="tab-button" type="button" data-tab-target="participants">Participants</button>
+                <button class="tab-button" type="button" data-tab-target="clubs">
+                    <span aria-hidden="true">🏢</span>
+                    <span>Clubs</span>
+                </button>
+                <button class="tab-button" type="button" data-tab-target="participants">
+                    <span aria-hidden="true">👥</span>
+                    <span>Participants</span>
+                </button>
                 @if ($isOrganizer)
-                    <button class="tab-button" type="button" data-tab-target="poules">Poules</button>
-                    <button class="tab-button" type="button" data-tab-target="combats">Combats</button>
+                    <button class="tab-button" type="button" data-tab-target="poules">
+                        <span aria-hidden="true">▦</span>
+                        <span>Poules</span>
+                    </button>
+                    <button class="tab-button" type="button" data-tab-target="combats">
+                        <span aria-hidden="true">⚔️</span>
+                        <span>Combats</span>
+                    </button>
                 @endif
             </div>
-            <span @class(['inscriptions-badge', 'open' => ! $competition->inscriptions_closed, 'tabs-status'])>
-                {{ $competition->inscriptions_closed ? 'Inscriptions fermées' : 'Inscriptions ouvertes' }}
-            </span>
         </nav>
 
         <div class="competition-content">
