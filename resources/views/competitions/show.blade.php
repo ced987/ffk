@@ -1393,6 +1393,15 @@
             min-height: 0;
         }
 
+        #participants-disponibles .participant-card[data-assignable-card] {
+            cursor: pointer;
+        }
+
+        #participants-disponibles .participant-card[data-assignable-card]:hover {
+            border-color: #bfdbfe;
+            background: #f8fbff;
+        }
+
         #participants-disponibles .participant-card-main {
             gap: 0;
             line-height: 1.2;
@@ -1489,6 +1498,184 @@
             border-color: #1d4ed8;
             border-left-color: #1d4ed8;
             background: #eff6ff;
+        }
+
+        .assignment-modal[hidden] {
+            display: none;
+        }
+
+        .assignment-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 5000;
+            display: grid;
+            place-items: center;
+            padding: 20px;
+        }
+
+        .assignment-modal-backdrop {
+            position: absolute;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.42);
+        }
+
+        .assignment-modal-panel {
+            position: relative;
+            z-index: 1;
+            width: min(860px, 100%);
+            max-height: min(720px, calc(100vh - 40px));
+            overflow: auto;
+            padding: 18px;
+            border: 1px solid #dbe3ee;
+            border-radius: 12px;
+            background: #ffffff;
+            box-shadow: 0 24px 80px rgba(15, 23, 42, 0.22);
+        }
+
+        .assignment-modal-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 14px;
+            margin-bottom: 14px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #e5eaf0;
+        }
+
+        .assignment-modal-header h3 {
+            margin: 0;
+            font-size: 18px;
+        }
+
+        .assignment-modal-close {
+            flex: 0 0 auto;
+            margin-top: 0;
+            min-height: 30px;
+            padding: 4px 8px;
+            border: 1px solid #cbd5e1;
+            border-radius: 7px;
+            background: #ffffff;
+            color: #334155;
+            cursor: pointer;
+            font-weight: 800;
+        }
+
+        .assignment-modal-grid {
+            display: grid;
+            grid-template-columns: 310px minmax(0, 1fr);
+            gap: 14px;
+            align-items: start;
+        }
+
+        .assignment-modal-column {
+            min-width: 0;
+        }
+
+        .assignment-modal-column h4 {
+            margin: 0 0 8px;
+            color: #17202a;
+            font-size: 14px;
+        }
+
+        .assignment-poule-list,
+        .assignment-preview-list {
+            display: grid;
+            gap: 6px;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .app-page .competition-page .assignment-poule-option {
+            display: grid;
+            gap: 2px;
+            width: 100%;
+            min-height: 58px;
+            margin-top: 0;
+            padding: 8px 10px;
+            border: 1px solid #dbe3ee;
+            border-left: 3px solid #facc15;
+            border-radius: 8px;
+            background: #ffffff;
+            color: #334155;
+            text-align: left;
+        }
+
+        .app-page .competition-page .assignment-poule-option:hover,
+        .app-page .competition-page .assignment-poule-option.is-selected {
+            border-color: #93c5fd;
+            border-left-color: #2563eb;
+            background: #eff6ff;
+            color: #17202a;
+        }
+
+        .assignment-poule-option strong {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            color: #17202a;
+            font-size: 13px;
+        }
+
+        .assignment-poule-option span,
+        .assignment-preview-list span {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            color: #64748b;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .assignment-preview-panel {
+            height: 260px;
+            overflow-y: auto;
+            padding: 10px;
+            border: 1px solid #e2e8f0;
+            border-radius: 9px;
+            background: #f8fafc;
+            box-sizing: border-box;
+        }
+
+        .assignment-preview-list li {
+            min-height: 46px;
+            padding: 5px 8px;
+            border: 1px solid #e5eaf0;
+            border-radius: 7px;
+            background: #ffffff;
+            box-sizing: border-box;
+        }
+
+        .assignment-preview-list strong {
+            display: block;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            color: #17202a;
+            font-size: 13px;
+        }
+
+        .assignment-modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+            margin-top: 14px;
+            padding-top: 12px;
+            border-top: 1px solid #e5eaf0;
+        }
+
+        .assignment-modal-empty {
+            padding: 12px;
+            border: 1px dashed #cbd5e1;
+            border-radius: 9px;
+            background: #f8fafc;
+            color: #475569;
+        }
+
+        @media (max-width: 760px) {
+            .assignment-modal-grid {
+                grid-template-columns: 1fr;
+            }
         }
 
         .combat-list {
@@ -2818,6 +3005,11 @@
                                     draggable="true"
                                     data-inscription-id="{{ $registration->id }}"
                                     data-source="available"
+                                    data-assignable-card
+                                    data-participant-name="{{ $registration->participantSource->last_name }} {{ $registration->participantSource->first_name }}"
+                                    role="button"
+                                    tabindex="0"
+                                    title="Affecter à une poule"
                                 >
                                     <div class="participant-card-main">
                                         <strong>{{ $registration->participantSource->last_name }} {{ $registration->participantSource->first_name }}</strong>
@@ -2996,6 +3188,77 @@
                 @else
                     <p class="empty-state">Aucune poule créée</p>
                 @endif
+                    </div>
+                </div>
+
+                <div class="assignment-modal" data-assignment-modal role="dialog" aria-modal="true" aria-labelledby="assignment-modal-title" hidden>
+                    <div class="assignment-modal-backdrop" data-assignment-modal-close></div>
+                    <div class="assignment-modal-panel">
+                        <div class="assignment-modal-header">
+                            <div>
+                                <h3 id="assignment-modal-title">Affecter <span data-assignment-participant-name></span> à une poule</h3>
+                                <p class="section-intro">Choisissez une poule en préparation pour affecter ce participant.</p>
+                            </div>
+                            <button class="assignment-modal-close" type="button" data-assignment-modal-close aria-label="Fermer">✕</button>
+                        </div>
+
+                        @if ($draftPoules->isNotEmpty())
+                            <div class="assignment-modal-grid">
+                                <div class="assignment-modal-column">
+                                    <h4>Poules disponibles</h4>
+                                    <div class="assignment-poule-list">
+                                        @foreach ($draftPoules as $poule)
+                                            <button
+                                                class="assignment-poule-option"
+                                                type="button"
+                                                data-assignment-poule-option
+                                                data-poule-id="{{ $poule->id }}"
+                                                data-assign-url="{{ route('competitions.poules.registrations.store', [$competition, $poule]) }}"
+                                            >
+                                                <strong>{{ $poule->name }}</strong>
+                                                <span>{{ $poule->registrations->count() }} participant(s) · En préparation</span>
+                                            </button>
+                                        @endforeach
+                                    </div>
+                                </div>
+
+                                <div class="assignment-modal-column">
+                                    <h4>Aperçu de la poule</h4>
+                                    <div class="assignment-preview-panel" data-assignment-preview>
+                                        <p class="empty-state">Sélectionnez une poule pour voir ses participants.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="assignment-modal-actions">
+                                <button class="secondary-button" type="button" data-assignment-modal-close>Annuler</button>
+                                <button type="button" data-assignment-submit disabled>Affecter à cette poule</button>
+                            </div>
+
+                            @foreach ($draftPoules as $poule)
+                                <template data-assignment-preview-template data-poule-id="{{ $poule->id }}">
+                                    @if ($poule->registrations->isNotEmpty())
+                                        <ul class="assignment-preview-list">
+                                            @foreach ($poule->registrations as $registration)
+                                                <li>
+                                                    <strong>{{ $registration->participantSource->last_name }} {{ $registration->participantSource->first_name }}</strong>
+                                                    <span>{{ $registration->club->name }} · {{ $registration->participantSource->age }} ans · {{ $registration->participantSource->approximate_weight }} kg</span>
+                                                </li>
+                                            @endforeach
+                                        </ul>
+                                    @else
+                                        <p class="empty-state">Aucun participant dans cette poule.</p>
+                                    @endif
+                                </template>
+                            @endforeach
+                        @else
+                            <div class="assignment-modal-empty">
+                                Créez une poule avant d’affecter ce participant.
+                            </div>
+                            <div class="assignment-modal-actions">
+                                <button class="secondary-button" type="button" data-assignment-modal-close>Fermer</button>
+                            </div>
+                        @endif
                     </div>
                 </div>
             </section>
@@ -3252,6 +3515,9 @@
             let autoScrollDirection = 0;
             let autoScrollFrame = null;
             let toastTimeout = null;
+            let suppressAssignmentClick = false;
+            let assignmentCard = null;
+            let selectedAssignmentOption = null;
 
             const competitionNameDisplay = document.querySelector('[data-competition-name-display]');
             const competitionNameForm = document.querySelector('[data-competition-name-form]');
@@ -3261,6 +3527,11 @@
             const additionalInfoForm = document.querySelector('[data-additional-info-form]');
             const additionalInfoEdit = document.querySelector('[data-additional-info-edit]');
             const additionalInfoCancel = document.querySelector('[data-additional-info-cancel]');
+            const assignmentModal = document.querySelector('[data-assignment-modal]');
+            const assignmentParticipantName = document.querySelector('[data-assignment-participant-name]');
+            const assignmentPreview = document.querySelector('[data-assignment-preview]');
+            const assignmentSubmit = document.querySelector('[data-assignment-submit]');
+            const assignmentOptions = Array.from(document.querySelectorAll('[data-assignment-poule-option]'));
 
             if (competitionNameDisplay && competitionNameForm && competitionNameEdit) {
                 competitionNameEdit.addEventListener('click', () => {
@@ -3436,6 +3707,154 @@
                 document.querySelectorAll('[data-poule-id]').forEach(updatePouleCount);
             };
 
+            const selectAssignmentPoule = (option) => {
+                if (! option || ! assignmentPreview) {
+                    return;
+                }
+
+                selectedAssignmentOption = option;
+
+                assignmentOptions.forEach((item) => {
+                    item.classList.toggle('is-selected', item === option);
+                });
+
+                const template = document.querySelector(`[data-assignment-preview-template][data-poule-id="${option.dataset.pouleId}"]`);
+
+                assignmentPreview.innerHTML = '';
+
+                if (template) {
+                    assignmentPreview.appendChild(template.content.cloneNode(true));
+                } else {
+                    assignmentPreview.innerHTML = '<p class="empty-state">Aucun aperçu disponible.</p>';
+                }
+
+                if (assignmentSubmit) {
+                    assignmentSubmit.disabled = false;
+                }
+            };
+
+            const openAssignmentModal = (card) => {
+                if (! assignmentModal || ! card) {
+                    return;
+                }
+
+                assignmentCard = card;
+
+                if (assignmentParticipantName) {
+                    assignmentParticipantName.textContent = card.dataset.participantName || 'ce participant';
+                }
+
+                assignmentModal.hidden = false;
+                document.body.style.overflow = 'hidden';
+
+                if (assignmentOptions.length > 0) {
+                    selectAssignmentPoule(assignmentOptions[0]);
+                    assignmentOptions[0].focus();
+                } else {
+                    assignmentModal.querySelector('[data-assignment-modal-close]')?.focus();
+                }
+            };
+
+            const closeAssignmentModal = () => {
+                if (! assignmentModal) {
+                    return;
+                }
+
+                assignmentModal.hidden = true;
+                document.body.style.overflow = '';
+                assignmentCard = null;
+                selectedAssignmentOption = null;
+
+                assignmentOptions.forEach((item) => {
+                    item.classList.remove('is-selected');
+                });
+
+                if (assignmentSubmit) {
+                    assignmentSubmit.disabled = true;
+                }
+            };
+
+            assignmentOptions.forEach((option) => {
+                option.addEventListener('click', () => selectAssignmentPoule(option));
+                option.addEventListener('mouseenter', () => selectAssignmentPoule(option));
+            });
+
+            document.querySelectorAll('[data-assignment-modal-close]').forEach((button) => {
+                button.addEventListener('click', closeAssignmentModal);
+            });
+
+            assignmentSubmit?.addEventListener('click', () => {
+                if (! assignmentCard || ! selectedAssignmentOption || ! csrfToken) {
+                    return;
+                }
+
+                const assignUrl = selectedAssignmentOption.dataset.assignUrl;
+
+                if (! assignUrl) {
+                    return;
+                }
+
+                const formData = new FormData();
+                formData.append('_token', csrfToken);
+                formData.append('registration_id', assignmentCard.dataset.inscriptionId);
+
+                assignmentSubmit.disabled = true;
+
+                fetch(assignUrl, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'Accept': 'text/html',
+                        'X-Requested-With': 'XMLHttpRequest',
+                    },
+                    credentials: 'same-origin',
+                })
+                    .then((response) => {
+                        if (! response.ok) {
+                            throw new Error('Affectation impossible.');
+                        }
+
+                        closeAssignmentModal();
+                        window.sessionStorage.setItem(scrollStorageKey, String(window.scrollY));
+                        window.location.href = response.url || window.location.href;
+                    })
+                    .catch(() => {
+                        assignmentSubmit.disabled = false;
+                        window.alert('Affectation impossible.');
+                    });
+            });
+
+            availableList?.addEventListener('click', (event) => {
+                const card = event.target.closest('[data-assignable-card]');
+
+                if (! card || suppressAssignmentClick) {
+                    return;
+                }
+
+                openAssignmentModal(card);
+            });
+
+            availableList?.addEventListener('keydown', (event) => {
+                if (! ['Enter', ' '].includes(event.key)) {
+                    return;
+                }
+
+                const card = event.target.closest('[data-assignable-card]');
+
+                if (! card) {
+                    return;
+                }
+
+                event.preventDefault();
+                openAssignmentModal(card);
+            });
+
+            document.addEventListener('keydown', (event) => {
+                if (event.key === 'Escape' && assignmentModal && ! assignmentModal.hidden) {
+                    closeAssignmentModal();
+                }
+            });
+
             const stopAutoScroll = () => {
                 autoScrollDirection = 0;
 
@@ -3485,6 +3904,7 @@
                     }
 
                     draggedCard = card;
+                    suppressAssignmentClick = true;
                     card.classList.add('is-dragging');
                     event.dataTransfer.effectAllowed = 'move';
                     event.dataTransfer.setData('text/plain', card.dataset.inscriptionId);
@@ -3497,6 +3917,9 @@
                     document.querySelectorAll('.poule-drop-zone.is-drag-over').forEach((dropZone) => {
                         dropZone.classList.remove('is-drag-over');
                     });
+                    window.setTimeout(() => {
+                        suppressAssignmentClick = false;
+                    }, 0);
                 });
             });
 
