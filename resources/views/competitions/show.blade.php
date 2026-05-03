@@ -1337,8 +1337,8 @@
 
         .participant-card-list {
             display: grid;
-            gap: 3px;
-            margin: 6px 0 0;
+            gap: 2px;
+            margin: 5px 0 0;
         }
 
         .participant-card {
@@ -1346,7 +1346,7 @@
             align-items: center;
             justify-content: space-between;
             gap: 6px;
-            padding: 4px 7px;
+            padding: 3px 7px;
             border: 1px solid #e2e8f0;
             border-radius: 6px;
             background: #ffffff;
@@ -1363,7 +1363,7 @@
 
         .participant-card-main {
             display: grid;
-            gap: 1px;
+            gap: 0;
             min-width: 0;
         }
 
@@ -1376,9 +1376,35 @@
         .participant-card-meta {
             color: #64748b;
             font-size: 11px;
+            line-height: 1.25;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
+        }
+
+        #participants-disponibles .participant-card-list {
+            gap: 6px;
+            margin-top: 6px;
+        }
+
+        #participants-disponibles .participant-card {
+            margin-top: 0;
+            padding: 6px 10px;
+            min-height: 0;
+        }
+
+        #participants-disponibles .participant-card-main {
+            gap: 0;
+            line-height: 1.2;
+        }
+
+        #participants-disponibles .participant-card-main strong {
+            font-size: 14px;
+        }
+
+        #participants-disponibles .participant-card-meta {
+            font-size: 12px;
+            line-height: 1.25;
         }
 
         .poule-participant-grid {
