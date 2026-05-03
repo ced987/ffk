@@ -1302,22 +1302,24 @@
 
         .poule-assignment-layout {
             display: grid;
-            grid-template-columns: minmax(260px, 0.78fr) minmax(420px, 1.42fr);
-            gap: 16px;
+            grid-template-columns: minmax(300px, 39%) minmax(0, 61%);
+            gap: 10px;
             align-items: start;
-            margin-top: 14px;
+            margin-top: 12px;
         }
 
         .poule-assignment-layout .subsection {
             margin-top: 0;
-            padding: 12px;
+            width: 100%;
+            padding: 10px;
             border: 1px solid #e2e8f0;
             border-radius: 10px;
             background: #f8fafc;
+            box-sizing: border-box;
         }
 
         .poule-assignment-layout .subsection + .subsection {
-            margin-top: 12px;
+            margin-top: 10px;
         }
 
         .poule-assignment-layout .subsection > h3 {
@@ -1330,22 +1332,23 @@
 
         .assignment-column {
             min-width: 0;
+            width: 100%;
         }
 
         .participant-card-list {
             display: grid;
-            gap: 5px;
-            margin: 8px 0 0;
+            gap: 3px;
+            margin: 6px 0 0;
         }
 
         .participant-card {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 8px;
-            padding: 6px 8px;
+            gap: 6px;
+            padding: 4px 7px;
             border: 1px solid #e2e8f0;
-            border-radius: 7px;
+            border-radius: 6px;
             background: #ffffff;
             box-shadow: none;
         }
@@ -1360,7 +1363,7 @@
 
         .participant-card-main {
             display: grid;
-            gap: 2px;
+            gap: 1px;
             min-width: 0;
         }
 
@@ -1380,14 +1383,14 @@
 
         .poule-participant-grid {
             grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 5px;
+            gap: 4px;
         }
 
         .participant-card.compact {
             align-items: center;
-            padding: 5px 7px;
+            padding: 4px 6px;
             border: 1px solid #e5eaf0;
-            border-radius: 7px;
+            border-radius: 6px;
             background: #ffffff;
             box-shadow: none;
         }
@@ -1429,7 +1432,7 @@
         }
 
         .poule-drop-zone {
-            padding: 12px;
+            padding: 10px;
             border: 1px solid #e2e8f0;
             border-left: 4px solid #facc15;
             border-radius: 10px;
@@ -1448,8 +1451,8 @@
         }
 
         .poule-assignment-layout .empty-state {
-            margin-top: 8px;
-            padding: 8px 9px;
+            margin-top: 6px;
+            padding: 6px 8px;
             border: 1px dashed #cbd5e1;
             border-radius: 7px;
             background: #ffffff;
