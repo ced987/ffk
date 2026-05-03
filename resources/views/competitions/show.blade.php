@@ -860,6 +860,239 @@
             gap: 4px;
         }
 
+        .club-kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 12px;
+            margin: 14px 0 18px;
+        }
+
+        .club-kpi-card {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 10px;
+            align-items: center;
+            padding: 13px 14px;
+            border: 1px solid #dbe3ef;
+            border-radius: 10px;
+            background: #ffffff;
+            box-shadow: 0 8px 18px rgba(15, 23, 42, 0.04);
+        }
+
+        .club-kpi-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            font-size: 18px;
+        }
+
+        .club-kpi-value {
+            display: block;
+            color: #111827;
+            font-size: 22px;
+            font-weight: 850;
+            line-height: 1;
+        }
+
+        .club-kpi-label {
+            color: #64748b;
+            font-size: 13px;
+            font-weight: 750;
+        }
+
+        .club-kpi-card.pre-invite .club-kpi-icon {
+            background: #eff6ff;
+            color: #1d4ed8;
+        }
+
+        .club-kpi-card.pending .club-kpi-icon {
+            background: #fff7ed;
+            color: #c2410c;
+        }
+
+        .club-kpi-card.accepted .club-kpi-icon {
+            background: #f0fdf4;
+            color: #166534;
+        }
+
+        .club-kpi-card.declined .club-kpi-icon {
+            background: #fef2f2;
+            color: #b91c1c;
+        }
+
+        .club-sections {
+            display: grid;
+            gap: 12px;
+        }
+
+        .club-sections-top {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+            align-items: start;
+        }
+
+        .club-invitation-section {
+            padding: 14px;
+            border: 1px solid #dbe3ef;
+            border-radius: 10px;
+            background: #ffffff;
+            box-shadow: 0 6px 14px rgba(15, 23, 42, 0.025);
+        }
+
+        .club-section-header {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+
+        .club-section-header h3 {
+            margin: 0 0 4px;
+            font-size: 16px;
+        }
+
+        .club-section-header p {
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        .club-count {
+            flex: 0 0 auto;
+            padding: 3px 8px;
+            border: 1px solid #dbe3ef;
+            border-radius: 999px;
+            background: #f8fafc;
+            color: #334155;
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .club-card-list {
+            display: grid;
+            gap: 6px;
+        }
+
+        .club-invitation-card {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto;
+            gap: 12px;
+            align-items: center;
+            min-height: 52px;
+            padding: 8px 10px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            background: #ffffff;
+        }
+
+        .club-invitation-card.accepted-row {
+            grid-template-columns: minmax(220px, 1fr) auto;
+            min-height: 46px;
+        }
+
+        .club-invitation-info {
+            display: grid;
+            gap: 5px;
+            min-width: 0;
+        }
+
+        .club-invitation-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            min-width: 0;
+        }
+
+        .club-invitation-title strong {
+            min-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .club-invitation-meta {
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        .club-invitation-stats {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+            gap: 6px;
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        .club-invitation-stats span {
+            padding: 2px 7px;
+            border: 1px solid #e2e8f0;
+            border-radius: 999px;
+            background: #f8fafc;
+            white-space: nowrap;
+        }
+
+        .club-invitation-stats .club-status-badge {
+            padding: 2px 7px;
+        }
+
+        .club-invitation-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .club-status-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 3px 7px;
+            border: 1px solid #cbd5e1;
+            border-radius: 999px;
+            background: #ffffff;
+            color: #334155;
+            font-size: 12px;
+            font-weight: 800;
+            white-space: nowrap;
+        }
+
+        .club-status-badge.pre-invite {
+            border-color: #bfdbfe;
+            background: #eff6ff;
+            color: #1d4ed8;
+        }
+
+        .club-status-badge.pending {
+            border-color: #fed7aa;
+            background: #fff7ed;
+            color: #c2410c;
+        }
+
+        .club-status-badge.accepted {
+            border-color: #bbf7d0;
+            background: #f0fdf4;
+            color: #166534;
+        }
+
+        .club-status-badge.declined {
+            border-color: #fecaca;
+            background: #fef2f2;
+            color: #b91c1c;
+        }
+
+        .club-empty-state {
+            padding: 9px 10px;
+            border: 1px dashed #cbd5e1;
+            border-radius: 8px;
+            background: #f8fafc;
+            color: #64748b;
+            font-size: 14px;
+        }
+
         .status {
             color: #5f6b7a;
             font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
@@ -1673,6 +1906,27 @@
         }
 
         @media (max-width: 760px) {
+            .club-kpi-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .club-sections-top,
+            .club-invitation-card.accepted-row {
+                grid-template-columns: 1fr;
+            }
+
+            .club-invitation-card {
+                grid-template-columns: 1fr;
+            }
+
+            .club-invitation-stats {
+                justify-content: flex-start;
+            }
+
+            .club-invitation-actions {
+                justify-content: flex-start;
+            }
+
             .assignment-modal-grid {
                 grid-template-columns: 1fr;
             }
@@ -2383,27 +2637,52 @@
         <section id="clubs" class="tab-panel" data-tab-panel="clubs">
             <h2>Clubs / invitations</h2>
 
-            <h3>Récapitulatif des clubs</h3>
+            @php
+                $preInvitedClubs = $competition->invitations
+                    ->where('status', \App\Models\Invitation::STATUS_PRE_INVITE)
+                    ->values();
+                $pendingInvitations = $competition->invitations
+                    ->where('status', \App\Models\Invitation::STATUS_INVITE)
+                    ->values();
+                $acceptedClubs = $competition->invitations
+                    ->where('status', \App\Models\Invitation::STATUS_PARTICIPATION_CONFIRMED)
+                    ->values();
+                $declinedClubs = $competition->invitations
+                    ->where('status', \App\Models\Invitation::STATUS_PARTICIPATION_DECLINED)
+                    ->values();
+            @endphp
 
-            <div class="summary-grid">
-                <div class="summary-item">
-                    <strong>{{ $invitationSummary[\App\Models\Invitation::STATUS_PRE_INVITE] }}</strong>
-                    <span>Préparation de l’invitation</span>
+            <div class="club-kpi-grid" aria-label="Récapitulatif des clubs invités">
+                <div class="club-kpi-card pre-invite">
+                    <span class="club-kpi-icon" aria-hidden="true">＋</span>
+                    <span>
+                        <strong class="club-kpi-value">{{ $preInvitedClubs->count() }}</strong>
+                        <span class="club-kpi-label">Pré-invités</span>
+                    </span>
                 </div>
 
-                <div class="summary-item">
-                    <strong>{{ $invitationSummary[\App\Models\Invitation::STATUS_INVITE] }}</strong>
-                    <span>En attente</span>
+                <div class="club-kpi-card pending">
+                    <span class="club-kpi-icon" aria-hidden="true">…</span>
+                    <span>
+                        <strong class="club-kpi-value">{{ $pendingInvitations->count() }}</strong>
+                        <span class="club-kpi-label">En attente</span>
+                    </span>
                 </div>
 
-                <div class="summary-item">
-                    <strong>{{ $invitationSummary[\App\Models\Invitation::STATUS_PARTICIPATION_CONFIRMED] }}</strong>
-                    <span>Confirmés</span>
+                <div class="club-kpi-card accepted">
+                    <span class="club-kpi-icon" aria-hidden="true">✓</span>
+                    <span>
+                        <strong class="club-kpi-value">{{ $acceptedClubs->count() }}</strong>
+                        <span class="club-kpi-label">Acceptés</span>
+                    </span>
                 </div>
 
-                <div class="summary-item">
-                    <strong>{{ $invitationSummary[\App\Models\Invitation::STATUS_PARTICIPATION_DECLINED] }}</strong>
-                    <span>Refusés</span>
+                <div class="club-kpi-card declined">
+                    <span class="club-kpi-icon" aria-hidden="true">×</span>
+                    <span>
+                        <strong class="club-kpi-value">{{ $declinedClubs->count() }}</strong>
+                        <span class="club-kpi-label">Refusés</span>
+                    </span>
                 </div>
             </div>
 
@@ -2428,22 +2707,8 @@
                 </div>
             @endif
 
-            @if ($isOrganizer)
-                <ul class="invitation-list">
-                    <li>
-                        <strong>{{ $competition->organizerClub->name }}</strong>
-                    @php
-                        $organizerValidationSummary = $participantValidationSummary['by_club']->get($competition->organizer_club_id, ['active' => 0, 'validated' => 0, 'not_validated' => 0]);
-                    @endphp
-                        <span>
-                            Organisateur -
-                            {{ $organizerValidationSummary['active'] }} actif(s),
-                            {{ $organizerValidationSummary['validated'] }} participant(s) validé(s),
-                            {{ $organizerValidationSummary['not_validated'] }} en attente de validation
-                        </span>
-                    </li>
-                </ul>
-            @elseif ($currentInvitation)
+            @unless ($isOrganizer)
+                @if ($currentInvitation)
                 @php
                     $currentClubValidationSummary = $participantValidationSummary['by_club']->get($currentUser->club_id, ['active' => 0, 'validated' => 0, 'not_validated' => 0]);
                 @endphp
@@ -2453,43 +2718,162 @@
                     {{ $currentClubValidationSummary['validated'] }} participant(s) validé(s),
                     {{ $currentClubValidationSummary['not_validated'] }} en attente de validation
                 </p>
-            @endif
+                @endif
+            @endunless
 
-            <div class="subsection">
-                <h3>Clubs invités</h3>
-
-            @if ($competition->invitations->isNotEmpty())
-                <ul class="invitation-list">
-                    @foreach ($competition->invitations as $invitation)
-                        <li>
-                            <div class="invitation-main">
-                                <strong>{{ $invitation->club->name }}</strong>
-                                <span>
-                                    {{ $invitationStatusLabels[$invitation->status] }}
-                                    @if ($isOrganizer)
-                                        @php
-                                            $clubValidationSummary = $participantValidationSummary['by_club']->get($invitation->club_id, ['active' => 0, 'validated' => 0, 'not_validated' => 0]);
-                                        @endphp
-                                        -
-                                        {{ $clubValidationSummary['active'] }} actif(s),
-                                        {{ $clubValidationSummary['validated'] }} participant(s) validé(s),
-                                        {{ $clubValidationSummary['not_validated'] }} en attente de validation
-                                    @endif
-                                </span>
+            @if ($isOrganizer)
+                @php
+                    $organizerValidationSummary = $participantValidationSummary['by_club']->get($competition->organizer_club_id, ['active' => 0, 'validated' => 0, 'not_validated' => 0]);
+                @endphp
+                <div class="club-invitation-section">
+                    <div class="club-invitation-card">
+                        <div class="club-invitation-info">
+                            <div class="club-invitation-title">
+                                <strong>{{ $competition->organizerClub->name }}</strong>
+                                <span class="club-status-badge accepted">Organisateur</span>
                             </div>
-
-                            @if ($isOrganizer && $invitation->status === \App\Models\Invitation::STATUS_PRE_INVITE)
-                                <form class="inline-form" method="POST" action="{{ route('competitions.invitations.mark-sent', [$competition, $invitation]) }}">
-                                    @csrf
-                                    <button type="submit">Marquer envoyée</button>
-                                </form>
-                            @endif
-                        </li>
-                    @endforeach
-                </ul>
-            @else
-                <p>Aucun club invité.</p>
+                            <span class="club-invitation-meta">
+                                Organisateur -
+                                {{ $organizerValidationSummary['active'] }} actif(s),
+                                {{ $organizerValidationSummary['validated'] }} participant(s) validé(s),
+                                {{ $organizerValidationSummary['not_validated'] }} en attente de validation
+                            </span>
+                        </div>
+                    </div>
+                </div>
             @endif
+
+            <div class="club-sections">
+                <div class="club-sections-top">
+                    <div class="club-invitation-section">
+                        <div class="club-section-header">
+                            <div>
+                                <h3>Clubs pré-invités</h3>
+                                <p>Clubs ajoutés mais invitation non encore envoyée.</p>
+                            </div>
+                            <span class="club-count">{{ $preInvitedClubs->count() }}</span>
+                        </div>
+
+                        @if ($preInvitedClubs->isNotEmpty())
+                            <div class="club-card-list">
+                                @foreach ($preInvitedClubs as $invitation)
+                                    <div class="club-invitation-card">
+                                        <div class="club-invitation-info">
+                                            <div class="club-invitation-title">
+                                                <strong>{{ $invitation->club->name }}</strong>
+                                                <span class="club-status-badge pre-invite">Pré-invité</span>
+                                            </div>
+                                            <span class="club-invitation-meta">Invitation prête à envoyer</span>
+                                        </div>
+
+                                        @if ($isOrganizer)
+                                            <div class="club-invitation-actions">
+                                                <form class="inline-form" method="POST" action="{{ route('competitions.invitations.mark-sent', [$competition, $invitation]) }}">
+                                                    @csrf
+                                                    <button type="submit">Lancer l’invitation</button>
+                                                </form>
+                                            </div>
+                                        @endif
+                                    </div>
+                                @endforeach
+                            </div>
+                        @else
+                            <p class="club-empty-state">Aucun club pré-invité.</p>
+                        @endif
+                    </div>
+
+                    <div class="club-invitation-section">
+                        <div class="club-section-header">
+                            <div>
+                                <h3>Invitations en attente</h3>
+                                <p>Invitation envoyée, en attente de réponse.</p>
+                            </div>
+                            <span class="club-count">{{ $pendingInvitations->count() }}</span>
+                        </div>
+
+                        @if ($pendingInvitations->isNotEmpty())
+                            <div class="club-card-list">
+                                @foreach ($pendingInvitations as $invitation)
+                                    <div class="club-invitation-card">
+                                        <div class="club-invitation-info">
+                                            <div class="club-invitation-title">
+                                                <strong>{{ $invitation->club->name }}</strong>
+                                                <span class="club-status-badge pending">Envoyée – en attente</span>
+                                            </div>
+                                            <span class="club-invitation-meta">Envoyée le {{ $invitation->updated_at?->format('d/m/Y') ?? 'date non renseignée' }}</span>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        @else
+                            <p class="club-empty-state">Aucune invitation en attente.</p>
+                        @endif
+                    </div>
+                </div>
+
+                <div class="club-invitation-section">
+                    <div class="club-section-header">
+                        <div>
+                            <h3>Clubs acceptés</h3>
+                            <p>Clubs ayant accepté l’invitation.</p>
+                        </div>
+                        <span class="club-count">{{ $acceptedClubs->count() }}</span>
+                    </div>
+
+                    @if ($acceptedClubs->isNotEmpty())
+                        <div class="club-card-list">
+                            @foreach ($acceptedClubs as $invitation)
+                                @php
+                                    $clubValidationSummary = $participantValidationSummary['by_club']->get($invitation->club_id, ['active' => 0, 'validated' => 0, 'not_validated' => 0]);
+                                @endphp
+                                <div class="club-invitation-card accepted-row">
+                                    <div class="club-invitation-info">
+                                        <div class="club-invitation-title">
+                                            <strong>{{ $invitation->club->name }}</strong>
+                                        </div>
+                                    </div>
+
+                                    <div class="club-invitation-stats">
+                                        <span class="club-status-badge accepted">Accepté</span>
+                                        <span>{{ $clubValidationSummary['active'] }} actif(s),</span>
+                                        <span>{{ $clubValidationSummary['validated'] }} validé(s),</span>
+                                        <span>{{ $clubValidationSummary['not_validated'] }} en attente de validation</span>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    @else
+                        <p class="club-empty-state">Aucun club accepté.</p>
+                    @endif
+                </div>
+
+                <div class="club-invitation-section">
+                    <div class="club-section-header">
+                        <div>
+                            <h3>Clubs refusés</h3>
+                            <p>Invitation refusée.</p>
+                        </div>
+                        <span class="club-count">{{ $declinedClubs->count() }}</span>
+                    </div>
+
+                    @if ($declinedClubs->isNotEmpty())
+                        <div class="club-card-list">
+                            @foreach ($declinedClubs as $invitation)
+                                <div class="club-invitation-card">
+                                    <div class="club-invitation-info">
+                                        <div class="club-invitation-title">
+                                            <strong>{{ $invitation->club->name }}</strong>
+                                            <span class="club-status-badge declined">Refusé</span>
+                                        </div>
+                                        <span class="club-invitation-meta">Refusée le {{ $invitation->updated_at?->format('d/m/Y') ?? 'date non renseignée' }}</span>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    @else
+                        <p class="club-empty-state">Aucun club refusé.</p>
+                    @endif
+                </div>
             </div>
 
             @if ($isOrganizer)
@@ -3508,7 +3892,6 @@
             const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
             let draggedCard = null;
             const scrollStorageKey = 'competition-show-scroll-y';
-            const tabStorageKey = 'competition-show-active-tab';
             const isTouchDevice = ('ontouchstart' in window) || navigator.maxTouchPoints > 0;
             const tabButtons = Array.from(document.querySelectorAll('[data-tab-target]'));
             const tabPanels = Array.from(document.querySelectorAll('[data-tab-panel]'));
@@ -3599,7 +3982,6 @@
                     panel.hidden = panel.dataset.tabPanel !== activeTab;
                 });
 
-                window.localStorage.setItem(tabStorageKey, activeTab);
             };
 
             tabButtons.forEach((button) => {
@@ -3621,15 +4003,35 @@
                 window.print();
             });
 
-            const hashTabMap = {
-                '#actions': 'suivi',
-                '#invitation': 'clubs',
-                '#participants': 'participants',
-                '#poules': 'poules',
-                '#combats': 'combats',
+            const tabForHash = (hash) => {
+                if (! hash) {
+                    return 'suivi';
+                }
+
+                if (hash === '#actions') {
+                    return 'suivi';
+                }
+
+                if (hash === '#invitation' || hash === '#clubs') {
+                    return 'clubs';
+                }
+
+                if (hash.startsWith('#participants')) {
+                    return 'participants';
+                }
+
+                if (hash.startsWith('#poules') || hash === '#assistant-poules' || hash === '#creation-poule') {
+                    return 'poules';
+                }
+
+                if (hash.startsWith('#combat')) {
+                    return 'combats';
+                }
+
+                return 'suivi';
             };
 
-            activateTab(hashTabMap[window.location.hash] || window.localStorage.getItem(tabStorageKey) || 'suivi');
+            activateTab(tabForHash(window.location.hash));
 
             document.querySelectorAll('[data-rename-open]').forEach((button) => {
                 button.addEventListener('click', () => {

@@ -41,7 +41,7 @@ class InvitationResponseTest extends TestCase
             ->get(route('competitions.show', $competition))
             ->assertOk()
             ->assertSee('Club B')
-            ->assertSee('Participation confirmée')
+            ->assertSee('Accepté')
             ->assertDontSee('participation_confirmee');
 
         $this->withSession(['current_user_id' => $userC->id])

@@ -11,6 +11,7 @@ use App\Models\Poule;
 use App\Models\Setting;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Route;
 
@@ -118,8 +119,54 @@ Route::get('/guide', function () {
     return view('guide', [
         'guide' => file_get_contents(base_path('docs/guide.md')),
         'helpVideoIframe' => Setting::where('key', 'help_video_iframe')->value('value'),
+        'showGuideExtras' => true,
     ]);
 })->name('guide');
+
+Route::get('/guide/jeu-test-demo', function () {
+    return view('guide', [
+        'guide' => file_get_contents(base_path('docs/jeu-test-demo.md')),
+        'helpVideoIframe' => null,
+        'showGuideExtras' => false,
+    ]);
+})->name('guide.jeu-test-demo');
+
+Route::get('/demo/reset', function () {
+    abort_if(app()->environment('production'), 404);
+
+    return view('demo.reset');
+})->name('demo.reset');
+
+Route::post('/demo/reset', function (Request $request) {
+    abort_if(app()->environment('production'), 404);
+
+    $request->validate([
+        'password' => ['required', 'string'],
+    ]);
+
+    $expectedPassword = config('demo.reset_password');
+
+    if (blank($expectedPassword)) {
+        return back()
+            ->withErrors(['password' => 'DEMO_RESET_PASSWORD doit être renseigné.'])
+            ->withInput();
+    }
+
+    if (! hash_equals((string) $expectedPassword, (string) $request->input('password'))) {
+        return back()
+            ->withErrors(['password' => 'Mot de passe incorrect.'])
+            ->withInput();
+    }
+
+    Artisan::call('migrate:fresh', [
+        '--seed' => true,
+        '--force' => true,
+    ]);
+
+    return redirect()
+        ->route('demo.reset')
+        ->with('status', 'Démo réinitialisée.');
+})->name('demo.reset.run');
 
 Route::get('/licencies', function () use ($currentDemoUser) {
     $currentUser = $currentDemoUser();

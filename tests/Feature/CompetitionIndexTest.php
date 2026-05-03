@@ -104,6 +104,8 @@ class CompetitionIndexTest extends TestCase
             ->assertSee('Actions : 1')
             ->assertSee('href="'.route('competitions.show', $competition).'"', false)
             ->assertSee('href="'.route('competitions.show', $demoCompetition).'"', false)
+            ->assertDontSee('href="'.route('competitions.show', $competition).'#', false)
+            ->assertDontSee('href="'.route('competitions.show', $demoCompetition).'#', false)
             ->assertSee('Gérer')
             ->assertDontSee('Participant')
             ->assertDontSee('Voir / gérer mes participants');

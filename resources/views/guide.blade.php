@@ -36,6 +36,25 @@
             border-radius: 8px;
         }
 
+        .guide-links {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 24px;
+        }
+
+        .guide-links a {
+            display: inline-flex;
+            align-items: center;
+            min-height: 34px;
+            padding: 6px 10px;
+            border: 1px solid #cbd5e1;
+            border-radius: 7px;
+            background: #f8fafc;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
         a {
             color: #1d4ed8;
         }
@@ -97,17 +116,30 @@
         </div>
     @endif
 
-    {{-- IMAGE --}}
-    <div style="margin-bottom: 24px;">
-        <img src="/images/guide-preview.png" style="width:100%; border-radius:8px;">
-    </div>
+    @if ($showGuideExtras ?? true)
+        {{-- IMAGE --}}
+        <div style="margin-bottom: 24px;">
+            <img src="/images/guide-preview.png" style="width:100%; border-radius:8px;">
+        </div>
 
-    {{-- PDF --}}
-    <div style="margin-bottom: 24px;">
-        <a href="/docs/guide-utilisateur.pdf" target="_blank">
-            📄 Télécharger le guide complet (PDF)
-        </a>
-    </div>
+        <div class="guide-links">
+            <a href="/docs/guide-utilisateur.pdf" target="_blank">
+                📄 Télécharger le guide complet (PDF)
+            </a>
+            <a href="{{ route('guide.jeu-test-demo') }}">
+                🧪 Jeu de test démo
+            </a>
+            @if (! app()->environment('production'))
+                <a href="{{ route('demo.reset') }}">
+                    ♻️ Réinitialiser cette démo
+                </a>
+            @endif
+        </div>
+    @else
+        <p class="back-link">
+            <a href="{{ route('guide') }}">← Retour à l’aide</a>
+        </p>
+    @endif
 
     {{-- MARKDOWN --}}
     {!! Str::markdown($guide) !!}
