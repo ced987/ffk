@@ -353,6 +353,263 @@
             font-weight: 800;
         }
 
+        .poule-assistant {
+            display: grid;
+            gap: 9px;
+            margin: 0 0 12px;
+            padding: 12px;
+            border: 1px solid #d8e1ec;
+            border-radius: 10px;
+            background: #ffffff;
+            box-shadow: 0 5px 14px rgba(15, 23, 42, 0.04);
+        }
+
+        .poule-assistant-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .poule-assistant-header h3,
+        .poule-proposal-card h4 {
+            margin: 0;
+            color: #17202a;
+        }
+
+        .poule-assistant-header h3 {
+            font-size: 15px;
+        }
+
+        .poule-assistant-header .section-intro {
+            margin-top: 2px;
+            max-width: 680px;
+            font-size: 11px;
+        }
+
+        .poule-assistant-form {
+            display: grid;
+            gap: 8px;
+            padding: 8px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            background: #f8fafc;
+        }
+
+        .poule-assistant-criteria {
+            display: grid;
+            grid-template-columns: repeat(5, minmax(120px, 1fr));
+            gap: 8px;
+        }
+
+        .poule-assistant-criteria label {
+            margin-bottom: 3px;
+            color: #475569;
+            font-size: 10px;
+            font-weight: 800;
+        }
+
+        .poule-assistant-criteria input,
+        .poule-assistant-criteria select {
+            max-width: none;
+            min-height: 30px;
+            padding: 5px 7px;
+            border-color: #cbd5e1;
+            background: #ffffff;
+            font-size: 12px;
+        }
+
+        .poule-assistant-actions,
+        .poule-proposal-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .poule-assistant-actions {
+            padding-top: 0;
+        }
+
+        .app-page .competition-page .poule-assistant-actions button,
+        .app-page .competition-page .poule-assistant-actions .secondary-button,
+        .app-page .competition-page .poule-assistant-results-header button,
+        .app-page .competition-page .poule-proposal-card button {
+            min-height: 28px;
+            margin-top: 0;
+            padding: 4px 8px;
+            font-size: 12px;
+        }
+
+        .app-page .competition-page .poule-assistant-actions .secondary-button,
+        .app-page .competition-page .poule-proposal-actions .secondary-button,
+        .app-page .competition-page .poule-proposal-card .secondary-button {
+            border-color: #cbd5e1;
+            background: #ffffff;
+            color: #334155;
+        }
+
+        .app-page .competition-page .poule-assistant-actions .secondary-button:hover,
+        .app-page .competition-page .poule-proposal-actions .secondary-button:hover,
+        .app-page .competition-page .poule-proposal-card .secondary-button:hover {
+            border-color: #94a3b8;
+            background: #f8fafc;
+        }
+
+        .poule-proposals {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 8px;
+        }
+
+        .poule-proposal-card {
+            display: grid;
+            gap: 6px;
+            padding: 9px;
+            border: 1px solid #dfe7f1;
+            border-left: 3px solid #2563eb;
+            border-radius: 8px;
+            background: #ffffff;
+            box-shadow: 0 2px 8px rgba(15, 23, 42, 0.03);
+        }
+
+        .poule-proposal-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .poule-proposal-heading {
+            display: grid;
+            gap: 2px;
+        }
+
+        .poule-proposal-card h4 {
+            font-size: 13px;
+        }
+
+        .poule-proposal-score {
+            color: #64748b;
+            font-size: 11px;
+            font-weight: 800;
+        }
+
+        .poule-proposal-indicator {
+            display: inline-flex;
+            width: fit-content;
+            padding: 3px 8px;
+            border: 1px solid #bfdbfe;
+            border-radius: 999px;
+            background: #eff6ff;
+            color: #1d4ed8;
+            font-size: 11px;
+            font-weight: 800;
+            white-space: nowrap;
+        }
+
+        .poule-proposal-indicator.very-good {
+            border-color: #bbf7d0;
+            background: #f0fdf4;
+            color: #166534;
+        }
+
+        .poule-proposal-indicator.arbitrate {
+            border-color: #fde68a;
+            background: #fffbeb;
+            color: #92400e;
+        }
+
+        .poule-proposal-explanation {
+            margin: -2px 0 0;
+            color: #475569;
+            font-size: 11px;
+            line-height: 1.25;
+        }
+
+        .poule-proposal-warning {
+            width: fit-content;
+            padding: 4px 7px;
+            border: 1px solid #fde68a;
+            border-radius: 8px;
+            background: #fffbeb;
+            color: #92400e;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .poule-proposal-list,
+        .poule-unassigned-list {
+            display: grid;
+            gap: 4px;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .poule-proposal-list li,
+        .poule-unassigned-list li {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            gap: 8px;
+            padding: 4px 6px;
+            border: 1px solid #e5eaf0;
+            border-radius: 6px;
+            background: #f8fafc;
+            color: #334155;
+            font-size: 11px;
+            line-height: 1.15;
+        }
+
+        .poule-proposal-list span,
+        .poule-unassigned-list span {
+            color: #64748b;
+            font-size: 11px;
+            white-space: nowrap;
+        }
+
+        .poule-assistant-results {
+            display: grid;
+            gap: 8px;
+            padding-top: 0;
+        }
+
+        .poule-assistant-results-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            flex-wrap: wrap;
+            padding: 2px 0;
+        }
+
+        .poule-assistant-results-header strong,
+        .poule-unassigned-title {
+            color: #17202a;
+            font-size: 14px;
+            font-weight: 850;
+        }
+
+        .poule-unassigned-panel {
+            display: grid;
+            gap: 6px;
+            padding: 8px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            background: #f8fafc;
+        }
+
+        @media (max-width: 1180px) {
+            .poule-assistant-criteria {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            }
+
+            .poule-proposals {
+                grid-template-columns: 1fr;
+            }
+        }
+
         .actions-summary {
             margin-bottom: 20px;
             padding-bottom: 18px;
@@ -851,7 +1108,7 @@
         }
 
         .participant-group {
-            margin-top: 16px;
+            margin-top: 10px;
         }
 
         .participant-group h3 {
@@ -863,9 +1120,9 @@
             display: flex;
             align-items: flex-start;
             justify-content: space-between;
-            gap: 12px;
-            margin: -2px -2px 14px;
-            padding-bottom: 12px;
+            gap: 10px;
+            margin: 0 0 10px;
+            padding-bottom: 8px;
             border-bottom: 1px solid #e5eaf0;
             min-width: 0;
         }
@@ -875,13 +1132,13 @@
             min-width: 0;
             overflow-wrap: anywhere;
             color: #111827;
-            font-size: 17px;
+            font-size: 15px;
             font-weight: 850;
         }
 
         .poule-header-main {
             display: grid;
-            gap: 10px;
+            gap: 6px;
             min-width: 0;
             flex: 1 1 auto;
         }
@@ -890,7 +1147,7 @@
             display: flex;
             align-items: center;
             justify-content: flex-end;
-            gap: 8px;
+            gap: 6px;
             flex: 0 0 auto;
             flex-wrap: wrap;
         }
@@ -899,7 +1156,7 @@
         .poule-meta-row {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 7px;
             min-width: 0;
         }
 
@@ -916,7 +1173,7 @@
         .poule-action-button {
             flex: 0 0 auto;
             margin-top: 0;
-            padding: 7px 10px;
+            padding: 5px 8px;
             border: 1px solid #cbd5e1;
             border-radius: 7px;
             background: #ffffff;
@@ -929,11 +1186,11 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 6px;
+            gap: 5px;
             min-width: 0;
-            height: 38px;
-            padding: 0 12px;
-            font-size: 14px;
+            height: 31px;
+            padding: 0 9px;
+            font-size: 12px;
             line-height: 1;
             text-decoration: none;
         }
@@ -969,7 +1226,7 @@
         .rename-poule-form {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
             flex-wrap: wrap;
             min-width: 0;
         }
@@ -983,6 +1240,9 @@
             flex: 1 1 220px;
             min-width: 160px;
             max-width: 360px;
+            min-height: 31px;
+            padding: 5px 8px;
+            font-size: 13px;
         }
 
         .rename-poule-form button {
@@ -992,12 +1252,12 @@
         .poule-count {
             display: inline-flex;
             align-items: center;
-            padding: 4px 10px;
+            padding: 3px 8px;
             border: 1px solid #d9e2ec;
             border-radius: 999px;
             background: #f8fafc;
             color: #334155;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 700;
             white-space: nowrap;
         }
@@ -1005,12 +1265,12 @@
         .poule-status-badge {
             display: inline-flex;
             align-items: center;
-            padding: 4px 10px;
+            padding: 3px 8px;
             border: 1px solid #fde68a;
             border-radius: 999px;
             background: #fef9c3;
             color: #854d0e;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 700;
             white-space: nowrap;
         }
@@ -1024,12 +1284,12 @@
         .poule-progress-badge {
             display: inline-flex;
             align-items: center;
-            padding: 4px 10px;
+            padding: 3px 8px;
             border: 1px solid #fde68a;
             border-radius: 999px;
             background: #fffbeb;
             color: #92400e;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 800;
             white-space: nowrap;
         }
@@ -1042,29 +1302,29 @@
 
         .poule-assignment-layout {
             display: grid;
-            grid-template-columns: minmax(280px, 0.9fr) minmax(360px, 1.4fr);
-            gap: 24px;
+            grid-template-columns: minmax(260px, 0.78fr) minmax(420px, 1.42fr);
+            gap: 16px;
             align-items: start;
-            margin-top: 22px;
+            margin-top: 14px;
         }
 
         .poule-assignment-layout .subsection {
             margin-top: 0;
-            padding: 18px;
+            padding: 12px;
             border: 1px solid #e2e8f0;
-            border-radius: 12px;
+            border-radius: 10px;
             background: #f8fafc;
         }
 
         .poule-assignment-layout .subsection + .subsection {
-            margin-top: 18px;
+            margin-top: 12px;
         }
 
         .poule-assignment-layout .subsection > h3 {
-            margin-bottom: 12px;
+            margin-bottom: 8px;
             padding-left: 2px;
             color: #17202a;
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 850;
         }
 
@@ -1074,18 +1334,18 @@
 
         .participant-card-list {
             display: grid;
-            gap: 8px;
-            margin: 12px 0 0;
+            gap: 5px;
+            margin: 8px 0 0;
         }
 
         .participant-card {
             display: flex;
-            align-items: flex-start;
+            align-items: center;
             justify-content: space-between;
-            gap: 10px;
-            padding: 9px 11px;
+            gap: 8px;
+            padding: 6px 8px;
             border: 1px solid #e2e8f0;
-            border-radius: 8px;
+            border-radius: 7px;
             background: #ffffff;
             box-shadow: none;
         }
@@ -1100,22 +1360,32 @@
 
         .participant-card-main {
             display: grid;
-            gap: 4px;
+            gap: 2px;
+            min-width: 0;
+        }
+
+        .participant-card-main strong {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
 
         .participant-card-meta {
             color: #64748b;
-            font-size: 13px;
+            font-size: 11px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
 
         .poule-participant-grid {
             grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 8px;
+            gap: 5px;
         }
 
         .participant-card.compact {
             align-items: center;
-            padding: 8px 10px;
+            padding: 5px 7px;
             border: 1px solid #e5eaf0;
             border-radius: 7px;
             background: #ffffff;
@@ -1126,17 +1396,20 @@
             display: grid;
             gap: 2px;
             min-width: 0;
-            font-size: 14px;
+            font-size: 12px;
         }
 
         .participant-card-title {
             color: #17202a;
             font-weight: 700;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
 
         .participant-card.compact .participant-card-meta {
             color: #64748b;
-            font-size: 13px;
+            font-size: 11px;
         }
 
         .app-page .competition-page .visual-remove-button {
@@ -1156,17 +1429,31 @@
         }
 
         .poule-drop-zone {
-            padding: 20px;
+            padding: 12px;
             border: 1px solid #e2e8f0;
             border-left: 4px solid #facc15;
-            border-radius: 12px;
+            border-radius: 10px;
             background: #ffffff;
-            box-shadow: 0 6px 16px rgba(15, 23, 42, 0.045);
+            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.035);
         }
 
         .poule-drop-zone.frozen {
             border-left-color: #22c55e;
             background: #f8fafc;
+        }
+
+        .poule-assignment-layout .section-intro {
+            margin-bottom: 8px;
+            font-size: 12px;
+        }
+
+        .poule-assignment-layout .empty-state {
+            margin-top: 8px;
+            padding: 8px 9px;
+            border: 1px dashed #cbd5e1;
+            border-radius: 7px;
+            background: #ffffff;
+            font-size: 12px;
         }
 
         .poule-drop-zone.is-drag-over {
@@ -2344,6 +2631,126 @@
                 <p class="section-intro">Affectez les participants puis figez les poules pour générer les combats.</p>
 
                 <div class="subsection">
+                    <div id="assistant-poules" class="poule-assistant">
+                        <div class="poule-assistant-header">
+                            <div>
+                                <h3>Assistant de génération des poules</h3>
+                                <p class="section-intro">Le logiciel propose des groupes à partir des participants disponibles. Vous gardez la décision finale.</p>
+                            </div>
+                        </div>
+
+                        <form class="poule-assistant-form" method="GET" action="{{ route('competitions.show', $competition) }}">
+                            <input type="hidden" name="analyze_poules" value="1">
+                            <div class="poule-assistant-criteria">
+                                <div>
+                                    <label for="same_sex_only">Même sexe uniquement</label>
+                                    <select id="same_sex_only" name="same_sex_only">
+                                        <option value="1" @selected($pouleAssistantCriteria['same_sex_only'])>Oui</option>
+                                        <option value="0" @selected(! $pouleAssistantCriteria['same_sex_only'])>Non</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="age_gap_max">Écart d’âge max</label>
+                                    <input id="age_gap_max" name="age_gap_max" type="number" min="0" max="50" value="{{ $pouleAssistantCriteria['age_gap_max'] }}">
+                                </div>
+                                <div>
+                                    <label for="weight_gap_max">Écart de poids max</label>
+                                    <input id="weight_gap_max" name="weight_gap_max" type="number" min="0" max="200" step="0.5" value="{{ $pouleAssistantCriteria['weight_gap_max'] }}">
+                                </div>
+                                <div>
+                                    <label for="target_size">Taille cible d’une poule</label>
+                                    <input id="target_size" name="target_size" type="number" min="2" max="16" value="{{ $pouleAssistantCriteria['target_size'] }}">
+                                </div>
+                                <div>
+                                    <label for="adult_access_age">Accès aux poules adultes à partir de</label>
+                                    <input id="adult_access_age" name="adult_access_age" type="number" min="12" max="30" value="{{ $pouleAssistantCriteria['adult_access_age'] }}">
+                                </div>
+                            </div>
+                            <div class="poule-assistant-actions">
+                                <button type="submit">Analyser les participants</button>
+                                @if ($pouleAssistantResult)
+                                    <button class="secondary-button" type="submit">Recalculer</button>
+                                    <a class="secondary-button" href="{{ route('competitions.show', $competition) }}#assistant-poules">Fermer les suggestions</a>
+                                @endif
+                            </div>
+                        </form>
+
+                        @if ($pouleAssistantResult)
+                            <div class="poule-assistant-results">
+                            @if ($pouleAssistantResult['proposals']->isNotEmpty())
+                                <div class="poule-assistant-results-header">
+                                    <strong>Poules proposées</strong>
+                                    <form class="inline-form" method="POST" action="{{ route('competitions.poules.proposals.store', $competition) }}">
+                                        @csrf
+                                        @foreach ($pouleAssistantResult['proposals'] as $proposal)
+                                            <input type="hidden" name="proposal_names[]" value="{{ $proposal['name'] }}">
+                                            <input type="hidden" name="proposal_registration_ids[]" value="{{ $proposal['registrations']->pluck('id')->implode(',') }}">
+                                        @endforeach
+                                        <button type="submit">Créer toutes les propositions</button>
+                                    </form>
+                                </div>
+
+                                <div class="poule-proposals">
+                                    @foreach ($pouleAssistantResult['proposals'] as $proposal)
+                                        @php
+                                            $indicatorClass = match ($proposal['indicator']) {
+                                                'Très cohérent' => 'very-good',
+                                                'À arbitrer' => 'arbitrate',
+                                                default => '',
+                                            };
+                                        @endphp
+                                        <div class="poule-proposal-card">
+                                            <div class="poule-proposal-top">
+                                                <div class="poule-proposal-heading">
+                                                    <h4>{{ $proposal['name'] }}</h4>
+                                                    <span class="poule-proposal-score">Score : {{ $proposal['score'] }}/100</span>
+                                                </div>
+                                                <span @class(['poule-proposal-indicator', $indicatorClass => $indicatorClass !== ''])>{{ $proposal['indicator'] }}</span>
+                                            </div>
+                                            <p class="poule-proposal-explanation">{{ $proposal['justification'] }}</p>
+                                            @if ($proposal['warning'])
+                                                <div class="poule-proposal-warning">{{ $proposal['warning'] }}</div>
+                                            @endif
+                                            <ul class="poule-proposal-list">
+                                                @foreach ($proposal['registrations'] as $registration)
+                                                    <li>
+                                                        <strong>{{ $registration->participantSource->last_name }} {{ $registration->participantSource->first_name }}</strong>
+                                                        <span>{{ $registration->club->name }} · {{ $registration->participantSource->sex }} · {{ $registration->participantSource->age }} ans · {{ $registration->participantSource->approximate_weight }} kg</span>
+                                                    </li>
+                                                @endforeach
+                                            </ul>
+                                            <form class="inline-form" method="POST" action="{{ route('competitions.poules.proposals.store', $competition) }}">
+                                                @csrf
+                                                <input type="hidden" name="proposal_names[]" value="{{ $proposal['name'] }}">
+                                                <input type="hidden" name="proposal_registration_ids[]" value="{{ $proposal['registrations']->pluck('id')->implode(',') }}">
+                                                <button class="secondary-button" type="submit">Créer cette poule</button>
+                                            </form>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            @else
+                                <p class="empty-state">Aucune proposition compatible trouvée.</p>
+                            @endif
+
+                            <div class="poule-unassigned-panel">
+                                <strong class="poule-unassigned-title">Participants non affectés</strong>
+                                @if ($pouleAssistantResult['unassigned']->isNotEmpty())
+                                    <ul class="poule-unassigned-list">
+                                        @foreach ($pouleAssistantResult['unassigned'] as $unassigned)
+                                            <li>
+                                                <strong>{{ $unassigned['registration']->participantSource->last_name }} {{ $unassigned['registration']->participantSource->first_name }}</strong>
+                                                <span>{{ $unassigned['registration']->club->name }} · {{ $unassigned['registration']->participantSource->sex }} · {{ $unassigned['registration']->participantSource->age }} ans · {{ $unassigned['registration']->participantSource->approximate_weight }} kg · {{ $unassigned['reason'] }}</span>
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                @else
+                                    <p class="empty-state">Tous les participants disponibles ont une proposition.</p>
+                                @endif
+                            </div>
+                            </div>
+                        @endif
+                    </div>
+
                     <h3>Poules</h3>
 
                     <details id="creation-poule" class="form-accordion">

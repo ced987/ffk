@@ -232,6 +232,8 @@ class DatabaseSeeder extends Seeder
                 ['name' => 'Poule préparation', 'status' => Poule::STATUS_DRAFT, 'registrations' => [2, 4]],
             ],
         ]);
+
+        $this->call(OpenInterclubsMediterraneeSeeder::class);
     }
 
     /**

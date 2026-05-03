@@ -20,7 +20,8 @@ $demoUsers = function () {
 
 $currentDemoUser = function () use ($demoUsers) {
     $users = $demoUsers();
-    $currentUser = $users->firstWhere('id', session('current_user_id')) ?? $users->first();
+    $defaultUser = $users->first(fn (User $user) => $user->club?->name === 'KC Marseille 13') ?? $users->first();
+    $currentUser = $users->firstWhere('id', session('current_user_id')) ?? $defaultUser;
 
     if ($currentUser !== null && session('current_user_id') !== $currentUser->id) {
         session(['current_user_id' => $currentUser->id]);
@@ -271,7 +272,7 @@ Route::get('/competitions', function () use ($currentDemoUser, $demoCompetitionN
     ]);
 })->name('competitions.index');
 
-Route::get('/competitions/{competition}', function (Competition $competition) use ($currentDemoUser) {
+Route::get('/competitions/{competition}', function (Request $request, Competition $competition) use ($currentDemoUser) {
     $currentUser = $currentDemoUser();
 
     abort_if($currentUser === null || $currentUser->club === null, 403);
@@ -354,6 +355,16 @@ Route::get('/competitions/{competition}', function (Competition $competition) us
             ->whereHas('operationalRegistrations', fn ($query) => $query->where('competition_id', $competition->id))
             ->pluck('licencie_id')
         : collect();
+    $pouleAssistantCriteria = [
+        'same_sex_only' => $request->input('same_sex_only', '1') === '1',
+        'age_gap_max' => max(0, min(50, (int) $request->input('age_gap_max', 2))),
+        'weight_gap_max' => max(0, min(200, (float) $request->input('weight_gap_max', 5))),
+        'target_size' => max(2, min(16, (int) $request->input('target_size', 4))),
+        'adult_access_age' => max(12, min(30, (int) $request->input('adult_access_age', 18))),
+    ];
+    $pouleAssistantResult = $isOrganizer && $request->boolean('analyze_poules')
+        ? $competition->pouleAssistantProposals($pouleAssistantCriteria)
+        : null;
 
     return view('competitions.show', [
         'currentUser' => $currentUser,
@@ -375,6 +386,8 @@ Route::get('/competitions/{competition}', function (Competition $competition) us
         'participantClubOptions' => $participantClubOptions,
         'currentClubLicencies' => $currentClubLicencies,
         'registeredLicencieIds' => $registeredLicencieIds,
+        'pouleAssistantCriteria' => $pouleAssistantCriteria,
+        'pouleAssistantResult' => $pouleAssistantResult,
     ]);
 })->name('competitions.show');
 
@@ -441,6 +454,62 @@ Route::post('/competitions/{competition}/poules', function (Request $request, Co
 
     return redirect_to_competition_fragment($competition, 'creation-poule', 'Poule créée en préparation.');
 })->name('competitions.poules.store');
+
+Route::post('/competitions/{competition}/poules/proposals', function (Request $request, Competition $competition) use ($currentDemoUser) {
+    $currentUser = $currentDemoUser();
+
+    abort_if($currentUser === null || $currentUser->club === null, 403);
+    abort_unless($currentUser->club_id === $competition->organizer_club_id, 403);
+
+    $validated = $request->validate([
+        'proposal_registration_ids' => ['required', 'array', 'min:1'],
+        'proposal_registration_ids.*' => ['required', 'string'],
+        'proposal_names' => ['nullable', 'array'],
+        'proposal_names.*' => ['nullable', 'string', 'max:100'],
+    ]);
+
+    $createdCount = 0;
+
+    foreach ($validated['proposal_registration_ids'] as $index => $registrationIds) {
+        $ids = collect(explode(',', $registrationIds))
+            ->map(fn (string $id) => (int) trim($id))
+            ->filter()
+            ->unique()
+            ->values();
+
+        if ($ids->count() < 2) {
+            continue;
+        }
+
+        $registrations = InscriptionOperationnelle::query()
+            ->whereIn('id', $ids)
+            ->where('competition_id', $competition->id)
+            ->where('is_active', true)
+            ->where('is_validated', true)
+            ->whereNull('poule_id')
+            ->orderBy('id')
+            ->get();
+
+        if ($registrations->count() < 2) {
+            continue;
+        }
+
+        $poule = Poule::create([
+            'competition_id' => $competition->id,
+            'name' => $validated['proposal_names'][$index] ?? 'Poule proposée '.($index + 1),
+            'status' => Poule::STATUS_DRAFT,
+        ]);
+
+        $registrations->each(fn (InscriptionOperationnelle $registration) => $registration->update(['poule_id' => $poule->id]));
+        $createdCount++;
+    }
+
+    if ($createdCount === 0) {
+        return redirect_to_competition_fragment($competition, 'assistant-poules', 'Aucune poule proposée créée.');
+    }
+
+    return redirect_to_competition_fragment($competition, 'poules-brouillon', $createdCount.' poule(s) proposée(s) créée(s).');
+})->name('competitions.poules.proposals.store');
 
 Route::patch('/competitions/{competition}/poules/{poule}/rename', function (Request $request, Competition $competition, Poule $poule) use ($currentDemoUser) {
     $currentUser = $currentDemoUser();

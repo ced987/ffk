@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 
 class Competition extends Model
 {
@@ -60,6 +61,249 @@ class Competition extends Model
                 $registration->participantSource->first_name,
             ))
             ->values();
+    }
+
+    public function pouleAssistantProposals(array $criteria = []): array
+    {
+        $criteria = array_merge([
+            'same_sex_only' => true,
+            'age_gap_max' => 2,
+            'weight_gap_max' => 5,
+            'target_size' => 4,
+            'adult_access_age' => 18,
+        ], $criteria);
+
+        $availableRegistrations = $this->eligiblePouleRegistrations()
+            ->sortBy(fn (InscriptionOperationnelle $registration) => sprintf(
+                '%s-%03d-%06.2f-%06d',
+                $criteria['same_sex_only'] ? $registration->participantSource->sex : 'mixte',
+                $registration->participantSource->age,
+                (float) $registration->participantSource->approximate_weight,
+                $registration->id,
+            ))
+            ->values();
+
+        $remaining = $availableRegistrations->values();
+        $proposals = collect();
+        $unassigned = collect();
+        $proposalNumber = 1;
+
+        $buckets = $remaining
+            ->groupBy(fn (InscriptionOperationnelle $registration) => $this->pouleAssistantBucketKey($registration, $criteria))
+            ->map(fn (Collection $bucket) => $bucket
+                ->sortBy(fn (InscriptionOperationnelle $registration) => sprintf(
+                    '%03d-%06.2f-%06d',
+                    $registration->participantSource->age,
+                    (float) $registration->participantSource->approximate_weight,
+                    $registration->id,
+                ))
+                ->values());
+
+        foreach ($buckets as $bucket) {
+            foreach ($this->pouleAssistantBalancedGroups($bucket, (int) $criteria['target_size']) as $group) {
+                if ($group->count() < 2) {
+                    $unassigned->push([
+                        'registration' => $group->first(),
+                        'reason' => 'Aucun regroupement compatible trouvé',
+                    ]);
+
+                    continue;
+                }
+
+                $analysis = $this->pouleAssistantGroupAnalysis($group, $criteria);
+
+                $proposals->push([
+                    'name' => 'Poule proposée '.$proposalNumber,
+                    'registrations' => $group->values(),
+                    'justification' => $analysis['justification'],
+                    'indicator' => $analysis['indicator'],
+                    'score' => $analysis['score'],
+                    'warning' => $analysis['warning'],
+                ]);
+
+                $proposalNumber++;
+            }
+        }
+
+        return [
+            'criteria' => $criteria,
+            'proposals' => $proposals,
+            'unassigned' => $unassigned,
+        ];
+    }
+
+    private function pouleAssistantBucketKey(InscriptionOperationnelle $registration, array $criteria): string
+    {
+        $source = $registration->participantSource;
+        $sexKey = $criteria['same_sex_only'] ? $source->sex : 'mixte';
+        $adultAccessAge = (int) $criteria['adult_access_age'];
+
+        if ($source->age >= 18 || ($adultAccessAge < 18 && $source->age >= $adultAccessAge)) {
+            return $sexKey.'-adultes';
+        }
+
+        $ageBandSize = max(1, (int) $criteria['age_gap_max'] + 1);
+        $ageBand = intdiv(max(0, $source->age - 10), $ageBandSize);
+
+        return $sexKey.'-jeunes-'.$ageBand;
+    }
+
+    private function pouleAssistantBalancedGroups(Collection $bucket, int $targetSize): array
+    {
+        $count = $bucket->count();
+
+        if ($count === 0) {
+            return [];
+        }
+
+        if ($count <= $targetSize + 1) {
+            return [$bucket->values()];
+        }
+
+        $groupCount = (int) ceil($count / $targetSize);
+        $baseSize = intdiv($count, $groupCount);
+        $largerGroups = $count % $groupCount;
+        $groups = [];
+        $offset = 0;
+
+        for ($i = 0; $i < $groupCount; $i++) {
+            $size = $baseSize + ($i < $largerGroups ? 1 : 0);
+            $groups[] = $bucket->slice($offset, $size)->values();
+            $offset += $size;
+        }
+
+        return $groups;
+    }
+
+    private function pouleAssistantBestCandidateIndex(Collection $group, Collection $remaining, array $criteria): int|false
+    {
+        $scoredCandidates = $remaining
+            ->map(function (InscriptionOperationnelle $candidate, int $index) use ($group, $criteria) {
+                $analysis = $this->pouleAssistantGroupAnalysis($group->concat([$candidate]), $criteria);
+
+                return [
+                    'index' => $index,
+                    'score' => $analysis['score'],
+                ];
+            })
+            ->filter(fn (array $candidate) => $candidate['score'] >= 45)
+            ->sortByDesc('score')
+            ->values();
+
+        return $scoredCandidates->first()['index'] ?? false;
+    }
+
+    private function pouleAssistantCandidateFits(Collection $group, InscriptionOperationnelle $candidate, array $criteria): bool
+    {
+        $registrations = $group->concat([$candidate]);
+        $sources = $registrations->pluck('participantSource');
+
+        if ($criteria['same_sex_only'] && $sources->pluck('sex')->unique()->count() > 1) {
+            return false;
+        }
+
+        if ($sources->max('approximate_weight') - $sources->min('approximate_weight') > (float) $criteria['weight_gap_max']) {
+            return false;
+        }
+
+        return $this->pouleAssistantAgesFit($sources->pluck('age'), (int) $criteria['age_gap_max'], (int) $criteria['adult_access_age']);
+    }
+
+    private function pouleAssistantAgesFit(Collection $ages, int $ageGapMax, int $adultAccessAge): bool
+    {
+        $adultCount = $ages->filter(fn (int $age) => $age >= 18)->count();
+        $minorAges = $ages->filter(fn (int $age) => $age < 18);
+
+        if ($adultCount === $ages->count()) {
+            return true;
+        }
+
+        if ($adultCount > 0) {
+            return $minorAges->every(fn (int $age) => $age >= $adultAccessAge);
+        }
+
+        return $ages->max() - $ages->min() <= $ageGapMax;
+    }
+
+    private function pouleAssistantGroupAnalysis(Collection $group, array $criteria): array
+    {
+        $sources = $group->pluck('participantSource');
+        $sexCount = $sources->pluck('sex')->unique()->count();
+        $weightGap = $sources->max('approximate_weight') - $sources->min('approximate_weight');
+        $ages = $sources->pluck('age');
+        $hasAdults = $ages->contains(fn (int $age) => $age >= 18);
+        $minorWithAdults = $hasAdults && $ages->contains(fn (int $age) => $age < 18);
+        $adultCount = $ages->filter(fn (int $age) => $age >= 18)->count();
+        $minorAges = $ages->filter(fn (int $age) => $age < 18);
+        $ageGap = $minorAges->count() > 1 ? $minorAges->max() - $minorAges->min() : 0;
+        $targetGap = abs($group->count() - (int) $criteria['target_size']);
+        $ageCompatible = $this->pouleAssistantAgesFit($ages, (int) $criteria['age_gap_max'], (int) $criteria['adult_access_age']);
+        $weightCompatible = $weightGap <= (float) $criteria['weight_gap_max'];
+        $sexCompatible = ! $criteria['same_sex_only'] || $sexCount === 1;
+        $score = 20;
+        $reasons = [];
+
+        if ($sexCompatible) {
+            $score += 20;
+            $reasons[] = $criteria['same_sex_only'] ? 'même sexe' : 'mixité autorisée';
+        } else {
+            $score -= 20;
+            $reasons[] = 'sexes mélangés';
+        }
+
+        if ($ageCompatible) {
+            $score += 20;
+            $reasons[] = $hasAdults && $adultCount === $group->count() ? 'adultes' : 'âge compatible';
+        } else {
+            $score -= 20;
+            $reasons[] = 'écart d’âge dépassé';
+        }
+
+        if ($weightCompatible) {
+            $score += 20;
+            $reasons[] = 'poids compatible';
+        } else {
+            $score -= min(20, 8 + (int) floor($weightGap - (float) $criteria['weight_gap_max']));
+            $reasons[] = 'écart de poids limite';
+        }
+
+        if ($targetGap === 0) {
+            $score += 20;
+            $reasons[] = 'taille cible respectée';
+        } elseif ($targetGap === 1) {
+            $score += 10;
+            $reasons[] = 'taille proche de la cible';
+        } elseif ($targetGap === 2) {
+            $score -= 10;
+            $reasons[] = 'taille acceptable';
+        } else {
+            $score -= min(45, $targetGap * 12);
+            $reasons[] = 'poule trop petite';
+        }
+
+        if ($minorWithAdults) {
+            $score -= 25;
+            $reasons[] = 'mineur proposé avec adultes';
+        }
+
+        if (! $hasAdults && $ageGap === (int) $criteria['age_gap_max']) {
+            $score -= 5;
+            $reasons[] = 'écart d’âge limite';
+        }
+
+        $score = max(0, min(100, $score));
+        $indicator = match (true) {
+            $score >= 85 => 'Très cohérent',
+            $score >= 60 => 'À vérifier',
+            default => 'À arbitrer',
+        };
+
+        return [
+            'indicator' => $indicator,
+            'score' => $score,
+            'justification' => Str::ucfirst(collect($reasons)->unique()->take(4)->implode(', ')),
+            'warning' => $minorWithAdults ? 'À vérifier : participant mineur proposé avec adultes' : null,
+        ];
     }
 
     public function participantValidationSummary(): array

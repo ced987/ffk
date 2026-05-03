@@ -299,6 +299,145 @@ class PoulePreparationTest extends TestCase
             ->assertDontSee('Participants disponibles');
     }
 
+    public function test_poule_assistant_proposes_only_available_eligible_participants(): void
+    {
+        [$clubA, $clubB, , $userA, , , $competition] = $this->scenario();
+        $existingPoule = Poule::create([
+            'competition_id' => $competition->id,
+            'name' => 'Poule Existante',
+            'status' => Poule::STATUS_DRAFT,
+        ]);
+        $eligibleA = $this->registerParticipant($competition, $clubA, 'Compatible', 'Alice', true, true, 'F', 14, 48);
+        $eligibleB = $this->registerParticipant($competition, $clubB, 'Compatible', 'Boris', true, true, 'F', 15, 50);
+        $notValidated = $this->registerParticipant($competition, $clubA, 'Attente', 'Charlie', true, false, 'F', 14, 49);
+        $withdrawn = $this->registerParticipant($competition, $clubB, 'Retire', 'Dina', false, false, 'F', 14, 49);
+        $alreadyAssigned = $this->registerParticipant($competition, $clubA, 'Affecte', 'Eli', true, true, 'F', 14, 49);
+        $alreadyAssigned->update(['poule_id' => $existingPoule->id]);
+
+        $assistantResult = $competition->pouleAssistantProposals([
+            'same_sex_only' => true,
+            'age_gap_max' => 2,
+            'weight_gap_max' => 5,
+            'target_size' => 4,
+            'adult_access_age' => 18,
+        ]);
+
+        $proposedIds = $assistantResult['proposals']
+            ->flatMap(fn (array $proposal) => $proposal['registrations']->pluck('id'))
+            ->all();
+
+        $this->assertContains($eligibleA->id, $proposedIds);
+        $this->assertContains($eligibleB->id, $proposedIds);
+        $this->assertNotContains($notValidated->id, $proposedIds);
+        $this->assertNotContains($withdrawn->id, $proposedIds);
+        $this->assertNotContains($alreadyAssigned->id, $proposedIds);
+        $this->assertSame('À vérifier', $assistantResult['proposals']->first()['indicator']);
+        $this->assertSame(70, $assistantResult['proposals']->first()['score']);
+
+        $this->withSession(['current_user_id' => $userA->id])
+            ->get(route('competitions.show', [
+                'competition' => $competition,
+                'analyze_poules' => 1,
+                'same_sex_only' => 1,
+                'age_gap_max' => 2,
+                'weight_gap_max' => 5,
+                'target_size' => 4,
+                'adult_access_age' => 18,
+            ]))
+            ->assertOk()
+            ->assertSee('Assistant de génération des poules')
+            ->assertSee('Analyser les participants')
+            ->assertSee('Recalculer')
+            ->assertSee('Poule proposée 1')
+            ->assertSee('À vérifier')
+            ->assertSee('Score : 70/100')
+            ->assertSee('Même sexe, âge compatible, poids compatible, taille acceptable')
+            ->assertSee('Créer cette poule')
+            ->assertSee('Créer toutes les propositions')
+            ->assertSee('Participants non affectés');
+    }
+
+    public function test_poule_assistant_flags_minor_proposed_with_adults(): void
+    {
+        [$clubA, , , , , , $competition] = $this->scenario();
+        $minor = $this->registerParticipant($competition, $clubA, 'Mineur', 'Leo', true, true, 'M', 17, 70);
+        $adult = $this->registerParticipant($competition, $clubA, 'Adulte', 'Marc', true, true, 'M', 25, 72);
+
+        $assistantResult = $competition->pouleAssistantProposals([
+            'same_sex_only' => true,
+            'age_gap_max' => 2,
+            'weight_gap_max' => 5,
+            'target_size' => 4,
+            'adult_access_age' => 17,
+        ]);
+
+        $proposal = $assistantResult['proposals']->first();
+
+        $this->assertEqualsCanonicalizing([$minor->id, $adult->id], $proposal['registrations']->pluck('id')->all());
+        $this->assertSame('À arbitrer', $proposal['indicator']);
+        $this->assertSame('À vérifier : participant mineur proposé avec adultes', $proposal['warning']);
+    }
+
+    public function test_poule_assistant_prioritizes_target_size_before_scoring(): void
+    {
+        [$clubA, , , , , , $competition] = $this->scenario();
+
+        foreach (range(1, 12) as $index) {
+            $this->registerParticipant(
+                $competition,
+                $clubA,
+                'Cible'.$index,
+                'Participant',
+                true,
+                true,
+                'M',
+                13 + intdiv($index - 1, 6),
+                45 + $index,
+            );
+        }
+
+        $assistantResult = $competition->pouleAssistantProposals([
+            'same_sex_only' => true,
+            'age_gap_max' => 2,
+            'weight_gap_max' => 8,
+            'target_size' => 6,
+            'adult_access_age' => 18,
+        ]);
+
+        $this->assertSame([6, 6], $assistantResult['proposals']->pluck('registrations')->map->count()->all());
+        $this->assertSame([100, 100], $assistantResult['proposals']->pluck('score')->all());
+        $this->assertTrue($assistantResult['unassigned']->isEmpty());
+    }
+
+    public function test_organizer_can_create_poule_from_assistant_proposal(): void
+    {
+        [$clubA, $clubB, , $userA, $userB, , $competition] = $this->scenario();
+        $first = $this->registerParticipant($competition, $clubA, 'Alpha', 'Alice', true, true, 'F', 14, 48);
+        $second = $this->registerParticipant($competition, $clubB, 'Bravo', 'Boris', true, true, 'F', 15, 50);
+
+        $this->withSession(['current_user_id' => $userB->id])
+            ->post(route('competitions.poules.proposals.store', $competition), [
+                'proposal_names' => ['Poule Interdite'],
+                'proposal_registration_ids' => [$first->id.','.$second->id],
+            ])
+            ->assertForbidden();
+
+        $this->withSession(['current_user_id' => $userA->id])
+            ->post(route('competitions.poules.proposals.store', $competition), [
+                'proposal_names' => ['Poule Assistant A'],
+                'proposal_registration_ids' => [$first->id.','.$second->id],
+            ])
+            ->assertRedirect(route('competitions.show', $competition).'#poules-brouillon')
+            ->assertSessionHas('status', '1 poule(s) proposée(s) créée(s).');
+
+        $poule = Poule::where('name', 'Poule Assistant A')->firstOrFail();
+
+        $this->assertSame(Poule::STATUS_DRAFT, $poule->status);
+        $this->assertSame($poule->id, $first->refresh()->poule_id);
+        $this->assertSame($poule->id, $second->refresh()->poule_id);
+        $this->assertDatabaseMissing('combats', ['poule_id' => $poule->id]);
+    }
+
     public function test_non_invited_club_cannot_see_competition_detail(): void
     {
         [, , , , , $userC, $competition] = $this->scenario();
@@ -1532,14 +1671,17 @@ class PoulePreparationTest extends TestCase
         string $firstName,
         bool $isActive,
         bool $isValidated,
+        string $sex = 'F',
+        int $age = 14,
+        float $weight = 48.5,
     ): InscriptionOperationnelle {
         $participant = ParticipantSource::create([
             'club_id' => $club->id,
             'last_name' => $lastName,
             'first_name' => $firstName,
-            'sex' => 'F',
-            'age' => 14,
-            'approximate_weight' => 48.5,
+            'sex' => $sex,
+            'age' => $age,
+            'approximate_weight' => $weight,
             'license_number' => null,
         ]);
 
