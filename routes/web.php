@@ -37,16 +37,16 @@ if (! function_exists('redirect_to_competition_section')) {
     function redirect_to_competition_section(Competition $competition, string $section, string $status)
     {
         return redirect()
-            ->back(302, [], route('competitions.show', $competition))
+            ->to(competition_tab_url($competition, $section))
             ->with('status', $status);
     }
 }
 
 if (! function_exists('redirect_to_competition_detail')) {
-    function redirect_to_competition_detail(Competition $competition, string $status)
+    function redirect_to_competition_detail(Competition $competition, string $status, string $tab = 'suivi')
     {
         return redirect()
-            ->route('competitions.show', $competition)
+            ->to(competition_tab_url($competition, $tab))
             ->with('status', $status);
     }
 }
@@ -55,8 +55,49 @@ if (! function_exists('redirect_to_competition_fragment')) {
     function redirect_to_competition_fragment(Competition $competition, string $fragment, string $status)
     {
         return redirect()
-            ->to(route('competitions.show', $competition).'#'.$fragment)
+            ->to(competition_tab_url($competition, competition_tab_for_fragment($fragment), $fragment))
             ->with('status', $status);
+    }
+}
+
+if (! function_exists('competition_tab_url')) {
+    function competition_tab_url(Competition $competition, string $tab = 'suivi', ?string $fragment = null): string
+    {
+        $tab = in_array($tab, ['suivi', 'clubs', 'participants', 'poules', 'combats'], true) ? $tab : 'suivi';
+        $url = route('competitions.show', ['competition' => $competition, 'tab' => $tab]);
+
+        return $fragment ? $url.'#'.$fragment : $url;
+    }
+}
+
+if (! function_exists('competition_tab_for_fragment')) {
+    function competition_tab_for_fragment(string $fragment): string
+    {
+        if ($fragment === 'actions') {
+            return 'suivi';
+        }
+
+        if ($fragment === 'invitation' || $fragment === 'clubs') {
+            return 'clubs';
+        }
+
+        if (str_starts_with($fragment, 'poules') || $fragment === 'assistant-poules' || $fragment === 'creation-poule') {
+            return 'poules';
+        }
+
+        if ($fragment === 'participants-disponibles') {
+            return 'poules';
+        }
+
+        if (str_starts_with($fragment, 'participants')) {
+            return 'participants';
+        }
+
+        if (str_starts_with($fragment, 'combat')) {
+            return 'combats';
+        }
+
+        return 'suivi';
     }
 }
 
@@ -463,7 +504,7 @@ Route::get('/competitions/{competition}/poules/{poule}/print', function (Competi
 })->name('competitions.poules.print');
 
 Route::get('/competitions/{competition}/poules', function (Competition $competition) {
-    return redirect_to_competition_detail($competition, 'Utilisez le formulaire pour créer une poule.');
+    return redirect_to_competition_detail($competition, 'Utilisez le formulaire pour créer une poule.', 'poules');
 });
 
 Route::patch('/competitions/{competition}', function (Request $request, Competition $competition) use ($currentDemoUser) {
@@ -565,7 +606,7 @@ Route::patch('/competitions/{competition}/poules/{poule}/rename', function (Requ
     abort_unless($poule->competition_id === $competition->id, 404);
 
     if ($currentUser->club_id !== $competition->organizer_club_id) {
-        return redirect_to_competition_detail($competition, 'Impossible : action réservée à l’organisateur');
+        return redirect_to_competition_detail($competition, 'Impossible : action réservée à l’organisateur', 'poules');
     }
 
     $validated = $request->validate([
@@ -578,7 +619,7 @@ Route::patch('/competitions/{competition}/poules/{poule}/rename', function (Requ
 })->name('competitions.poules.rename');
 
 Route::get('/competitions/{competition}/poules/{poule}/registrations', function (Competition $competition, Poule $poule) {
-    return redirect_to_competition_detail($competition, 'Utilisez le formulaire pour affecter un participant.');
+    return redirect_to_competition_detail($competition, 'Utilisez le formulaire pour affecter un participant.', 'poules');
 });
 
 Route::post('/competitions/{competition}/poules/{poule}/registrations', function (Request $request, Competition $competition, Poule $poule) use ($currentDemoUser) {
@@ -606,7 +647,7 @@ Route::post('/competitions/{competition}/poules/{poule}/registrations', function
 })->name('competitions.poules.registrations.store');
 
 Route::get('/competitions/{competition}/poules/{poule}/freeze', function (Competition $competition) {
-    return redirect_to_competition_detail($competition, 'Utilisez le formulaire pour figer une poule.');
+    return redirect_to_competition_detail($competition, 'Utilisez le formulaire pour figer une poule.', 'poules');
 });
 
 Route::patch('/competitions/{competition}/poules/{poule}/freeze', function (Competition $competition, Poule $poule) use ($currentDemoUser) {
@@ -630,7 +671,7 @@ Route::patch('/competitions/{competition}/poules/{poule}/freeze', function (Comp
 })->name('competitions.poules.freeze');
 
 Route::get('/competitions/{competition}/poules/{poule}/unfreeze', function (Competition $competition) {
-    return redirect_to_competition_detail($competition, 'Utilisez le formulaire pour défiger une poule.');
+    return redirect_to_competition_detail($competition, 'Utilisez le formulaire pour défiger une poule.', 'poules');
 });
 
 Route::patch('/competitions/{competition}/poules/{poule}/unfreeze', function (Competition $competition, Poule $poule) use ($currentDemoUser) {
@@ -657,7 +698,7 @@ Route::delete('/competitions/{competition}/poules/{poule}', function (Competitio
     abort_unless($poule->competition_id === $competition->id, 404);
 
     if ($currentUser->club_id !== $competition->organizer_club_id) {
-        return redirect_to_competition_detail($competition, 'Impossible : action réservée à l’organisateur');
+        return redirect_to_competition_detail($competition, 'Impossible : action réservée à l’organisateur', 'poules');
     }
 
     $section = poule_work_section($poule);
@@ -670,7 +711,7 @@ Route::delete('/competitions/{competition}/poules/{poule}', function (Competitio
 })->name('competitions.poules.destroy');
 
 Route::get('/competitions/{competition}/poules/{poule}/combats/generate', function (Competition $competition) {
-    return redirect_to_competition_detail($competition, 'Utilisez le formulaire pour générer les combats.');
+    return redirect_to_competition_detail($competition, 'Utilisez le formulaire pour générer les combats.', 'poules');
 });
 
 Route::post('/competitions/{competition}/poules/{poule}/combats/generate', function (Competition $competition, Poule $poule) use ($currentDemoUser) {
@@ -700,7 +741,7 @@ Route::get('/competitions/{competition}/combats/{combat}/edit', function (Compet
     abort_unless($combat->poule->competition_id === $competition->id, 404);
 
     if ($message = $combat->scoreAccessBlockedMessage($competition->organizer_club_id, $currentUser->club_id)) {
-        return redirect_to_competition_detail($competition, $message);
+        return redirect_to_competition_detail($competition, $message, 'combats');
     }
 
     $combat->load(['poule', 'inscriptionA.participantSource', 'inscriptionB.participantSource']);
@@ -713,7 +754,7 @@ Route::get('/competitions/{competition}/combats/{combat}/edit', function (Compet
 })->name('competitions.combats.edit');
 
 Route::get('/competitions/{competition}/combats/{combat}', function (Competition $competition) {
-    return redirect_to_competition_detail($competition, 'Utilisez le formulaire pour enregistrer le score.');
+    return redirect_to_competition_detail($competition, 'Utilisez le formulaire pour enregistrer le score.', 'combats');
 });
 
 Route::patch('/competitions/{competition}/combats/{combat}', function (Request $request, Competition $competition, Combat $combat) use ($currentDemoUser) {
@@ -778,7 +819,7 @@ Route::patch('/competitions/{competition}/combats/{combat}', function (Request $
 })->name('competitions.combats.update');
 
 Route::get('/competitions/{competition}/registrations/{registration}/withdraw-assignment', function (Competition $competition) {
-    return redirect_to_competition_detail($competition, 'Utilisez le formulaire pour retirer l affectation.');
+    return redirect_to_competition_detail($competition, 'Utilisez le formulaire pour retirer l affectation.', 'poules');
 });
 
 Route::patch('/competitions/{competition}/registrations/{registration}/withdraw-assignment', function (Competition $competition, InscriptionOperationnelle $registration) use ($currentDemoUser) {
@@ -801,7 +842,7 @@ Route::patch('/competitions/{competition}/registrations/{registration}/withdraw-
 })->name('competitions.registrations.withdraw-assignment');
 
 Route::get('/competitions/{competition}/registrations/{registration}/move-assignment', function (Competition $competition) {
-    return redirect_to_competition_detail($competition, 'Utilisez le formulaire pour déplacer le participant.');
+    return redirect_to_competition_detail($competition, 'Utilisez le formulaire pour déplacer le participant.', 'poules');
 });
 
 Route::patch('/competitions/{competition}/registrations/{registration}/move-assignment', function (Request $request, Competition $competition, InscriptionOperationnelle $registration) use ($currentDemoUser) {
@@ -837,35 +878,63 @@ Route::post('/competitions/{competition}/invitations', function (Request $reques
     abort_if($currentUser === null || $currentUser->club === null, 403);
     abort_unless($currentUser->club_id === $competition->organizer_club_id, 403);
 
-    $validated = $request->validate([
-        'club_id' => ['required', 'exists:clubs,id'],
-    ]);
+    $isMultiSelection = $request->has('club_ids');
+    $validated = $isMultiSelection
+        ? $request->validate([
+            'club_ids' => ['required', 'array', 'min:1'],
+            'club_ids.*' => ['integer', 'exists:clubs,id'],
+        ], [
+            'club_ids.required' => 'Sélectionnez au moins un club.',
+            'club_ids.min' => 'Sélectionnez au moins un club.',
+        ])
+        : $request->validate([
+            'club_id' => ['required', 'exists:clubs,id'],
+        ]);
 
-    $clubId = (int) $validated['club_id'];
+    $clubIds = $isMultiSelection
+        ? collect($validated['club_ids'])->map(fn ($clubId) => (int) $clubId)->unique()->values()
+        : collect([(int) $validated['club_id']]);
 
-    if ($clubId === $competition->organizer_club_id) {
+    if ($clubIds->contains((int) $competition->organizer_club_id)) {
         return back()
-            ->withErrors(['club_id' => 'Le club organisateur ne peut pas s inviter lui-meme.'])
+            ->withErrors([$isMultiSelection ? 'club_ids' : 'club_id' => 'Le club organisateur ne peut pas s inviter lui-meme.'])
             ->withInput();
     }
 
-    if ($competition->invitations()->where('club_id', $clubId)->exists()) {
+    $alreadyInvitedClubIds = $competition->invitations()
+        ->whereIn('club_id', $clubIds)
+        ->pluck('club_id')
+        ->map(fn ($clubId) => (int) $clubId);
+
+    if (! $isMultiSelection && $alreadyInvitedClubIds->isNotEmpty()) {
         return back()
             ->withErrors(['club_id' => 'Ce club est deja invite a cette competition.'])
             ->withInput();
     }
 
-    Invitation::create([
-        'competition_id' => $competition->id,
-        'club_id' => $clubId,
-        'status' => Invitation::STATUS_PRE_INVITE,
-    ]);
+    $clubIdsToInvite = $clubIds->diff($alreadyInvitedClubIds)->values();
 
-    return redirect_to_competition_section($competition, 'clubs', 'Club ajouté en préparation de l’invitation.');
+    if ($clubIdsToInvite->isEmpty()) {
+        return redirect_to_competition_section($competition, 'clubs', 'Aucun club ajouté : les clubs sélectionnés sont déjà invités.');
+    }
+
+    $clubIdsToInvite->each(function (int $clubId) use ($competition) {
+        Invitation::create([
+            'competition_id' => $competition->id,
+            'club_id' => $clubId,
+            'status' => Invitation::STATUS_PRE_INVITE,
+        ]);
+    });
+
+    $message = $clubIdsToInvite->count() === 1
+        ? 'Club ajouté en préparation de l’invitation.'
+        : $clubIdsToInvite->count().' clubs ajoutés en préparation de l’invitation.';
+
+    return redirect_to_competition_section($competition, 'clubs', $message);
 })->name('competitions.invitations.store');
 
 Route::get('/competitions/{competition}/invitations/{invitation}/mark-sent', function (Competition $competition) {
-    return redirect_to_competition_detail($competition, 'Utilisez le formulaire pour marquer l invitation envoyee.');
+    return redirect_to_competition_detail($competition, 'Utilisez le formulaire pour marquer l invitation envoyee.', 'clubs');
 });
 
 Route::post('/competitions/{competition}/invitations/{invitation}/mark-sent', function (Competition $competition, Invitation $invitation) use ($currentDemoUser) {
@@ -883,7 +952,7 @@ Route::post('/competitions/{competition}/invitations/{invitation}/mark-sent', fu
 })->name('competitions.invitations.mark-sent');
 
 Route::get('/competitions/{competition}/invitations/{invitation}/confirm', function (Competition $competition) {
-    return redirect_to_competition_detail($competition, 'Utilisez le formulaire pour confirmer la participation.');
+    return redirect_to_competition_detail($competition, 'Utilisez le formulaire pour confirmer la participation.', 'clubs');
 });
 
 Route::post('/competitions/{competition}/invitations/{invitation}/confirm', function (Competition $competition, Invitation $invitation) use ($currentDemoUser) {
@@ -901,7 +970,7 @@ Route::post('/competitions/{competition}/invitations/{invitation}/confirm', func
 })->name('competitions.invitations.confirm');
 
 Route::get('/competitions/{competition}/invitations/{invitation}/decline', function (Competition $competition) {
-    return redirect_to_competition_detail($competition, 'Utilisez le formulaire pour refuser la participation.');
+    return redirect_to_competition_detail($competition, 'Utilisez le formulaire pour refuser la participation.', 'clubs');
 });
 
 Route::post('/competitions/{competition}/invitations/{invitation}/decline', function (Competition $competition, Invitation $invitation) use ($currentDemoUser) {
@@ -1068,46 +1137,77 @@ Route::post('/competitions/{competition}/participants/from-licencie', function (
         return redirect_to_competition_fragment($competition, 'participants-ajout', 'Inscriptions fermées.');
     }
 
-    $validated = $request->validate([
-        'licencie_id' => ['required', 'exists:licencies,id'],
-    ]);
+    $isMultiSelection = $request->has('licencie_ids');
+    $validated = $isMultiSelection
+        ? $request->validate([
+            'licencie_ids' => ['required', 'array', 'min:1'],
+            'licencie_ids.*' => ['integer', 'exists:licencies,id'],
+        ], [
+            'licencie_ids.required' => 'Sélectionnez au moins un licencié.',
+            'licencie_ids.min' => 'Sélectionnez au moins un licencié.',
+        ])
+        : $request->validate([
+            'licencie_id' => ['required', 'exists:licencies,id'],
+        ]);
 
-    $licencie = Licencie::findOrFail($validated['licencie_id']);
-    abort_unless($licencie->club_id === $currentUser->club_id, 403);
+    $licencieIds = $isMultiSelection
+        ? collect($validated['licencie_ids'])->map(fn ($licencieId) => (int) $licencieId)->unique()->values()
+        : collect([(int) $validated['licencie_id']]);
 
-    $alreadyRegistered = InscriptionOperationnelle::query()
+    $licencies = Licencie::whereIn('id', $licencieIds)->get();
+    abort_unless($licencies->every(fn ($licencie) => $licencie->club_id === $currentUser->club_id), 403);
+
+    $alreadyRegisteredLicencieIds = InscriptionOperationnelle::query()
         ->where('competition_id', $competition->id)
-        ->whereHas('participantSource', fn ($query) => $query->where('licencie_id', $licencie->id))
-        ->exists();
+        ->whereHas('participantSource', fn ($query) => $query->whereIn('licencie_id', $licencieIds))
+        ->with('participantSource')
+        ->get()
+        ->pluck('participantSource.licencie_id')
+        ->filter()
+        ->map(fn ($licencieId) => (int) $licencieId);
 
-    if ($alreadyRegistered) {
+    if (! $isMultiSelection && $alreadyRegisteredLicencieIds->isNotEmpty()) {
         return redirect_to_competition_fragment($competition, 'participants-ajout', 'Ce licencié est déjà inscrit à la compétition.');
     }
 
-    $participant = ParticipantSource::create([
-        'club_id' => $currentUser->club_id,
-        'licencie_id' => $licencie->id,
-        'last_name' => $licencie->nom,
-        'first_name' => $licencie->prenom,
-        'sex' => match ($licencie->sexe) {
-            'masculin' => 'M',
-            'feminin' => 'F',
-            default => $licencie->sexe,
-        },
-        'age' => $licencie->date_naissance->age,
-        'approximate_weight' => $licencie->poids,
-        'license_number' => null,
-    ]);
+    $licenciesToRegister = $licencies
+        ->reject(fn ($licencie) => $alreadyRegisteredLicencieIds->contains((int) $licencie->id))
+        ->values();
 
-    InscriptionOperationnelle::create([
-        'competition_id' => $competition->id,
-        'club_id' => $currentUser->club_id,
-        'participant_source_id' => $participant->id,
-        'is_active' => true,
-        'is_validated' => false,
-    ]);
+    if ($licenciesToRegister->isEmpty()) {
+        return redirect_to_competition_fragment($competition, 'participants-ajout', 'Aucun licencié ajouté : les licenciés sélectionnés sont déjà inscrits.');
+    }
 
-    return redirect_to_competition_fragment($competition, 'participants-ajout', 'Participant inscrit depuis un licencié.');
+    $licenciesToRegister->each(function (Licencie $licencie) use ($competition, $currentUser) {
+        $participant = ParticipantSource::create([
+            'club_id' => $currentUser->club_id,
+            'licencie_id' => $licencie->id,
+            'last_name' => $licencie->nom,
+            'first_name' => $licencie->prenom,
+            'sex' => match ($licencie->sexe) {
+                'masculin' => 'M',
+                'feminin' => 'F',
+                default => $licencie->sexe,
+            },
+            'age' => $licencie->date_naissance->age,
+            'approximate_weight' => $licencie->poids,
+            'license_number' => null,
+        ]);
+
+        InscriptionOperationnelle::create([
+            'competition_id' => $competition->id,
+            'club_id' => $currentUser->club_id,
+            'participant_source_id' => $participant->id,
+            'is_active' => true,
+            'is_validated' => false,
+        ]);
+    });
+
+    $message = $licenciesToRegister->count() === 1
+        ? 'Participant inscrit depuis un licencié.'
+        : $licenciesToRegister->count().' participants inscrits depuis les licenciés.';
+
+    return redirect_to_competition_fragment($competition, 'participants-ajout', $message);
 })->name('competitions.participants.store-from-licencie');
 
 Route::get('/competitions/{competition}/participants/{registration}/edit', function (Competition $competition, InscriptionOperationnelle $registration) use ($currentDemoUser) {
@@ -1131,7 +1231,7 @@ Route::get('/competitions/{competition}/participants/{registration}/edit', funct
     }
 
     if ($message = $registration->editBlockedMessage()) {
-        return redirect_to_competition_detail($competition, $message);
+        return redirect_to_competition_detail($competition, $message, 'participants');
     }
 
     $registration->load('participantSource');
@@ -1193,7 +1293,7 @@ Route::patch('/competitions/{competition}/participants/{registration}', function
 })->name('competitions.participants.update');
 
 Route::get('/competitions/{competition}/participants/{registration}/withdraw', function (Competition $competition) {
-    return redirect_to_competition_detail($competition, 'Utilisez le formulaire pour retirer le participant.');
+    return redirect_to_competition_detail($competition, 'Utilisez le formulaire pour retirer le participant.', 'participants');
 });
 
 Route::patch('/competitions/{competition}/participants/{registration}/withdraw', function (Competition $competition, InscriptionOperationnelle $registration) use ($currentDemoUser) {
@@ -1232,7 +1332,7 @@ Route::patch('/competitions/{competition}/participants/{registration}/withdraw',
 })->name('competitions.participants.withdraw');
 
 Route::get('/competitions/{competition}/participants/{registration}/validate', function (Competition $competition) {
-    return redirect_to_competition_detail($competition, 'Utilisez le formulaire pour valider le participant.');
+    return redirect_to_competition_detail($competition, 'Utilisez le formulaire pour valider le participant.', 'participants');
 });
 
 Route::patch('/competitions/{competition}/participants/{registration}/validate', function (Competition $competition, InscriptionOperationnelle $registration) use ($currentDemoUser) {
@@ -1257,7 +1357,7 @@ Route::patch('/competitions/{competition}/participants/{registration}/validate',
 })->name('competitions.participants.validate');
 
 Route::get('/competitions/{competition}/participants/{registration}/unvalidate', function (Competition $competition) {
-    return redirect_to_competition_detail($competition, 'Utilisez le formulaire pour dévalider le participant.');
+    return redirect_to_competition_detail($competition, 'Utilisez le formulaire pour dévalider le participant.', 'participants');
 });
 
 Route::patch('/competitions/{competition}/participants/{registration}/unvalidate', function (Competition $competition, InscriptionOperationnelle $registration) use ($currentDemoUser) {
@@ -1277,7 +1377,7 @@ Route::patch('/competitions/{competition}/participants/{registration}/unvalidate
 })->name('competitions.participants.unvalidate');
 
 Route::get('/competitions/{competition}/participants/{registration}/reactivate', function (Competition $competition) {
-    return redirect_to_competition_detail($competition, 'Utilisez le formulaire pour réactiver le participant.');
+    return redirect_to_competition_detail($competition, 'Utilisez le formulaire pour réactiver le participant.', 'participants');
 });
 
 Route::patch('/competitions/{competition}/participants/{registration}/reactivate', function (Competition $competition, InscriptionOperationnelle $registration) use ($currentDemoUser) {

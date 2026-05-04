@@ -24,7 +24,7 @@ class ParticipantRegistrationTest extends TestCase
 
         $this->withSession(['current_user_id' => $userB->id])
             ->post(route('competitions.participants.store', $competition), $this->participantPayload())
-            ->assertRedirect(route('competitions.show', $competition).'#participants-ajout');
+            ->assertRedirect(route('competitions.show', ['competition' => $competition, 'tab' => 'participants']).'#participants-ajout');
 
         $participant = ParticipantSource::firstOrFail();
         $registration = InscriptionOperationnelle::firstOrFail();
@@ -87,7 +87,9 @@ class ParticipantRegistrationTest extends TestCase
             ->get(route('competitions.show', $competition))
             ->assertOk()
             ->assertSee('Ajouter depuis mes licenciés')
-            ->assertSee('Ajouter ce licencié')
+            ->assertSee('Rechercher un licencié')
+            ->assertSee('Ajouter les licenciés sélectionnés')
+            ->assertSee('name="licencie_ids[]"', false)
             ->assertSee('Invite Boris')
             ->assertSee($licencieB->date_naissance->age.' ans')
             ->assertSee('57 kg')
@@ -111,7 +113,7 @@ class ParticipantRegistrationTest extends TestCase
             ->post(route('competitions.participants.store-from-licencie', $competition), [
                 'licencie_id' => $licencie->id,
             ])
-            ->assertRedirect(route('competitions.show', $competition).'#participants-ajout');
+            ->assertRedirect(route('competitions.show', ['competition' => $competition, 'tab' => 'participants']).'#participants-ajout');
 
         $participant = ParticipantSource::firstOrFail();
         $registration = InscriptionOperationnelle::firstOrFail();
@@ -147,6 +149,51 @@ class ParticipantRegistrationTest extends TestCase
             ->assertSee('40');
     }
 
+    public function test_confirmed_club_can_create_multiple_participants_from_own_licencies(): void
+    {
+        [, $clubB, , , $userB, , $competition] = $this->scenario(Invitation::STATUS_PARTICIPATION_CONFIRMED);
+
+        $licencieA = Licencie::create([
+            'club_id' => $clubB->id,
+            'nom' => 'Diaz',
+            'prenom' => 'Dina',
+            'date_naissance' => '2013-08-09',
+            'sexe' => 'feminin',
+            'poids' => 40,
+        ]);
+        $licencieB = Licencie::create([
+            'club_id' => $clubB->id,
+            'nom' => 'Leroy',
+            'prenom' => 'Noah',
+            'date_naissance' => '2011-05-02',
+            'sexe' => 'masculin',
+            'poids' => 52,
+        ]);
+
+        $this->withSession(['current_user_id' => $userB->id])
+            ->post(route('competitions.participants.store-from-licencie', $competition), [
+                'licencie_ids' => [$licencieA->id, $licencieB->id],
+            ])
+            ->assertRedirect(route('competitions.show', ['competition' => $competition, 'tab' => 'participants']).'#participants-ajout')
+            ->assertSessionHas('status', '2 participants inscrits depuis les licenciés.');
+
+        $this->assertDatabaseHas('participant_sources', [
+            'club_id' => $clubB->id,
+            'licencie_id' => $licencieA->id,
+            'last_name' => 'Diaz',
+            'first_name' => 'Dina',
+        ]);
+
+        $this->assertDatabaseHas('participant_sources', [
+            'club_id' => $clubB->id,
+            'licencie_id' => $licencieB->id,
+            'last_name' => 'Leroy',
+            'first_name' => 'Noah',
+        ]);
+
+        $this->assertDatabaseCount('inscription_operationnelles', 2);
+    }
+
     public function test_same_licencie_cannot_be_added_twice_to_same_competition(): void
     {
         [$clubA, $clubB, , $userA, $userB, , $competition] = $this->scenario(Invitation::STATUS_PARTICIPATION_CONFIRMED);
@@ -164,13 +211,13 @@ class ParticipantRegistrationTest extends TestCase
             ->post(route('competitions.participants.store-from-licencie', $competition), [
                 'licencie_id' => $licencie->id,
             ])
-            ->assertRedirect(route('competitions.show', $competition).'#participants-ajout');
+            ->assertRedirect(route('competitions.show', ['competition' => $competition, 'tab' => 'participants']).'#participants-ajout');
 
         $this->withSession(['current_user_id' => $userB->id])
             ->post(route('competitions.participants.store-from-licencie', $competition), [
                 'licencie_id' => $licencie->id,
             ])
-            ->assertRedirect(route('competitions.show', $competition).'#participants-ajout')
+            ->assertRedirect(route('competitions.show', ['competition' => $competition, 'tab' => 'participants']).'#participants-ajout')
             ->assertSessionHas('status', 'Ce licencié est déjà inscrit à la compétition.');
 
         $this->assertDatabaseCount('participant_sources', 1);
@@ -196,7 +243,7 @@ class ParticipantRegistrationTest extends TestCase
             ->post(route('competitions.participants.store-from-licencie', $otherCompetition), [
                 'licencie_id' => $licencie->id,
             ])
-            ->assertRedirect(route('competitions.show', $otherCompetition).'#participants-ajout');
+            ->assertRedirect(route('competitions.show', ['competition' => $otherCompetition, 'tab' => 'participants']).'#participants-ajout');
 
         $this->assertDatabaseCount('participant_sources', 2);
         $this->assertDatabaseCount('inscription_operationnelles', 2);
@@ -245,7 +292,7 @@ class ParticipantRegistrationTest extends TestCase
 
         $this->withSession(['current_user_id' => $userA->id])
             ->post(route('competitions.participants.store', $competition), $this->participantPayload())
-            ->assertRedirect(route('competitions.show', $competition).'#participants-ajout');
+            ->assertRedirect(route('competitions.show', ['competition' => $competition, 'tab' => 'participants']).'#participants-ajout');
 
         $participant = ParticipantSource::firstOrFail();
         $registration = InscriptionOperationnelle::firstOrFail();
@@ -282,7 +329,7 @@ class ParticipantRegistrationTest extends TestCase
                 ...$this->participantPayload(),
                 'club_id' => $clubB->id,
             ])
-            ->assertRedirect(route('competitions.show', $competition).'#participants-ajout');
+            ->assertRedirect(route('competitions.show', ['competition' => $competition, 'tab' => 'participants']).'#participants-ajout');
 
         $participant = ParticipantSource::firstOrFail();
         $registration = InscriptionOperationnelle::firstOrFail();
@@ -314,7 +361,7 @@ class ParticipantRegistrationTest extends TestCase
                 ...$this->participantPayload(),
                 'club_id' => $clubA->id,
             ])
-            ->assertRedirect(route('competitions.show', $competition).'#participants-ajout');
+            ->assertRedirect(route('competitions.show', ['competition' => $competition, 'tab' => 'participants']).'#participants-ajout');
 
         $participant = ParticipantSource::firstOrFail();
         $registration = InscriptionOperationnelle::firstOrFail();
@@ -409,7 +456,7 @@ class ParticipantRegistrationTest extends TestCase
 
         $this->withSession(['current_user_id' => $userA->id])
             ->patch(route('competitions.participants.validate', [$competition, $registration]))
-            ->assertRedirect(route('competitions.show', $competition).'#participants-non-valides');
+            ->assertRedirect(route('competitions.show', ['competition' => $competition, 'tab' => 'participants']).'#participants-non-valides');
 
         $this->assertTrue($registration->refresh()->is_validated);
 
@@ -428,7 +475,7 @@ class ParticipantRegistrationTest extends TestCase
 
         $this->withSession(['current_user_id' => $userA->id])
             ->patch(route('competitions.participants.unvalidate', [$competition, $registration]))
-            ->assertRedirect(route('competitions.show', $competition).'#participants-valides');
+            ->assertRedirect(route('competitions.show', ['competition' => $competition, 'tab' => 'participants']).'#participants-valides');
 
         $this->assertFalse($registration->refresh()->is_validated);
     }
@@ -448,7 +495,7 @@ class ParticipantRegistrationTest extends TestCase
 
         $this->withSession(['current_user_id' => $userA->id])
             ->patch(route('competitions.participants.unvalidate', [$competition, $registration]))
-            ->assertRedirect(route('competitions.show', $competition).'#participants-valides');
+            ->assertRedirect(route('competitions.show', ['competition' => $competition, 'tab' => 'participants']).'#participants-valides');
 
         $registration->refresh();
 
@@ -476,7 +523,7 @@ class ParticipantRegistrationTest extends TestCase
 
         $this->withSession(['current_user_id' => $userA->id])
             ->patch(route('competitions.participants.unvalidate', [$competition, $registration]))
-            ->assertRedirect(route('competitions.show', $competition).'#participants-valides')
+            ->assertRedirect(route('competitions.show', ['competition' => $competition, 'tab' => 'participants']).'#participants-valides')
             ->assertSessionHas('status', 'Impossible : participant dans une poule figée');
 
         $registration->refresh();
@@ -503,7 +550,7 @@ class ParticipantRegistrationTest extends TestCase
 
         $this->withSession(['current_user_id' => $userA->id])
             ->patch(route('competitions.participants.validate', [$competition, $inactiveRegistration]))
-            ->assertRedirect(route('competitions.show', $competition).'#participants-retires')
+            ->assertRedirect(route('competitions.show', ['competition' => $competition, 'tab' => 'participants']).'#participants-retires')
             ->assertSessionHas('status', 'Participant validé.');
 
         $this->assertFalse($activeRegistration->refresh()->is_validated);
@@ -521,7 +568,7 @@ class ParticipantRegistrationTest extends TestCase
 
         $this->withSession(['current_user_id' => $userA->id])
             ->patch(route('competitions.participants.unvalidate', [$competition, $inactiveRegistration]))
-            ->assertRedirect(route('competitions.show', $competition).'#participants-retires')
+            ->assertRedirect(route('competitions.show', ['competition' => $competition, 'tab' => 'participants']).'#participants-retires')
             ->assertSessionHas('status', 'Impossible : participation annulée');
 
         $this->assertFalse($inactiveRegistration->refresh()->is_active);
@@ -537,7 +584,7 @@ class ParticipantRegistrationTest extends TestCase
 
         $this->withSession(['current_user_id' => $userB->id])
             ->patch(route('competitions.participants.withdraw', [$competition, $registration]))
-            ->assertRedirect(route('competitions.show', $competition).'#participants-valides');
+            ->assertRedirect(route('competitions.show', ['competition' => $competition, 'tab' => 'participants']).'#participants-valides');
 
         $registration->refresh();
 
@@ -628,7 +675,7 @@ class ParticipantRegistrationTest extends TestCase
 
         $this->withSession(['current_user_id' => $userB->id])
             ->patch(route('competitions.participants.withdraw', [$competition, $withdrawnRegistration]))
-            ->assertRedirect(route('competitions.show', $competition).'#participants-non-valides');
+            ->assertRedirect(route('competitions.show', ['competition' => $competition, 'tab' => 'participants']).'#participants-non-valides');
 
         $withdrawnRegistration->refresh();
 
@@ -678,7 +725,7 @@ class ParticipantRegistrationTest extends TestCase
 
         $this->withSession(['current_user_id' => $userB->id])
             ->patch(route('competitions.participants.withdraw', [$competition, $registration]))
-            ->assertRedirect(route('competitions.show', $competition).'#participants-retires')
+            ->assertRedirect(route('competitions.show', ['competition' => $competition, 'tab' => 'participants']).'#participants-retires')
             ->assertSessionHas('status', 'Impossible : participation annulée');
 
         $this->assertFalse($registration->refresh()->is_active);
@@ -707,7 +754,7 @@ class ParticipantRegistrationTest extends TestCase
 
         $this->withSession(['current_user_id' => $userB->id])
             ->patch(route('competitions.participants.withdraw', [$competition, $registration]))
-            ->assertRedirect(route('competitions.show', $competition).'#participants-valides')
+            ->assertRedirect(route('competitions.show', ['competition' => $competition, 'tab' => 'participants']).'#participants-valides')
             ->assertSessionHas('status', 'Impossible : participant dans une poule figée');
 
         $registration->refresh();
@@ -727,7 +774,7 @@ class ParticipantRegistrationTest extends TestCase
 
         $this->withSession(['current_user_id' => $userB->id])
             ->patch(route('competitions.participants.reactivate', [$competition, $registration]))
-            ->assertRedirect(route('competitions.show', $competition).'#participants-retires');
+            ->assertRedirect(route('competitions.show', ['competition' => $competition, 'tab' => 'participants']).'#participants-retires');
 
         $this->assertTrue($registration->refresh()->is_active);
 
@@ -768,7 +815,7 @@ class ParticipantRegistrationTest extends TestCase
 
         $this->withSession(['current_user_id' => $userB->id])
             ->patch(route('competitions.participants.reactivate', [$competition, $registration]))
-            ->assertRedirect(route('competitions.show', $competition).'#participants-non-valides')
+            ->assertRedirect(route('competitions.show', ['competition' => $competition, 'tab' => 'participants']).'#participants-non-valides')
             ->assertSessionHas('status', 'Impossible : participant déjà actif');
 
         $this->assertTrue($registration->refresh()->is_active);
@@ -802,7 +849,7 @@ class ParticipantRegistrationTest extends TestCase
 
         $this->withSession(['current_user_id' => $userB->id])
             ->patch(route('competitions.participants.reactivate', [$competition, $registration]))
-            ->assertRedirect(route('competitions.show', $competition).'#participants-retires')
+            ->assertRedirect(route('competitions.show', ['competition' => $competition, 'tab' => 'participants']).'#participants-retires')
             ->assertSessionHas('status', 'Impossible : participant dans une poule figée');
 
         $this->assertFalse($registration->refresh()->is_active);
@@ -839,11 +886,11 @@ class ParticipantRegistrationTest extends TestCase
 
         $this->withSession(['current_user_id' => $userA->id])
             ->patch(route('competitions.participants.withdraw', [$competition, $organizerRegistration]))
-            ->assertRedirect(route('competitions.show', $competition).'#participants-non-valides');
+            ->assertRedirect(route('competitions.show', ['competition' => $competition, 'tab' => 'participants']).'#participants-non-valides');
 
         $this->withSession(['current_user_id' => $userA->id])
             ->patch(route('competitions.participants.withdraw', [$competition, $invitedRegistration]))
-            ->assertRedirect(route('competitions.show', $competition).'#participants-non-valides');
+            ->assertRedirect(route('competitions.show', ['competition' => $competition, 'tab' => 'participants']).'#participants-non-valides');
 
         $this->assertFalse($organizerRegistration->refresh()->is_active);
         $this->assertFalse($invitedRegistration->refresh()->is_active);
@@ -899,7 +946,7 @@ class ParticipantRegistrationTest extends TestCase
                 'approximate_weight' => 50.2,
                 'license_number' => 'LIC-456',
             ])
-            ->assertRedirect(route('competitions.show', $competition).'#participants-non-valides');
+            ->assertRedirect(route('competitions.show', ['competition' => $competition, 'tab' => 'participants']).'#participants-non-valides');
 
         $registration->refresh();
 
@@ -997,7 +1044,7 @@ class ParticipantRegistrationTest extends TestCase
         foreach ($blockedCases as [$registration, $message, $fragment]) {
             $this->withSession(['current_user_id' => $userB->id])
                 ->get(route('competitions.participants.edit', [$competition, $registration]))
-                ->assertRedirect(route('competitions.show', $competition))
+                ->assertRedirect(route('competitions.show', ['competition' => $competition, 'tab' => 'participants']))
                 ->assertSessionHas('status', $message);
 
             $this->withSession(['current_user_id' => $userB->id])
@@ -1009,7 +1056,7 @@ class ParticipantRegistrationTest extends TestCase
                     'approximate_weight' => 70,
                     'license_number' => null,
                 ])
-                ->assertRedirect(route('competitions.show', $competition).'#'.$fragment)
+                ->assertRedirect(route('competitions.show', ['competition' => $competition, 'tab' => 'participants']).'#'.$fragment)
                 ->assertSessionHas('status', $message);
         }
 
@@ -1037,7 +1084,7 @@ class ParticipantRegistrationTest extends TestCase
                 'approximate_weight' => 44.1,
                 'license_number' => null,
             ])
-            ->assertRedirect(route('competitions.show', $competition).'#participants-non-valides');
+            ->assertRedirect(route('competitions.show', ['competition' => $competition, 'tab' => 'participants']).'#participants-non-valides');
 
         $this->withSession(['current_user_id' => $userA->id])
             ->get(route('competitions.participants.edit', [$competition, $invitedRegistration]))
@@ -1218,6 +1265,56 @@ class ParticipantRegistrationTest extends TestCase
         $this->assertTrue($organizerRegistration->refresh()->is_validated);
     }
 
+    public function test_participants_tab_can_filter_participants_without_status_filter(): void
+    {
+        [, $clubB, $clubC, $userA, , , $competition] = $this->scenario(Invitation::STATUS_PARTICIPATION_CONFIRMED);
+
+        $this->registerParticipant($competition, $clubB, [
+            'last_name' => 'Durand',
+            'first_name' => 'Alice',
+            'sex' => 'F',
+            'age' => 12,
+            'approximate_weight' => 42,
+            'is_validated' => true,
+        ]);
+
+        $this->registerParticipant($competition, $clubC, [
+            'last_name' => 'Martin',
+            'first_name' => 'Bob',
+            'sex' => 'M',
+            'age' => 16,
+            'approximate_weight' => 65,
+            'is_validated' => true,
+        ]);
+
+        $response = $this->withSession(['current_user_id' => $userA->id])
+            ->get(route('competitions.show', [
+                'competition' => $competition,
+                'tab' => 'participants',
+                'participant_search' => 'Durand',
+                'participant_club' => $clubB->id,
+                'participant_sex' => 'F',
+                'participant_sort' => 'name',
+            ]))
+            ->assertOk()
+            ->assertSee('Rechercher un participant ou un club')
+            ->assertSee('Tous les clubs')
+            ->assertSee('Club puis nom')
+            ->assertSee('name="tab" value="participants"', false)
+            ->assertSee('Durand Alice')
+            ->assertSee('Club B');
+
+        $content = $response->getContent();
+        $participantsPanelStart = strpos($content, 'data-tab-panel="participants"');
+        $poulesPanelStart = strpos($content, 'data-tab-panel="poules"');
+        $this->assertNotFalse($participantsPanelStart);
+        $this->assertNotFalse($poulesPanelStart);
+
+        $participantsPanel = substr($content, $participantsPanelStart, $poulesPanelStart - $participantsPanelStart);
+        $this->assertStringContainsString('Durand Alice', $participantsPanel);
+        $this->assertStringNotContainsString('Martin Bob', $participantsPanel);
+    }
+
     public function test_organizer_can_close_and_reopen_competition_inscriptions(): void
     {
         [, , , $userA, $userB, , $competition] = $this->scenario(Invitation::STATUS_PARTICIPATION_CONFIRMED);
@@ -1241,7 +1338,7 @@ class ParticipantRegistrationTest extends TestCase
 
         $this->withSession(['current_user_id' => $userA->id])
             ->patch(route('competitions.close-inscriptions', $competition))
-            ->assertRedirect(route('competitions.show', $competition).'#participants')
+            ->assertRedirect(route('competitions.show', ['competition' => $competition, 'tab' => 'participants']).'#participants')
             ->assertSessionHas('status', 'Inscriptions fermées.');
 
         $this->assertTrue($competition->refresh()->inscriptions_closed);
@@ -1262,7 +1359,7 @@ class ParticipantRegistrationTest extends TestCase
 
         $this->withSession(['current_user_id' => $userA->id])
             ->patch(route('competitions.open-inscriptions', $competition))
-            ->assertRedirect(route('competitions.show', $competition).'#participants')
+            ->assertRedirect(route('competitions.show', ['competition' => $competition, 'tab' => 'participants']).'#participants')
             ->assertSessionHas('status', 'Inscriptions ouvertes.');
 
         $this->assertFalse($competition->refresh()->inscriptions_closed);
@@ -1287,14 +1384,14 @@ class ParticipantRegistrationTest extends TestCase
 
         $this->withSession(['current_user_id' => $userA->id])
             ->patch(route('competitions.close-inscriptions', $competition))
-            ->assertRedirect(route('competitions.show', $competition).'#participants');
+            ->assertRedirect(route('competitions.show', ['competition' => $competition, 'tab' => 'participants']).'#participants');
 
         $this->withSession(['current_user_id' => $userB->id])
             ->post(route('competitions.participants.store', $competition), array_merge($this->participantPayload(), [
                 'last_name' => 'Bloque',
                 'first_name' => 'Nouveau',
             ]))
-            ->assertRedirect(route('competitions.show', $competition).'#participants-ajout')
+            ->assertRedirect(route('competitions.show', ['competition' => $competition, 'tab' => 'participants']).'#participants-ajout')
             ->assertSessionHas('status', 'Inscriptions fermées.');
 
         $this->assertDatabaseMissing('participant_sources', [
@@ -1306,24 +1403,24 @@ class ParticipantRegistrationTest extends TestCase
 
         $this->withSession(['current_user_id' => $userB->id])
             ->get(route('competitions.participants.edit', [$competition, $registration]))
-            ->assertRedirect(route('competitions.show', $competition).'#participants-non-valides')
+            ->assertRedirect(route('competitions.show', ['competition' => $competition, 'tab' => 'participants']).'#participants-non-valides')
             ->assertSessionHas('status', 'Inscriptions fermées.');
 
         $this->withSession(['current_user_id' => $userB->id])
             ->patch(route('competitions.participants.update', [$competition, $registration]), array_merge($this->participantPayload(), [
                 'last_name' => 'Modifie',
             ]))
-            ->assertRedirect(route('competitions.show', $competition).'#participants-non-valides')
+            ->assertRedirect(route('competitions.show', ['competition' => $competition, 'tab' => 'participants']).'#participants-non-valides')
             ->assertSessionHas('status', 'Inscriptions fermées.');
 
         $this->withSession(['current_user_id' => $userB->id])
             ->patch(route('competitions.participants.withdraw', [$competition, $registration]))
-            ->assertRedirect(route('competitions.show', $competition).'#participants-non-valides')
+            ->assertRedirect(route('competitions.show', ['competition' => $competition, 'tab' => 'participants']).'#participants-non-valides')
             ->assertSessionHas('status', 'Inscriptions fermées.');
 
         $this->withSession(['current_user_id' => $userB->id])
             ->patch(route('competitions.participants.reactivate', [$competition, $withdrawnRegistration]))
-            ->assertRedirect(route('competitions.show', $competition).'#participants-retires')
+            ->assertRedirect(route('competitions.show', ['competition' => $competition, 'tab' => 'participants']).'#participants-retires')
             ->assertSessionHas('status', 'Inscriptions fermées.');
 
         $registration->refresh()->load('participantSource');
@@ -1340,7 +1437,7 @@ class ParticipantRegistrationTest extends TestCase
 
         $this->withSession(['current_user_id' => $userA->id])
             ->patch(route('competitions.close-inscriptions', $competition))
-            ->assertRedirect(route('competitions.show', $competition).'#participants');
+            ->assertRedirect(route('competitions.show', ['competition' => $competition, 'tab' => 'participants']).'#participants');
 
         $this->withSession(['current_user_id' => $userA->id])
             ->post(route('competitions.participants.store', $competition), array_merge($this->participantPayload(), [
@@ -1348,7 +1445,7 @@ class ParticipantRegistrationTest extends TestCase
                 'last_name' => 'Ajoute',
                 'first_name' => 'Orga',
             ]))
-            ->assertRedirect(route('competitions.show', $competition).'#participants-ajout');
+            ->assertRedirect(route('competitions.show', ['competition' => $competition, 'tab' => 'participants']).'#participants-ajout');
 
         $this->assertDatabaseHas('participant_sources', [
             'club_id' => $clubB->id,
@@ -1363,7 +1460,7 @@ class ParticipantRegistrationTest extends TestCase
                 'last_name' => 'Orga',
                 'first_name' => 'Modifie',
             ]))
-            ->assertRedirect(route('competitions.show', $competition).'#participants-non-valides');
+            ->assertRedirect(route('competitions.show', ['competition' => $competition, 'tab' => 'participants']).'#participants-non-valides');
 
         $this->assertDatabaseHas('participant_sources', [
             'id' => $organizerRegistration->participant_source_id,
@@ -1373,7 +1470,7 @@ class ParticipantRegistrationTest extends TestCase
 
         $this->withSession(['current_user_id' => $userA->id])
             ->patch(route('competitions.participants.withdraw', [$competition, $organizerRegistration]))
-            ->assertRedirect(route('competitions.show', $competition).'#participants-non-valides');
+            ->assertRedirect(route('competitions.show', ['competition' => $competition, 'tab' => 'participants']).'#participants-non-valides');
 
         $this->assertFalse($organizerRegistration->refresh()->is_active);
     }

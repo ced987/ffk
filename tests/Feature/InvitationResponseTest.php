@@ -19,7 +19,7 @@ class InvitationResponseTest extends TestCase
 
         $this->withSession(['current_user_id' => $userB->id])
             ->post(route('competitions.invitations.confirm', [$competition, $invitation]))
-            ->assertRedirect(route('competitions.show', $competition));
+            ->assertRedirect(route('competitions.show', ['competition' => $competition, 'tab' => 'clubs']));
 
         $this->assertSame(Invitation::STATUS_PARTICIPATION_CONFIRMED, $invitation->fresh()->status);
 
@@ -60,7 +60,7 @@ class InvitationResponseTest extends TestCase
 
         $this->withSession(['current_user_id' => $userB->id])
             ->post(route('competitions.invitations.decline', [$competition, $invitation]))
-            ->assertRedirect(route('competitions.show', $competition));
+            ->assertRedirect(route('competitions.show', ['competition' => $competition, 'tab' => 'clubs']));
 
         $this->assertSame(Invitation::STATUS_PARTICIPATION_DECLINED, $invitation->fresh()->status);
         $this->assertTrue(Competition::visibleForClub($clubB)->whereKey($competition)->exists());

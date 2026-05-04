@@ -1157,6 +1157,207 @@
             background: #f8fafc;
         }
 
+        .participant-filter-bar {
+            display: grid;
+            grid-template-columns: minmax(220px, 1.4fr) repeat(3, minmax(140px, 0.8fr)) auto;
+            gap: 10px;
+            align-items: end;
+            margin: 14px 0;
+            padding: 12px;
+            border: 1px solid #dbe3ec;
+            border-radius: 10px;
+            background: #ffffff;
+        }
+
+        .participant-filter-bar label {
+            display: block;
+            margin: 0 0 4px;
+            color: #64748b;
+            font-size: 12px;
+            font-weight: 750;
+        }
+
+        .participant-filter-bar input,
+        .participant-filter-bar select {
+            width: 100%;
+            min-height: 34px;
+            margin: 0;
+            padding: 6px 9px;
+            font-size: 13px;
+        }
+
+        .participant-filter-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .participant-filter-actions button,
+        .participant-filter-actions a {
+            min-height: 34px;
+            margin: 0;
+            padding: 7px 10px;
+            white-space: nowrap;
+        }
+
+        .searchable-checklist {
+            margin-top: 12px;
+        }
+
+        .searchable-checklist-search {
+            max-width: 420px;
+            margin-bottom: 8px;
+        }
+
+        .searchable-checklist-meta {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 8px;
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        .searchable-checklist-items {
+            display: grid;
+            gap: 6px;
+            max-height: 260px;
+            overflow: auto;
+            padding: 8px;
+            border: 1px solid #dbe3ec;
+            border-radius: 10px;
+            background: #f8fafc;
+        }
+
+        .searchable-checklist-item {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            padding: 8px 10px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            background: #ffffff;
+        }
+
+        .searchable-checklist-item input {
+            width: auto;
+            margin: 0;
+        }
+
+        .searchable-checklist-item strong {
+            display: block;
+            color: #17202e;
+            font-size: 14px;
+        }
+
+        .searchable-checklist-item span {
+            display: block;
+            color: #64748b;
+            font-size: 12px;
+        }
+
+        .searchable-checklist-empty {
+            display: none;
+            padding: 10px;
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        .searchable-checklist-empty.is-visible {
+            display: block;
+        }
+
+        .searchable-checklist.compact {
+            margin-top: 8px;
+        }
+
+        .searchable-checklist.compact .searchable-checklist-topline {
+            display: grid;
+            grid-template-columns: minmax(180px, 280px) auto;
+            gap: 8px;
+            align-items: end;
+            margin-bottom: 8px;
+        }
+
+        .searchable-checklist.compact .searchable-checklist-search {
+            max-width: none;
+            min-height: 32px;
+            margin-bottom: 0;
+            padding: 5px 8px;
+        }
+
+        .searchable-checklist.compact .searchable-checklist-meta {
+            justify-content: flex-start;
+            gap: 12px;
+            margin-bottom: 0;
+            padding-bottom: 2px;
+            font-size: 12px;
+        }
+
+        .searchable-checklist.compact .searchable-checklist-items {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 1px;
+            max-height: 190px;
+            padding: 4px;
+        }
+
+        .searchable-checklist.compact .searchable-checklist-item {
+            gap: 6px;
+            padding: 3px 7px;
+        }
+
+        .searchable-checklist.compact .searchable-checklist-line {
+            display: flex;
+            min-width: 0;
+            align-items: baseline;
+            gap: 6px;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+
+        .searchable-checklist.compact .searchable-checklist-item strong {
+            flex: 0 0 auto;
+            font-size: 13px;
+            line-height: 1.15;
+        }
+
+        .searchable-checklist.compact .searchable-checklist-item span {
+            min-width: 0;
+            font-size: 11px;
+            line-height: 1.2;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .searchable-checklist.compact + button {
+            min-height: 32px;
+            margin-top: 8px;
+            padding: 6px 10px;
+        }
+
+        @media (max-width: 760px) {
+            .searchable-checklist.compact .searchable-checklist-topline {
+                grid-template-columns: 1fr;
+            }
+
+            .searchable-checklist.compact .searchable-checklist-items {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 1100px) {
+            .participant-filter-bar {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 680px) {
+            .participant-filter-bar {
+                grid-template-columns: 1fr;
+            }
+        }
+
         .participant-name-line {
             display: flex;
             align-items: center;
@@ -2428,10 +2629,65 @@
             $allRegistrations = $isOrganizer
                 ? $registrationsByClub->flatten(1)->values()
                 : $currentClubRegistrations;
+            $participantSearch = trim((string) request('participant_search', ''));
+            $participantClubFilter = request('participant_club');
+            $participantSexFilter = in_array(request('participant_sex'), ['F', 'M'], true) ? request('participant_sex') : '';
+            $participantSort = in_array(request('participant_sort'), ['club_name', 'name', 'age', 'weight'], true) ? request('participant_sort') : 'club_name';
+            $participantFilterClubs = $allRegistrations
+                ->pluck('club')
+                ->filter()
+                ->unique('id')
+                ->sortBy('name')
+                ->values();
+            $filterParticipantRegistrations = function ($registrations) use ($participantSearch, $participantClubFilter, $participantSexFilter, $participantSort) {
+                $filtered = $registrations;
+
+                if ($participantSearch !== '') {
+                    $search = \Illuminate\Support\Str::lower($participantSearch);
+                    $filtered = $filtered->filter(function ($registration) use ($search) {
+                        $participant = $registration->participantSource;
+                        $clubName = $registration->club->name ?? '';
+                        $haystack = \Illuminate\Support\Str::lower(trim($participant->last_name.' '.$participant->first_name.' '.$clubName));
+
+                        return str_contains($haystack, $search);
+                    });
+                }
+
+                if ($participantClubFilter) {
+                    $filtered = $filtered->filter(fn ($registration) => (string) $registration->club_id === (string) $participantClubFilter);
+                }
+
+                if ($participantSexFilter !== '') {
+                    $filtered = $filtered->filter(fn ($registration) => $registration->participantSource->sex === $participantSexFilter);
+                }
+
+                return match ($participantSort) {
+                    'name' => $filtered->sortBy(fn ($registration) => [
+                        $registration->participantSource->last_name,
+                        $registration->participantSource->first_name,
+                        $registration->club->name ?? '',
+                    ])->values(),
+                    'age' => $filtered->sortBy(fn ($registration) => [
+                        $registration->participantSource->age,
+                        $registration->participantSource->last_name,
+                        $registration->participantSource->first_name,
+                    ])->values(),
+                    'weight' => $filtered->sortBy(fn ($registration) => [
+                        $registration->participantSource->approximate_weight,
+                        $registration->participantSource->last_name,
+                        $registration->participantSource->first_name,
+                    ])->values(),
+                    default => $filtered->sortBy(fn ($registration) => [
+                        $registration->club->name ?? '',
+                        $registration->participantSource->last_name,
+                        $registration->participantSource->first_name,
+                    ])->values(),
+                };
+            };
             $participantGroups = [
-                'Participants validés' => $allRegistrations->filter(fn ($registration) => $registration->is_active && $registration->is_validated)->values(),
-                'Participants en attente de validation' => $allRegistrations->filter(fn ($registration) => $registration->is_active && ! $registration->is_validated)->values(),
-                'Participants retirés' => $allRegistrations->filter(fn ($registration) => ! $registration->is_active)->values(),
+                'Participants validés' => $filterParticipantRegistrations($allRegistrations->filter(fn ($registration) => $registration->is_active && $registration->is_validated)->values()),
+                'Participants en attente de validation' => $filterParticipantRegistrations($allRegistrations->filter(fn ($registration) => $registration->is_active && ! $registration->is_validated)->values()),
+                'Participants retirés' => $filterParticipantRegistrations($allRegistrations->filter(fn ($registration) => ! $registration->is_active)->values()),
             ];
             $participantGroupEmptyMessages = [
                 'Participants validés' => 'Aucun participant validé',
@@ -2448,6 +2704,7 @@
             $participantHintCount = $isOrganizer ? $participantValidationSummary['global']['not_validated'] : $currentClubSummary['not_validated'];
             $poulesReady = $eligiblePouleRegistrations->isEmpty() && $draftPoules->isEmpty() && $frozenPoules->isNotEmpty();
             $roleLabel = $competition->roleLabelForClub($currentUser->club);
+            $requestedTab = in_array(request('tab'), ['suivi', 'clubs', 'participants', 'poules', 'combats'], true) ? request('tab') : 'suivi';
         @endphp
 
         @if (session('status'))
@@ -2456,7 +2713,7 @@
 
         <nav class="tabs" aria-label="Navigation compétition">
             <div class="tabs-list">
-                <button class="tab-button" type="button" data-tab-target="suivi">
+                <button class="tab-button" type="button" data-tab-target="suivi" data-tab-url="{{ route('competitions.show', ['competition' => $competition, 'tab' => 'suivi']) }}">
                     <svg aria-hidden="true" viewBox="0 0 24 24">
                         <path d="M9 6h11"></path>
                         <path d="M9 12h11"></path>
@@ -2470,7 +2727,7 @@
                         <span>({{ $pendingActions->count() }})</span>
                     @endif
                 </button>
-                <button class="tab-button" type="button" data-tab-target="clubs">
+                <button class="tab-button" type="button" data-tab-target="clubs" data-tab-url="{{ route('competitions.show', ['competition' => $competition, 'tab' => 'clubs']) }}">
                     <svg aria-hidden="true" viewBox="0 0 24 24">
                         <path d="M4 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16"></path>
                         <path d="M16 8h2a2 2 0 0 1 2 2v11"></path>
@@ -2481,7 +2738,7 @@
                     </svg>
                     <span>Clubs</span>
                 </button>
-                <button class="tab-button" type="button" data-tab-target="participants">
+                <button class="tab-button" type="button" data-tab-target="participants" data-tab-url="{{ route('competitions.show', ['competition' => $competition, 'tab' => 'participants']) }}">
                     <svg aria-hidden="true" viewBox="0 0 24 24">
                         <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
                         <circle cx="9" cy="7" r="4"></circle>
@@ -2491,7 +2748,7 @@
                     <span>Participants</span>
                 </button>
                 @if ($isOrganizer)
-                    <button class="tab-button" type="button" data-tab-target="poules">
+                    <button class="tab-button" type="button" data-tab-target="poules" data-tab-url="{{ route('competitions.show', ['competition' => $competition, 'tab' => 'poules']) }}">
                         <svg aria-hidden="true" viewBox="0 0 24 24">
                             <rect x="3" y="3" width="7" height="7" rx="1"></rect>
                             <rect x="14" y="3" width="7" height="7" rx="1"></rect>
@@ -2500,7 +2757,7 @@
                         </svg>
                         <span>Poules</span>
                     </button>
-                    <button class="tab-button" type="button" data-tab-target="combats">
+                    <button class="tab-button" type="button" data-tab-target="combats" data-tab-url="{{ route('competitions.show', ['competition' => $competition, 'tab' => 'combats']) }}">
                         <svg aria-hidden="true" viewBox="0 0 24 24">
                             <path d="M14.5 4.5 19 3l-1.5 4.5L7 18l-3 1 1-3 10.5-10.5Z"></path>
                             <path d="M9.5 4.5 5 3l1.5 4.5L17 18l3 1-1-3L8.5 5.5Z"></path>
@@ -2884,20 +3141,39 @@
                         <form method="POST" action="{{ route('competitions.invitations.store', $competition) }}">
                             @csrf
 
-                            <label for="club_id">Club</label>
-                            <select id="club_id" name="club_id" required>
-                                @foreach ($availableClubs as $club)
-                                    <option value="{{ $club->id }}" @selected((int) old('club_id') === $club->id)>
-                                        {{ $club->name }}
-                                    </option>
-                                @endforeach
-                            </select>
+                            <div class="searchable-checklist" data-searchable-checklist>
+                                <label for="club_search">Rechercher un club</label>
+                                <input class="searchable-checklist-search" id="club_search" type="search" placeholder="Rechercher un club" data-searchable-checklist-input>
+
+                                <div class="searchable-checklist-meta">
+                                    <span data-searchable-checklist-count>0 sélectionné(s)</span>
+                                    <span>{{ $availableClubs->count() }} club(s) disponible(s)</span>
+                                </div>
+
+                                <div class="searchable-checklist-items">
+                                    @foreach ($availableClubs as $club)
+                                        <label class="searchable-checklist-item" data-searchable-checklist-item data-search-text="{{ \Illuminate\Support\Str::lower($club->name) }}">
+                                            <input type="checkbox" name="club_ids[]" value="{{ $club->id }}" @checked(collect(old('club_ids', []))->contains((string) $club->id))>
+                                            <span>
+                                                <strong>{{ $club->name }}</strong>
+                                            </span>
+                                        </label>
+                                    @endforeach
+                                    <p class="searchable-checklist-empty" data-searchable-checklist-empty>Aucun résultat</p>
+                                </div>
+                            </div>
 
                             @error('club_id')
                                 <div class="error">{{ $message }}</div>
                             @enderror
+                            @error('club_ids')
+                                <div class="error">{{ $message }}</div>
+                            @enderror
+                            @error('club_ids.*')
+                                <div class="error">{{ $message }}</div>
+                            @enderror
 
-                            <button type="submit">Ajouter en pré-invité</button>
+                            <button type="submit">Ajouter les clubs sélectionnés</button>
                         </form>
                     @else
                         <p class="empty-state">Aucun club disponible à inviter.</p>
@@ -3049,28 +3325,49 @@
                             <form method="POST" action="{{ route('competitions.participants.store-from-licencie', $competition) }}">
                                 @csrf
 
-                                <div class="form-grid">
-                                    <div>
-                                        <label for="licencie_id">Licencié</label>
-                                        <select id="licencie_id" name="licencie_id" required>
-                                            @foreach ($currentClubLicencies as $licencie)
-                                                @php
-                                                    $isLicencieAlreadyRegistered = $registeredLicencieIds->contains($licencie->id);
-                                                    $licencieLabel = "{$licencie->nom} {$licencie->prenom} - {$licencie->date_naissance->age} ans - {$licencie->poids} kg";
-                                                    $licencieLabel .= $isLicencieAlreadyRegistered ? ' — Déjà inscrit' : '';
-                                                @endphp
-                                                <option value="{{ $licencie->id }}"{{ $isLicencieAlreadyRegistered ? ' disabled' : '' }}>
-                                                    {{ $licencieLabel }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                        @error('licencie_id')
-                                            <div class="error">{{ $message }}</div>
-                                        @enderror
+                                <div class="searchable-checklist compact" data-searchable-checklist>
+                                    <div class="searchable-checklist-topline">
+                                        <div>
+                                            <label for="licencie_search">Rechercher un licencié</label>
+                                            <input class="searchable-checklist-search" id="licencie_search" type="search" placeholder="Nom, prénom ou club" data-searchable-checklist-input>
+                                        </div>
+
+                                        <div class="searchable-checklist-meta">
+                                            <span data-searchable-checklist-count>0 sélectionné(s)</span>
+                                            <span>{{ $currentClubLicencies->count() }} licencié(s)</span>
+                                        </div>
                                     </div>
+
+                                    <div class="searchable-checklist-items">
+                                        @foreach ($currentClubLicencies as $licencie)
+                                            @php
+                                                $isLicencieAlreadyRegistered = $registeredLicencieIds->contains($licencie->id);
+                                                $licencieDetails = "{$licencie->date_naissance->age} ans · {$licencie->poids} kg";
+                                                $licencieSearchText = \Illuminate\Support\Str::lower("{$licencie->nom} {$licencie->prenom} {$currentUser->club->name}");
+                                            @endphp
+                                            <label class="searchable-checklist-item" data-searchable-checklist-item data-search-text="{{ $licencieSearchText }}">
+                                                <input type="checkbox" name="licencie_ids[]" value="{{ $licencie->id }}" @checked(collect(old('licencie_ids', []))->contains((string) $licencie->id)) @disabled($isLicencieAlreadyRegistered)>
+                                                <span class="searchable-checklist-line">
+                                                    <strong>{{ $licencie->nom }} {{ $licencie->prenom }}</strong>
+                                                    <span>{{ $currentUser->club->name }} · {{ $licencieDetails }}{{ $isLicencieAlreadyRegistered ? ' · Déjà inscrit' : '' }}</span>
+                                                </span>
+                                            </label>
+                                        @endforeach
+                                        <p class="searchable-checklist-empty" data-searchable-checklist-empty>Aucun résultat</p>
+                                    </div>
+
+                                    @error('licencie_id')
+                                        <div class="error">{{ $message }}</div>
+                                    @enderror
+                                    @error('licencie_ids')
+                                        <div class="error">{{ $message }}</div>
+                                    @enderror
+                                    @error('licencie_ids.*')
+                                        <div class="error">{{ $message }}</div>
+                                    @enderror
                                 </div>
 
-                                <button type="submit">Ajouter ce licencié</button>
+                                <button type="submit">Ajouter les licenciés sélectionnés</button>
                             </form>
                         @else
                             <p class="empty-state">Aucun licencié disponible pour ce club.</p>
@@ -3079,6 +3376,53 @@
                 </div>
             @elseif (!$isOrganizer && $competition->inscriptions_closed)
                 <p class="empty-state">Inscriptions fermées</p>
+            @endif
+
+            @if ($isOrganizer && $allRegistrations->isNotEmpty())
+                <form class="participant-filter-bar" method="GET" action="{{ route('competitions.show', $competition) }}">
+                    <input type="hidden" name="tab" value="participants">
+
+                    <div>
+                        <label for="participant_search">Recherche</label>
+                        <input id="participant_search" name="participant_search" value="{{ $participantSearch }}" placeholder="Rechercher un participant ou un club">
+                    </div>
+
+                    <div>
+                        <label for="participant_club">Club</label>
+                        <select id="participant_club" name="participant_club">
+                            <option value="">Tous les clubs</option>
+                            @foreach ($participantFilterClubs as $club)
+                                <option value="{{ $club->id }}" @selected((string) $participantClubFilter === (string) $club->id)>
+                                    {{ $club->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div>
+                        <label for="participant_sex">Sexe</label>
+                        <select id="participant_sex" name="participant_sex">
+                            <option value="">Tous</option>
+                            <option value="F" @selected($participantSexFilter === 'F')>F</option>
+                            <option value="M" @selected($participantSexFilter === 'M')>M</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label for="participant_sort">Tri</label>
+                        <select id="participant_sort" name="participant_sort">
+                            <option value="club_name" @selected($participantSort === 'club_name')>Club puis nom</option>
+                            <option value="name" @selected($participantSort === 'name')>Nom</option>
+                            <option value="age" @selected($participantSort === 'age')>Âge</option>
+                            <option value="weight" @selected($participantSort === 'weight')>Poids</option>
+                        </select>
+                    </div>
+
+                    <div class="participant-filter-actions">
+                        <button type="submit">Filtrer</button>
+                        <a class="secondary-button" href="{{ route('competitions.show', ['competition' => $competition, 'tab' => 'participants']) }}">Réinitialiser</a>
+                    </div>
+                </form>
             @endif
 
             @if ($allRegistrations->isNotEmpty())
@@ -3240,6 +3584,7 @@
                         </div>
 
                         <form class="poule-assistant-form" method="GET" action="{{ route('competitions.show', $competition) }}">
+                            <input type="hidden" name="tab" value="poules">
                             <input type="hidden" name="analyze_poules" value="1">
                             <div class="poule-assistant-criteria">
                                 <div>
@@ -3270,7 +3615,7 @@
                                 <button type="submit">Analyser les participants</button>
                                 @if ($pouleAssistantResult)
                                     <button class="secondary-button" type="submit">Recalculer</button>
-                                    <a class="secondary-button" href="{{ route('competitions.show', $competition) }}#assistant-poules">Fermer les suggestions</a>
+                                    <a class="secondary-button" href="{{ route('competitions.show', ['competition' => $competition, 'tab' => 'poules']) }}#assistant-poules">Fermer les suggestions</a>
                                 @endif
                             </div>
                         </form>
@@ -3895,12 +4240,46 @@
             const isTouchDevice = ('ontouchstart' in window) || navigator.maxTouchPoints > 0;
             const tabButtons = Array.from(document.querySelectorAll('[data-tab-target]'));
             const tabPanels = Array.from(document.querySelectorAll('[data-tab-panel]'));
+            const initialTab = @json($requestedTab);
             let autoScrollDirection = 0;
             let autoScrollFrame = null;
             let toastTimeout = null;
             let suppressAssignmentClick = false;
             let assignmentCard = null;
             let selectedAssignmentOption = null;
+
+            document.querySelectorAll('[data-searchable-checklist]').forEach((checklist) => {
+                const input = checklist.querySelector('[data-searchable-checklist-input]');
+                const items = Array.from(checklist.querySelectorAll('[data-searchable-checklist-item]'));
+                const count = checklist.querySelector('[data-searchable-checklist-count]');
+                const empty = checklist.querySelector('[data-searchable-checklist-empty]');
+
+                const updateChecklist = () => {
+                    const query = (input?.value || '').trim().toLowerCase();
+                    let visibleCount = 0;
+
+                    items.forEach((item) => {
+                        const isVisible = ! query || (item.dataset.searchText || '').includes(query);
+                        item.style.display = isVisible ? '' : 'none';
+                        if (isVisible) {
+                            visibleCount += 1;
+                        }
+                    });
+
+                    if (empty) {
+                        empty.classList.toggle('is-visible', visibleCount === 0);
+                    }
+
+                    if (count) {
+                        const selectedCount = items.filter((item) => item.querySelector('input[type="checkbox"]')?.checked).length;
+                        count.textContent = `${selectedCount} sélectionné(s)`;
+                    }
+                };
+
+                input?.addEventListener('input', updateChecklist);
+                items.forEach((item) => item.querySelector('input[type="checkbox"]')?.addEventListener('change', updateChecklist));
+                updateChecklist();
+            });
 
             const competitionNameDisplay = document.querySelector('[data-competition-name-display]');
             const competitionNameForm = document.querySelector('[data-competition-name-form]');
@@ -3987,6 +4366,9 @@
             tabButtons.forEach((button) => {
                 button.addEventListener('click', () => {
                     activateTab(button.dataset.tabTarget);
+                    if (button.dataset.tabUrl) {
+                        window.history.replaceState({}, '', button.dataset.tabUrl);
+                    }
                     window.scrollTo(0, 0);
                 });
             });
@@ -3995,6 +4377,10 @@
                 link.addEventListener('click', (event) => {
                     event.preventDefault();
                     activateTab(link.dataset.tabLinkTarget);
+                    const targetButton = tabButtons.find((button) => button.dataset.tabTarget === link.dataset.tabLinkTarget);
+                    if (targetButton?.dataset.tabUrl) {
+                        window.history.replaceState({}, '', targetButton.dataset.tabUrl);
+                    }
                     window.scrollTo(0, 0);
                 });
             });
@@ -4003,9 +4389,9 @@
                 window.print();
             });
 
-            const tabForHash = (hash) => {
+            const tabForHash = (hash, fallbackTab = 'suivi') => {
                 if (! hash) {
-                    return 'suivi';
+                    return fallbackTab;
                 }
 
                 if (hash === '#actions') {
@@ -4031,7 +4417,7 @@
                 return 'suivi';
             };
 
-            activateTab(tabForHash(window.location.hash));
+            activateTab(tabForHash(window.location.hash, initialTab));
 
             document.querySelectorAll('[data-rename-open]').forEach((button) => {
                 button.addEventListener('click', () => {

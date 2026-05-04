@@ -41,7 +41,9 @@ class CompetitionInvitationTest extends TestCase
             ->get(route('competitions.show', $competition))
             ->assertOk()
             ->assertSee('Club C')
-            ->assertSee('<option value="'.$clubC->id.'"', false);
+            ->assertSee('Rechercher un club')
+            ->assertSee('name="club_ids[]"', false)
+            ->assertSee('value="'.$clubC->id.'"', false);
 
         $content = $response->getContent();
         $formStart = strpos($content, 'action="'.route('competitions.invitations.store', $competition).'"');
@@ -50,9 +52,9 @@ class CompetitionInvitationTest extends TestCase
         $this->assertNotFalse($formEnd);
         $invitationForm = substr($content, $formStart, $formEnd - $formStart);
 
-        $this->assertStringContainsString('<option value="'.$clubC->id.'"', $invitationForm);
-        $this->assertStringNotContainsString('<option value="'.$clubA->id.'"', $invitationForm);
-        $this->assertStringNotContainsString('<option value="'.$clubB->id.'"', $invitationForm);
+        $this->assertStringContainsString('value="'.$clubC->id.'"', $invitationForm);
+        $this->assertStringNotContainsString('value="'.$clubA->id.'"', $invitationForm);
+        $this->assertStringNotContainsString('value="'.$clubB->id.'"', $invitationForm);
     }
 
     public function test_organizer_can_add_a_pre_invited_club_without_making_competition_visible_yet(): void
@@ -76,7 +78,7 @@ class CompetitionInvitationTest extends TestCase
             ->post(route('competitions.invitations.store', $competition), [
                 'club_id' => $clubB->id,
             ])
-            ->assertRedirect(route('competitions.show', $competition));
+            ->assertRedirect(route('competitions.show', ['competition' => $competition, 'tab' => 'clubs']));
 
         $this->assertDatabaseHas('invitations', [
             'competition_id' => $competition->id,
@@ -118,12 +120,50 @@ class CompetitionInvitationTest extends TestCase
 
         $this->withSession(['current_user_id' => $userA->id])
             ->post(route('competitions.invitations.mark-sent', [$competition, $invitation]))
-            ->assertRedirect(route('competitions.show', $competition));
+            ->assertRedirect(route('competitions.show', ['competition' => $competition, 'tab' => 'clubs']));
 
         $this->assertSame(Invitation::STATUS_INVITE, $invitation->fresh()->status);
         $this->assertTrue(
             Competition::visibleForClub($clubB)->whereKey($competition)->exists()
         );
+    }
+
+    public function test_organizer_can_add_multiple_pre_invited_clubs_at_once(): void
+    {
+        $clubA = Club::create(['name' => 'Club A']);
+        $clubB = Club::create(['name' => 'Club B']);
+        $clubC = Club::create(['name' => 'Club C']);
+
+        $userA = User::create([
+            'club_id' => $clubA->id,
+            'name' => 'Utilisateur Club A',
+            'email' => 'club-a@example.test',
+            'password' => 'password',
+        ]);
+
+        $competition = Competition::create([
+            'organizer_club_id' => $clubA->id,
+            'name' => 'Competition Sprint 1',
+        ]);
+
+        $this->withSession(['current_user_id' => $userA->id])
+            ->post(route('competitions.invitations.store', $competition), [
+                'club_ids' => [$clubB->id, $clubC->id],
+            ])
+            ->assertRedirect(route('competitions.show', ['competition' => $competition, 'tab' => 'clubs']))
+            ->assertSessionHas('status', '2 clubs ajoutés en préparation de l’invitation.');
+
+        $this->assertDatabaseHas('invitations', [
+            'competition_id' => $competition->id,
+            'club_id' => $clubB->id,
+            'status' => Invitation::STATUS_PRE_INVITE,
+        ]);
+
+        $this->assertDatabaseHas('invitations', [
+            'competition_id' => $competition->id,
+            'club_id' => $clubC->id,
+            'status' => Invitation::STATUS_PRE_INVITE,
+        ]);
     }
 
     public function test_non_organizer_cannot_mark_invitation_as_sent(): void

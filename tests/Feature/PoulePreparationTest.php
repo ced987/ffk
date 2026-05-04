@@ -25,7 +25,7 @@ class PoulePreparationTest extends TestCase
             ->post(route('competitions.poules.store', $competition), [
                 'name' => 'Poule Demo A',
             ])
-            ->assertRedirect(route('competitions.show', $competition).'#creation-poule');
+            ->assertRedirect(route('competitions.show', ['competition' => $competition, 'tab' => 'poules']).'#creation-poule');
 
         $this->assertDatabaseHas('poules', [
             'competition_id' => $competition->id,
@@ -56,7 +56,7 @@ class PoulePreparationTest extends TestCase
             ->patch(route('competitions.poules.rename', [$competition, $poule]), [
                 'name' => 'Nouveau nom',
             ])
-            ->assertRedirect(route('competitions.show', $competition).'#poules-figees')
+            ->assertRedirect(route('competitions.show', ['competition' => $competition, 'tab' => 'poules']).'#poules-figees')
             ->assertSessionHas('status', 'Poule renommée.');
 
         $this->assertSame('Nouveau nom', $poule->refresh()->name);
@@ -81,7 +81,7 @@ class PoulePreparationTest extends TestCase
             ->patch(route('competitions.poules.rename', [$competition, $poule]), [
                 'name' => 'Nom interdit',
             ])
-            ->assertRedirect(route('competitions.show', $competition))
+            ->assertRedirect(route('competitions.show', ['competition' => $competition, 'tab' => 'poules']))
             ->assertSessionHas('status', 'Impossible : action réservée à l’organisateur');
 
         $this->assertSame('Poule Club B', $poule->refresh()->name);
@@ -142,7 +142,7 @@ class PoulePreparationTest extends TestCase
 
         $this->withSession(['current_user_id' => $userA->id])
             ->delete(route('competitions.poules.destroy', [$competition, $poule]))
-            ->assertRedirect(route('competitions.show', $competition).'#poules-figees')
+            ->assertRedirect(route('competitions.show', ['competition' => $competition, 'tab' => 'poules']).'#poules-figees')
             ->assertSessionHas('status', 'Poule supprimée.');
 
         $this->assertDatabaseMissing('poules', ['id' => $poule->id]);
@@ -167,7 +167,7 @@ class PoulePreparationTest extends TestCase
 
         $this->withSession(['current_user_id' => $userB->id])
             ->delete(route('competitions.poules.destroy', [$competition, $poule]))
-            ->assertRedirect(route('competitions.show', $competition))
+            ->assertRedirect(route('competitions.show', ['competition' => $competition, 'tab' => 'poules']))
             ->assertSessionHas('status', 'Impossible : action réservée à l’organisateur');
 
         $this->assertDatabaseHas('poules', ['id' => $poule->id]);
@@ -187,17 +187,17 @@ class PoulePreparationTest extends TestCase
 
         $this->withSession(['current_user_id' => $userA->id])
             ->get('/competitions/'.$competition->id.'/poules')
-            ->assertRedirect(route('competitions.show', $competition))
+            ->assertRedirect(route('competitions.show', ['competition' => $competition, 'tab' => 'poules']))
             ->assertSessionHas('status', 'Utilisez le formulaire pour créer une poule.');
 
         $this->withSession(['current_user_id' => $userA->id])
             ->get('/competitions/'.$competition->id.'/poules/'.$poule->id.'/registrations')
-            ->assertRedirect(route('competitions.show', $competition))
+            ->assertRedirect(route('competitions.show', ['competition' => $competition, 'tab' => 'poules']))
             ->assertSessionHas('status', 'Utilisez le formulaire pour affecter un participant.');
 
         $this->withSession(['current_user_id' => $userA->id])
             ->get('/competitions/'.$competition->id.'/registrations/'.$registration->id.'/withdraw-assignment')
-            ->assertRedirect(route('competitions.show', $competition))
+            ->assertRedirect(route('competitions.show', ['competition' => $competition, 'tab' => 'poules']))
             ->assertSessionHas('status', 'Utilisez le formulaire pour retirer l affectation.');
 
         $this->assertSame($poule->id, $registration->refresh()->poule_id);
@@ -427,7 +427,7 @@ class PoulePreparationTest extends TestCase
                 'proposal_names' => ['Poule Assistant A'],
                 'proposal_registration_ids' => [$first->id.','.$second->id],
             ])
-            ->assertRedirect(route('competitions.show', $competition).'#poules-brouillon')
+            ->assertRedirect(route('competitions.show', ['competition' => $competition, 'tab' => 'poules']).'#poules-brouillon')
             ->assertSessionHas('status', '1 poule(s) proposée(s) créée(s).');
 
         $poule = Poule::where('name', 'Poule Assistant A')->firstOrFail();
@@ -461,7 +461,7 @@ class PoulePreparationTest extends TestCase
             ->post(route('competitions.poules.registrations.store', [$competition, $poule]), [
                 'registration_id' => $registration->id,
             ])
-            ->assertRedirect(route('competitions.show', $competition).'#participants-disponibles');
+            ->assertRedirect(route('competitions.show', ['competition' => $competition, 'tab' => 'poules']).'#participants-disponibles');
 
         $this->assertSame($poule->id, $registration->refresh()->poule_id);
         $this->assertNotContains($registration->id, $competition->eligiblePouleRegistrations()->pluck('id')->all());
@@ -519,28 +519,28 @@ class PoulePreparationTest extends TestCase
             ->post(route('competitions.poules.registrations.store', [$competition, $closedPoule]), [
                 'registration_id' => $available->id,
             ])
-            ->assertRedirect(route('competitions.show', $competition).'#participants-disponibles')
+            ->assertRedirect(route('competitions.show', ['competition' => $competition, 'tab' => 'poules']).'#participants-disponibles')
             ->assertSessionHas('status', 'Impossible : poule figée');
 
         $this->withSession(['current_user_id' => $userA->id])
             ->post(route('competitions.poules.registrations.store', [$competition, $poule]), [
                 'registration_id' => $notValidated->id,
             ])
-            ->assertRedirect(route('competitions.show', $competition).'#participants-disponibles')
+            ->assertRedirect(route('competitions.show', ['competition' => $competition, 'tab' => 'poules']).'#participants-disponibles')
             ->assertSessionHas('status', 'Impossible : participant non validé');
 
         $this->withSession(['current_user_id' => $userA->id])
             ->post(route('competitions.poules.registrations.store', [$competition, $poule]), [
                 'registration_id' => $withdrawn->id,
             ])
-            ->assertRedirect(route('competitions.show', $competition).'#participants-disponibles')
+            ->assertRedirect(route('competitions.show', ['competition' => $competition, 'tab' => 'poules']).'#participants-disponibles')
             ->assertSessionHas('status', 'Impossible : participation annulée');
 
         $this->withSession(['current_user_id' => $userA->id])
             ->post(route('competitions.poules.registrations.store', [$competition, $poule]), [
                 'registration_id' => $alreadyAssigned->id,
             ])
-            ->assertRedirect(route('competitions.show', $competition).'#participants-disponibles')
+            ->assertRedirect(route('competitions.show', ['competition' => $competition, 'tab' => 'poules']).'#participants-disponibles')
             ->assertSessionHas('status', 'Impossible : participant déjà affecté');
 
         $this->withSession(['current_user_id' => $userA->id])
@@ -589,7 +589,7 @@ class PoulePreparationTest extends TestCase
 
         $this->withSession(['current_user_id' => $userA->id])
             ->patch(route('competitions.registrations.withdraw-assignment', [$competition, $registration]))
-            ->assertRedirect(route('competitions.show', $competition).'#poules-brouillon');
+            ->assertRedirect(route('competitions.show', ['competition' => $competition, 'tab' => 'poules']).'#poules-brouillon');
 
         $this->assertNull($registration->refresh()->poule_id);
         $this->assertContains($registration->id, $competition->eligiblePouleRegistrations()->pluck('id')->all());
@@ -615,7 +615,7 @@ class PoulePreparationTest extends TestCase
             ->patch(route('competitions.registrations.move-assignment', [$competition, $registration]), [
                 'poule_id' => $targetPoule->id,
             ])
-            ->assertRedirect(route('competitions.show', $competition).'#poules-brouillon');
+            ->assertRedirect(route('competitions.show', ['competition' => $competition, 'tab' => 'poules']).'#poules-brouillon');
 
         $this->assertSame($targetPoule->id, $registration->refresh()->poule_id);
         $this->assertNotContains($registration->id, $competition->eligiblePouleRegistrations()->pluck('id')->all());
@@ -645,7 +645,7 @@ class PoulePreparationTest extends TestCase
             ->patch(route('competitions.registrations.move-assignment', [$competition, $registration]), [
                 'poule_id' => $poule->id,
             ])
-            ->assertRedirect(route('competitions.show', $competition).'#poules-brouillon')
+            ->assertRedirect(route('competitions.show', ['competition' => $competition, 'tab' => 'poules']).'#poules-brouillon')
             ->assertSessionHas('status', 'Impossible : même poule');
 
         $this->assertSame($poule->id, $registration->refresh()->poule_id);
@@ -672,7 +672,7 @@ class PoulePreparationTest extends TestCase
             ->patch(route('competitions.registrations.move-assignment', [$competition, $registration]), [
                 'poule_id' => $targetPoule->id,
             ])
-            ->assertRedirect(route('competitions.show', $competition).'#participants-disponibles')
+            ->assertRedirect(route('competitions.show', ['competition' => $competition, 'tab' => 'poules']).'#participants-disponibles')
             ->assertSessionHas('status', 'Impossible : participation annulée');
 
         $this->assertNotContains($registration->id, $competition->eligiblePouleRegistrations()->pluck('id')->all());
@@ -760,21 +760,21 @@ class PoulePreparationTest extends TestCase
             ->patch(route('competitions.registrations.move-assignment', [$competition, $validRegistration]), [
                 'poule_id' => $closedPoule->id,
             ])
-            ->assertRedirect(route('competitions.show', $competition).'#poules-brouillon')
+            ->assertRedirect(route('competitions.show', ['competition' => $competition, 'tab' => 'poules']).'#poules-brouillon')
             ->assertSessionHas('status', 'Impossible : poule figée');
 
         $this->withSession(['current_user_id' => $userA->id])
             ->patch(route('competitions.registrations.move-assignment', [$competition, $notValidated]), [
                 'poule_id' => $targetPoule->id,
             ])
-            ->assertRedirect(route('competitions.show', $competition).'#participants-disponibles')
+            ->assertRedirect(route('competitions.show', ['competition' => $competition, 'tab' => 'poules']).'#participants-disponibles')
             ->assertSessionHas('status', 'Impossible : participant non validé');
 
         $this->withSession(['current_user_id' => $userA->id])
             ->patch(route('competitions.registrations.move-assignment', [$competition, $unassigned]), [
                 'poule_id' => $targetPoule->id,
             ])
-            ->assertRedirect(route('competitions.show', $competition).'#participants-disponibles')
+            ->assertRedirect(route('competitions.show', ['competition' => $competition, 'tab' => 'poules']).'#participants-disponibles')
             ->assertSessionHas('status', 'Impossible : participant déjà affecté');
 
         $this->withSession(['current_user_id' => $userA->id])
@@ -820,7 +820,7 @@ class PoulePreparationTest extends TestCase
 
         $this->withSession(['current_user_id' => $userA->id])
             ->patch(route('competitions.poules.freeze', [$competition, $poule]))
-            ->assertRedirect(route('competitions.show', $competition).'#poules-brouillon');
+            ->assertRedirect(route('competitions.show', ['competition' => $competition, 'tab' => 'poules']).'#poules-brouillon');
 
         $this->assertSame(Poule::STATUS_FROZEN, $poule->refresh()->status);
         $this->assertDatabaseHas('combats', [
@@ -900,7 +900,7 @@ class PoulePreparationTest extends TestCase
 
         $this->withSession(['current_user_id' => $userA->id])
             ->patch(route('competitions.poules.unfreeze', [$competition, $poule]))
-            ->assertRedirect(route('competitions.show', $competition).'#poules-figees')
+            ->assertRedirect(route('competitions.show', ['competition' => $competition, 'tab' => 'poules']).'#poules-figees')
             ->assertSessionHas('status', 'Poule remise en préparation.');
 
         $this->assertSame(Poule::STATUS_DRAFT, $poule->refresh()->status);
@@ -957,12 +957,12 @@ class PoulePreparationTest extends TestCase
 
         $this->withSession(['current_user_id' => $userA->id])
             ->patch(route('competitions.poules.freeze', [$competition, $oneParticipantPoule]))
-            ->assertRedirect(route('competitions.show', $competition).'#poules-brouillon')
+            ->assertRedirect(route('competitions.show', ['competition' => $competition, 'tab' => 'poules']).'#poules-brouillon')
             ->assertSessionHas('status', 'Impossible : minimum 2 participants');
 
         $this->withSession(['current_user_id' => $userA->id])
             ->patch(route('competitions.poules.freeze', [$competition, $frozenPoule]))
-            ->assertRedirect(route('competitions.show', $competition).'#poules-figees')
+            ->assertRedirect(route('competitions.show', ['competition' => $competition, 'tab' => 'poules']).'#poules-figees')
             ->assertSessionHas('status', 'Impossible : poule déjà figée');
 
         $this->withSession(['current_user_id' => $userB->id])
@@ -994,24 +994,24 @@ class PoulePreparationTest extends TestCase
             ->post(route('competitions.poules.registrations.store', [$competition, $frozenPoule]), [
                 'registration_id' => $available->id,
             ])
-            ->assertRedirect(route('competitions.show', $competition).'#participants-disponibles')
+            ->assertRedirect(route('competitions.show', ['competition' => $competition, 'tab' => 'poules']).'#participants-disponibles')
             ->assertSessionHas('status', 'Impossible : poule figée');
 
         $this->withSession(['current_user_id' => $userA->id])
             ->patch(route('competitions.registrations.withdraw-assignment', [$competition, $assigned]))
-            ->assertRedirect(route('competitions.show', $competition).'#poules-figees')
+            ->assertRedirect(route('competitions.show', ['competition' => $competition, 'tab' => 'poules']).'#poules-figees')
             ->assertSessionHas('status', 'Impossible : poule figée');
 
         $this->withSession(['current_user_id' => $userA->id])
             ->patch(route('competitions.registrations.move-assignment', [$competition, $assigned]), [
                 'poule_id' => $draftPoule->id,
             ])
-            ->assertRedirect(route('competitions.show', $competition).'#poules-figees')
+            ->assertRedirect(route('competitions.show', ['competition' => $competition, 'tab' => 'poules']).'#poules-figees')
             ->assertSessionHas('status', 'Impossible : poule figée');
 
         $this->withSession(['current_user_id' => $userA->id])
             ->patch(route('competitions.participants.withdraw', [$competition, $assigned]))
-            ->assertRedirect(route('competitions.show', $competition).'#participants-valides')
+            ->assertRedirect(route('competitions.show', ['competition' => $competition, 'tab' => 'participants']).'#participants-valides')
             ->assertSessionHas('status', 'Impossible : participant dans une poule figée');
 
         $this->assertSame($frozenPoule->id, $assigned->refresh()->poule_id);
@@ -1036,7 +1036,7 @@ class PoulePreparationTest extends TestCase
 
         $this->withSession(['current_user_id' => $userA->id])
             ->post(route('competitions.poules.combats.generate', [$competition, $poule]))
-            ->assertRedirect(route('competitions.show', $competition).'#poules-figees');
+            ->assertRedirect(route('competitions.show', ['competition' => $competition, 'tab' => 'poules']).'#poules-figees');
 
         $combats = Combat::where('poule_id', $poule->id)
             ->orderBy('ordre_combat')
@@ -1082,7 +1082,7 @@ class PoulePreparationTest extends TestCase
 
         $this->withSession(['current_user_id' => $userA->id])
             ->post(route('competitions.poules.combats.generate', [$competition, $poule]))
-            ->assertRedirect(route('competitions.show', $competition).'#poules-figees');
+            ->assertRedirect(route('competitions.show', ['competition' => $competition, 'tab' => 'poules']).'#poules-figees');
 
         $combats = Combat::where('poule_id', $poule->id)
             ->orderBy('ordre_combat')
@@ -1308,17 +1308,17 @@ class PoulePreparationTest extends TestCase
 
         $this->withSession(['current_user_id' => $userB->id])
             ->post(route('competitions.poules.combats.generate', [$competition, $readyPoule]))
-            ->assertRedirect(route('competitions.show', $competition).'#poules-figees')
+            ->assertRedirect(route('competitions.show', ['competition' => $competition, 'tab' => 'poules']).'#poules-figees')
             ->assertSessionHas('status', 'Impossible : action réservée à l’organisateur');
 
         $this->withSession(['current_user_id' => $userA->id])
             ->post(route('competitions.poules.combats.generate', [$competition, $draftPoule]))
-            ->assertRedirect(route('competitions.show', $competition).'#poules-brouillon')
+            ->assertRedirect(route('competitions.show', ['competition' => $competition, 'tab' => 'poules']).'#poules-brouillon')
             ->assertSessionHas('status', 'Impossible : poule non figée');
 
         $this->withSession(['current_user_id' => $userA->id])
             ->post(route('competitions.poules.combats.generate', [$competition, $singlePoule]))
-            ->assertRedirect(route('competitions.show', $competition).'#poules-figees')
+            ->assertRedirect(route('competitions.show', ['competition' => $competition, 'tab' => 'poules']).'#poules-figees')
             ->assertSessionHas('status', 'Impossible : minimum 2 participants');
 
         Combat::create([
@@ -1331,7 +1331,7 @@ class PoulePreparationTest extends TestCase
 
         $this->withSession(['current_user_id' => $userA->id])
             ->post(route('competitions.poules.combats.generate', [$competition, $readyPoule]))
-            ->assertRedirect(route('competitions.show', $competition).'#poules-figees')
+            ->assertRedirect(route('competitions.show', ['competition' => $competition, 'tab' => 'poules']).'#poules-figees')
             ->assertSessionHas('status', 'Impossible : combats déjà générés');
 
         $this->assertDatabaseCount('combats', 1);
@@ -1363,7 +1363,7 @@ class PoulePreparationTest extends TestCase
 
         $this->withSession(['current_user_id' => $userA->id])
             ->post(route('competitions.poules.combats.generate', [$competition, $poule]))
-            ->assertRedirect(route('competitions.show', $competition).'#poules-figees');
+            ->assertRedirect(route('competitions.show', ['competition' => $competition, 'tab' => 'poules']).'#poules-figees');
 
         $combat = Combat::firstOrFail();
 
@@ -1406,7 +1406,7 @@ class PoulePreparationTest extends TestCase
                 'score_b' => 4,
                 'commentaire' => 'Combat maitrise',
             ])
-            ->assertRedirect(route('competitions.show', $competition).'#combat-'.$combat->id);
+            ->assertRedirect(route('competitions.show', ['competition' => $competition, 'tab' => 'combats']).'#combat-'.$combat->id);
 
         $combat->refresh();
 
@@ -1445,7 +1445,7 @@ class PoulePreparationTest extends TestCase
                 'score_a' => 2,
                 'score_b' => 2,
             ])
-            ->assertRedirect(route('competitions.show', $competition).'#combat-'.$combat->id);
+            ->assertRedirect(route('competitions.show', ['competition' => $competition, 'tab' => 'combats']).'#combat-'.$combat->id);
 
         $this->assertSame(Combat::RESULT_DRAW, $combat->refresh()->resultat);
         $this->assertSame(2, $combat->score_a);
@@ -1459,7 +1459,7 @@ class PoulePreparationTest extends TestCase
                 'score_a' => 0,
                 'score_b' => 4,
             ])
-            ->assertRedirect(route('competitions.show', $competition).'#combat-'.$combat->id);
+            ->assertRedirect(route('competitions.show', ['competition' => $competition, 'tab' => 'combats']).'#combat-'.$combat->id);
 
         $combat->refresh();
 
@@ -1473,7 +1473,7 @@ class PoulePreparationTest extends TestCase
             ->patch(route('competitions.combats.update', [$competition, $combat]), [
                 'action' => 'clear',
             ])
-            ->assertRedirect(route('competitions.show', $competition).'#combat-'.$combat->id);
+            ->assertRedirect(route('competitions.show', ['competition' => $competition, 'tab' => 'combats']).'#combat-'.$combat->id);
 
         $combat->refresh();
 
@@ -1491,7 +1491,7 @@ class PoulePreparationTest extends TestCase
 
         $this->withSession(['current_user_id' => $userB->id])
             ->get(route('competitions.combats.edit', [$competition, $combat]))
-            ->assertRedirect(route('competitions.show', $competition))
+            ->assertRedirect(route('competitions.show', ['competition' => $competition, 'tab' => 'combats']))
             ->assertSessionHas('status', 'Impossible : action réservée à l’organisateur');
 
         $this->withSession(['current_user_id' => $userB->id])
@@ -1499,7 +1499,7 @@ class PoulePreparationTest extends TestCase
             ->patch(route('competitions.combats.update', [$competition, $combat]), [
                 'resultat' => Combat::RESULT_LEFT_WIN,
             ])
-            ->assertRedirect(route('competitions.show', $competition).'#combat-'.$combat->id)
+            ->assertRedirect(route('competitions.show', ['competition' => $competition, 'tab' => 'combats']).'#combat-'.$combat->id)
             ->assertSessionHas('status', 'Impossible : action réservée à l’organisateur');
 
         $this->withSession(['current_user_id' => $userB->id])
@@ -1563,7 +1563,7 @@ class PoulePreparationTest extends TestCase
                 'score_a' => 0,
                 'score_b' => 99,
             ])
-            ->assertRedirect(route('competitions.show', $competition).'#combat-'.$combat->id);
+            ->assertRedirect(route('competitions.show', ['competition' => $competition, 'tab' => 'combats']).'#combat-'.$combat->id);
 
         $ranking = $poule->ranking();
 

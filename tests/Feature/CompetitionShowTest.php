@@ -72,7 +72,7 @@ class CompetitionShowTest extends TestCase
             ->assertSee('data-tab-panel="participants"', false)
             ->assertSee('data-tab-panel="poules"', false)
             ->assertSee('data-tab-panel="combats"', false)
-            ->assertSee('const tabForHash = (hash) =>', false)
+            ->assertSee('const tabForHash = (hash, fallbackTab =', false)
             ->assertSee("return 'suivi';", false)
             ->assertSee("hash === '#invitation' || hash === '#clubs'", false)
             ->assertSee("hash.startsWith('#participants')", false)
@@ -135,7 +135,7 @@ class CompetitionShowTest extends TestCase
             ->assertSee('Pré-invité')
             ->assertSee('Lancer l’invitation')
             ->assertDontSee(Invitation::STATUS_PRE_INVITE)
-            ->assertDontSee('<strong>Club C</strong>', false);
+            ->assertSee('Rechercher un club');
     }
 
     public function test_organizer_can_update_competition_date_visible_to_invited_clubs(): void
@@ -171,7 +171,7 @@ class CompetitionShowTest extends TestCase
             ->patch(route('competitions.date.update', $competition), [
                 'date_competition' => '2026-03-12',
             ])
-            ->assertRedirect(route('competitions.show', $competition).'#actions')
+            ->assertRedirect(route('competitions.show', ['competition' => $competition, 'tab' => 'suivi']).'#actions')
             ->assertSessionHas('status', 'Date de compétition enregistrée.');
 
         $this->assertSame('2026-03-12', $competition->refresh()->date_competition->toDateString());
@@ -231,7 +231,7 @@ class CompetitionShowTest extends TestCase
             ->patch(route('competitions.date.update', $competition), [
                 'date_competition' => '',
             ])
-            ->assertRedirect(route('competitions.show', $competition).'#actions');
+            ->assertRedirect(route('competitions.show', ['competition' => $competition, 'tab' => 'suivi']).'#actions');
 
         $this->assertNull($competition->refresh()->date_competition);
     }
@@ -341,7 +341,7 @@ class CompetitionShowTest extends TestCase
             ->patch(route('competitions.informations-complementaires.update', $competition), [
                 'informations_complementaires' => "Accueil 8h30\nPrévoir protections <strong>obligatoires</strong>",
             ])
-            ->assertRedirect(route('competitions.show', $competition).'#actions')
+            ->assertRedirect(route('competitions.show', ['competition' => $competition, 'tab' => 'suivi']).'#actions')
             ->assertSessionHas('status', 'Informations complémentaires enregistrées.');
 
         $this->assertDatabaseHas('competitions', [
@@ -408,7 +408,7 @@ class CompetitionShowTest extends TestCase
             ->patch(route('competitions.informations-complementaires.update', $competition), [
                 'informations_complementaires' => '   ',
             ])
-            ->assertRedirect(route('competitions.show', $competition).'#actions');
+            ->assertRedirect(route('competitions.show', ['competition' => $competition, 'tab' => 'suivi']).'#actions');
 
         $this->assertNull($competition->refresh()->informations_complementaires);
     }
