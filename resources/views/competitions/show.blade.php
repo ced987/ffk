@@ -257,7 +257,7 @@
             background: transparent;
             color: #475569;
             box-shadow: none;
-            font-size: 12px;
+            font-size: 13px;
             font-weight: 700;
         }
 
@@ -286,7 +286,7 @@
 
         .tab-count {
             color: #64748b;
-            font-size: 11px;
+            font-size: 12px;
             font-weight: 800;
         }
 
