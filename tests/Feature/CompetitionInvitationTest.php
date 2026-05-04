@@ -196,6 +196,85 @@ class CompetitionInvitationTest extends TestCase
         $this->assertSame(Invitation::STATUS_PRE_INVITE, $invitation->fresh()->status);
     }
 
+    public function test_organizer_can_relaunch_declined_invitation(): void
+    {
+        $clubA = Club::create(['name' => 'Club A']);
+        $clubB = Club::create(['name' => 'Club B']);
+
+        $userA = User::create([
+            'club_id' => $clubA->id,
+            'name' => 'Utilisateur Club A',
+            'email' => 'club-a@example.test',
+            'password' => 'password',
+        ]);
+
+        $competition = Competition::create([
+            'organizer_club_id' => $clubA->id,
+            'name' => 'Competition Sprint 1',
+        ]);
+
+        $invitation = Invitation::create([
+            'competition_id' => $competition->id,
+            'club_id' => $clubB->id,
+            'status' => Invitation::STATUS_PARTICIPATION_DECLINED,
+        ]);
+
+        $this->withSession(['current_user_id' => $userA->id])
+            ->get(route('competitions.show', $competition))
+            ->assertOk()
+            ->assertSee('Clubs refusés')
+            ->assertSee(route('competitions.invitations.relaunch', [$competition, $invitation]), false);
+
+        $this->withSession(['current_user_id' => $userA->id])
+            ->post(route('competitions.invitations.relaunch', [$competition, $invitation]))
+            ->assertRedirect(route('competitions.show', ['competition' => $competition, 'tab' => 'clubs']))
+            ->assertSessionHas('status', 'Invitation relancée. Le club est de nouveau en attente de réponse.');
+
+        $this->assertSame(Invitation::STATUS_INVITE, $invitation->fresh()->status);
+
+        $this->withSession(['current_user_id' => $userA->id])
+            ->get(route('competitions.show', $competition))
+            ->assertOk()
+            ->assertSee('Invitations en attente')
+            ->assertSee('Envoyée — en attente')
+            ->assertSee('Aucun club refusé.');
+    }
+
+    public function test_non_organizer_cannot_relaunch_declined_invitation(): void
+    {
+        $clubA = Club::create(['name' => 'Club A']);
+        $clubB = Club::create(['name' => 'Club B']);
+
+        $userB = User::create([
+            'club_id' => $clubB->id,
+            'name' => 'Utilisateur Club B',
+            'email' => 'club-b@example.test',
+            'password' => 'password',
+        ]);
+
+        $competition = Competition::create([
+            'organizer_club_id' => $clubA->id,
+            'name' => 'Competition Sprint 1',
+        ]);
+
+        $invitation = Invitation::create([
+            'competition_id' => $competition->id,
+            'club_id' => $clubB->id,
+            'status' => Invitation::STATUS_PARTICIPATION_DECLINED,
+        ]);
+
+        $this->withSession(['current_user_id' => $userB->id])
+            ->get(route('competitions.show', $competition))
+            ->assertOk()
+            ->assertDontSee(route('competitions.invitations.relaunch', [$competition, $invitation]), false);
+
+        $this->withSession(['current_user_id' => $userB->id])
+            ->post(route('competitions.invitations.relaunch', [$competition, $invitation]))
+            ->assertForbidden();
+
+        $this->assertSame(Invitation::STATUS_PARTICIPATION_DECLINED, $invitation->fresh()->status);
+    }
+
     public function test_mark_sent_button_is_only_shown_for_pre_invite_invitations_to_organizer(): void
     {
         $clubA = Club::create(['name' => 'Club A']);

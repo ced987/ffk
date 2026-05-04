@@ -91,7 +91,7 @@ class CompetitionShowTest extends TestCase
             ->assertSee('Clubs refusés')
             ->assertSee('Invitation refusée.')
             ->assertSee('Pré-invité')
-            ->assertSee('Envoyée – en attente')
+            ->assertSee('Envoyée — en attente')
             ->assertSee('Accepté')
             ->assertSee('Refusé')
             ->assertSee('Club B')

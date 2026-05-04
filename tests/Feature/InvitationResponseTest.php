@@ -66,6 +66,39 @@ class InvitationResponseTest extends TestCase
         $this->assertTrue(Competition::visibleForClub($clubB)->whereKey($competition)->exists());
     }
 
+    public function test_pending_invited_club_cannot_answer_when_inscriptions_are_closed(): void
+    {
+        [, , , $userA, $userB, , $competition, $invitation] = $this->scenario();
+        $competition->update(['inscriptions_closed' => true]);
+
+        $this->withSession(['current_user_id' => $userB->id])
+            ->get(route('competitions.show', ['competition' => $competition, 'tab' => 'clubs']))
+            ->assertOk()
+            ->assertSee('Inscriptions fermées. Votre club est considéré comme non participant.')
+            ->assertDontSee('Confirmer la participation')
+            ->assertDontSee('Refuser la participation');
+
+        $this->withSession(['current_user_id' => $userA->id])
+            ->get(route('competitions.show', ['competition' => $competition, 'tab' => 'clubs']))
+            ->assertOk()
+            ->assertSee('Inscription fermée / non participant');
+
+        $this->withSession(['current_user_id' => $userB->id])
+            ->post(route('competitions.invitations.confirm', [$competition, $invitation]))
+            ->assertRedirect(route('competitions.show', ['competition' => $competition, 'tab' => 'clubs']))
+            ->assertSessionHas('status', 'Inscriptions fermées. Votre club est considéré comme non participant.');
+
+        $this->assertSame(Invitation::STATUS_INVITE, $invitation->fresh()->status);
+
+        $competition->update(['inscriptions_closed' => false]);
+
+        $this->withSession(['current_user_id' => $userB->id])
+            ->get(route('competitions.show', ['competition' => $competition, 'tab' => 'clubs']))
+            ->assertOk()
+            ->assertSee('Confirmer la participation')
+            ->assertSee('Refuser la participation');
+    }
+
     public function test_only_invited_club_with_invite_status_can_answer(): void
     {
         [$clubA, $clubB, $clubC, $userA, $userB, $userC, $competition, $invitation] = $this->scenario(Invitation::STATUS_PRE_INVITE);

@@ -951,6 +951,23 @@ Route::post('/competitions/{competition}/invitations/{invitation}/mark-sent', fu
     return redirect_to_competition_section($competition, 'clubs', 'Invitation marquee comme envoyee.');
 })->name('competitions.invitations.mark-sent');
 
+Route::get('/competitions/{competition}/invitations/{invitation}/relaunch', function (Competition $competition) {
+    return redirect_to_competition_detail($competition, 'Utilisez le formulaire pour relancer l invitation.', 'clubs');
+});
+
+Route::post('/competitions/{competition}/invitations/{invitation}/relaunch', function (Competition $competition, Invitation $invitation) use ($currentDemoUser) {
+    $currentUser = $currentDemoUser();
+
+    abort_if($currentUser === null || $currentUser->club === null, 403);
+    abort_unless($currentUser->club_id === $competition->organizer_club_id, 403);
+    abort_unless($invitation->competition_id === $competition->id, 404);
+    abort_unless($invitation->status === Invitation::STATUS_PARTICIPATION_DECLINED, 403);
+
+    $invitation->markAsSent();
+
+    return redirect_to_competition_section($competition, 'clubs', 'Invitation relancée. Le club est de nouveau en attente de réponse.');
+})->name('competitions.invitations.relaunch');
+
 Route::get('/competitions/{competition}/invitations/{invitation}/confirm', function (Competition $competition) {
     return redirect_to_competition_detail($competition, 'Utilisez le formulaire pour confirmer la participation.', 'clubs');
 });
@@ -963,6 +980,10 @@ Route::post('/competitions/{competition}/invitations/{invitation}/confirm', func
     abort_unless($invitation->club_id === $currentUser->club_id, 403);
     abort_unless($currentUser->club_id !== $competition->organizer_club_id, 403);
     abort_unless($invitation->status === Invitation::STATUS_INVITE, 403);
+
+    if ($competition->inscriptions_closed) {
+        return redirect_to_competition_section($competition, 'clubs', 'Inscriptions fermées. Votre club est considéré comme non participant.');
+    }
 
     $invitation->confirmParticipation();
 
@@ -981,6 +1002,10 @@ Route::post('/competitions/{competition}/invitations/{invitation}/decline', func
     abort_unless($invitation->club_id === $currentUser->club_id, 403);
     abort_unless($currentUser->club_id !== $competition->organizer_club_id, 403);
     abort_unless($invitation->status === Invitation::STATUS_INVITE, 403);
+
+    if ($competition->inscriptions_closed) {
+        return redirect_to_competition_section($competition, 'clubs', 'Inscriptions fermées. Votre club est considéré comme non participant.');
+    }
 
     $invitation->declineParticipation();
 

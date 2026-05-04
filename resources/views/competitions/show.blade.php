@@ -182,6 +182,18 @@
             pointer-events: none;
         }
 
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
         section {
             margin-top: 24px;
             padding: 24px;
@@ -209,8 +221,8 @@
             justify-content: flex-start;
             gap: 0;
             margin-top: 0;
-            margin-bottom: 10px;
-            padding: 0 18px;
+            margin-bottom: 8px;
+            padding: 0 14px;
             border: 0;
             border-bottom: 1px solid #e5eaf0;
             border-radius: 0;
@@ -219,15 +231,16 @@
         }
 
         .tabs + * {
-            margin-top: 12px;
+            margin-top: 10px;
         }
 
         .tabs-list {
             display: flex;
             align-items: center;
-            flex-wrap: wrap;
+            flex-wrap: nowrap;
             gap: 0;
             min-width: 0;
+            overflow-x: auto;
         }
 
         .app-page .competition-page .tab-button {
@@ -244,14 +257,14 @@
             background: transparent;
             color: #475569;
             box-shadow: none;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 700;
         }
 
         .app-page .competition-page .tab-button svg {
-            width: 16px;
-            height: 16px;
-            flex: 0 0 16px;
+            width: 13px;
+            height: 13px;
+            flex: 0 0 13px;
             color: currentColor;
             stroke: currentColor;
             stroke-width: 1.9;
@@ -260,12 +273,61 @@
             fill: none;
         }
 
+        .tab-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            overflow: hidden;
+            color: inherit;
+            line-height: 1.1;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .tab-count {
+            color: #64748b;
+            font-size: 11px;
+            font-weight: 800;
+        }
+
+        .tab-state {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 6px;
+            height: 6px;
+            flex: 0 0 6px;
+            border-radius: 999px;
+            font-size: 6px;
+            line-height: 1;
+        }
+
+        .tab-state.is-done {
+            width: 8px;
+            height: 8px;
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .tab-state.is-done::before {
+            content: "✓";
+            font-weight: 900;
+        }
+
+        .tab-state.is-current {
+            background: #2563eb;
+        }
+
+        .tab-state.is-upcoming {
+            background: #cbd5e1;
+        }
+
         .app-page .competition-page .tab-button::after {
             content: "";
             position: absolute;
-            right: 10px;
+            right: 9px;
             bottom: 0;
-            left: 10px;
+            left: 9px;
             height: 2px;
             border-radius: 999px 999px 0 0;
             background: transparent;
@@ -277,8 +339,12 @@
         }
 
         .app-page .competition-page .tab-button.is-active {
-            background: #f8fbff;
+            background: transparent;
             color: #1d4ed8;
+        }
+
+        .app-page .competition-page .tab-button.is-active .tab-count {
+            color: #1e40af;
         }
 
         .app-page .competition-page .tab-button.is-active::after {
@@ -616,6 +682,363 @@
             border-bottom: 1px solid #e5eaf0;
         }
 
+        .follow-dashboard {
+            display: grid;
+            gap: 16px;
+        }
+
+        .follow-hero,
+        .follow-panel {
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            background: #ffffff;
+            box-shadow: 0 6px 16px rgba(15, 23, 42, 0.04);
+        }
+
+        .follow-hero {
+            display: grid;
+            gap: 14px;
+            padding: 18px;
+        }
+
+        .follow-hero-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .follow-current-step {
+            display: grid;
+            grid-template-columns: auto minmax(0, 1fr) auto;
+            align-items: center;
+            gap: 14px;
+            padding: 16px;
+            border: 1px solid #dbeafe;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #eff6ff 0%, #ffffff 72%);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.85);
+        }
+
+        .follow-current-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+
+        .follow-current-icon svg {
+            display: block;
+            width: 20px;
+            height: 20px;
+            stroke: currentColor;
+            stroke-width: 2;
+            fill: none;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .follow-current-step-content {
+            display: grid;
+            gap: 5px;
+        }
+
+        .follow-current-step strong {
+            color: #17202a;
+            font-size: 20px;
+            line-height: 1.2;
+        }
+
+        .follow-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .follow-actions a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 0;
+            min-height: 34px;
+            padding: 8px 12px;
+            border-radius: 7px;
+            font-weight: 800;
+            line-height: 1.15;
+            text-decoration: none;
+        }
+
+        .follow-progress {
+            position: relative;
+            display: grid;
+            grid-template-columns: repeat(6, minmax(0, 1fr));
+            gap: 6px;
+        }
+
+        .follow-step {
+            position: relative;
+            display: grid;
+            gap: 4px;
+            min-width: 0;
+            padding: 8px 9px;
+            border: 1px solid #e2e8f0;
+            border-radius: 7px;
+            background: #f8fafc;
+        }
+
+        .follow-step::before {
+            content: "";
+            position: absolute;
+            top: 16px;
+            left: calc(-6px - 1px);
+            width: 6px;
+            height: 2px;
+            background: #d9e2ec;
+        }
+
+        .follow-step:first-child::before {
+            display: none;
+        }
+
+        .follow-step.is-active-step {
+            border-color: #60a5fa;
+            background: #eff6ff;
+            box-shadow: inset 0 -2px 0 #2563eb, 0 6px 14px rgba(37, 99, 235, 0.08);
+        }
+
+        .follow-step strong {
+            color: #17202a;
+            font-size: 12px;
+            line-height: 1.2;
+            white-space: nowrap;
+        }
+
+        .follow-status {
+            width: fit-content;
+            padding: 2px 6px;
+            border-radius: 999px;
+            font-size: 10px;
+            font-weight: 800;
+            line-height: 1.15;
+        }
+
+        .follow-status.is-done {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .follow-status.is-current {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .follow-status.is-upcoming {
+            background: #e2e8f0;
+            color: #475569;
+        }
+
+        .follow-status.is-registration-open,
+        .follow-status.is-registration-closed {
+            background: #eef2ff;
+            color: #475569;
+        }
+
+        .follow-indicators {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 10px;
+        }
+
+        .follow-indicator {
+            display: grid;
+            gap: 4px;
+            padding: 12px;
+            border: 1px solid #e2e8f0;
+            border-radius: 9px;
+            background: #ffffff;
+        }
+
+        .follow-indicator span {
+            color: #64748b;
+            font-size: 12px;
+            font-weight: 750;
+        }
+
+        .follow-indicator strong {
+            color: #17202a;
+            font-size: 24px;
+            line-height: 1;
+        }
+
+        .follow-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+        }
+
+        .follow-panel {
+            display: grid;
+            gap: 10px;
+            padding: 14px;
+        }
+
+        .follow-panel h2 {
+            margin: 0;
+            color: #17202a;
+            font-size: 16px;
+            line-height: 1.25;
+        }
+
+        .follow-list {
+            display: grid;
+            gap: 8px;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .follow-list li {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 9px 10px;
+            border-radius: 8px;
+            background: #f8fafc;
+            color: #334155;
+            font-size: 13px;
+            font-weight: 650;
+        }
+
+        .follow-list:not(.is-attention) li {
+            padding: 0;
+            background: transparent;
+        }
+
+        .follow-list a {
+            flex: 0 0 auto;
+            font-weight: 800;
+            text-decoration: none;
+        }
+
+        .follow-action-line {
+            flex: 1 1 auto;
+            display: grid;
+            grid-template-columns: auto minmax(0, 1fr) auto;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+            padding: 10px 11px;
+            border: 1px solid #e2e8f0;
+            border-radius: 9px;
+            background: #ffffff;
+            color: #17202a;
+            text-decoration: none;
+            transition: border-color 120ms ease, background 120ms ease, transform 120ms ease;
+        }
+
+        .follow-action-line:hover {
+            border-color: #bfdbfe;
+            background: #f8fbff;
+            transform: translateY(-1px);
+        }
+
+        .follow-action-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            background: #eff6ff;
+            color: #1d4ed8;
+            font-size: 14px;
+            font-weight: 900;
+        }
+
+        .follow-action-copy {
+            display: grid;
+            gap: 2px;
+            min-width: 0;
+        }
+
+        .follow-action-copy strong {
+            overflow: hidden;
+            color: #17202a;
+            font-size: 13px;
+            line-height: 1.25;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .follow-action-copy span {
+            color: #64748b;
+            font-size: 12px;
+            font-weight: 650;
+        }
+
+        .follow-action-chevron {
+            color: #94a3b8;
+            font-size: 20px;
+            line-height: 1;
+        }
+
+        .follow-list.is-attention li {
+            background: #fffbeb;
+            color: #78350f;
+        }
+
+        .follow-empty {
+            padding: 10px;
+            border-radius: 8px;
+            background: #f8fafc;
+            color: #64748b;
+            font-size: 13px;
+            font-weight: 650;
+        }
+
+        .follow-date-form {
+            display: flex;
+            align-items: end;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 12px;
+        }
+
+        .follow-date-form label {
+            display: grid;
+            gap: 4px;
+            color: #64748b;
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        @media (max-width: 900px) {
+            .follow-progress,
+            .follow-indicators,
+            .follow-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .follow-current-step {
+                grid-template-columns: 1fr;
+            }
+
+            .follow-current-icon {
+                display: none;
+            }
+
+            .follow-step::before {
+                display: none;
+            }
+        }
+
         .actions-summary h2,
         .info-summary h2 {
             margin: 0 0 10px;
@@ -656,6 +1079,16 @@
             padding: 0 0 18px;
             border-top: 0;
             border-bottom: 1px solid #e5eaf0;
+        }
+
+        .follow-panel.info-summary {
+            padding: 14px;
+            border-top: 1px solid #e2e8f0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .follow-panel .actions-todo-list {
+            margin-bottom: 2px;
         }
 
         .compact-info {
@@ -1045,6 +1478,19 @@
             justify-content: flex-end;
             gap: 8px;
             flex-wrap: wrap;
+        }
+
+        .pending-invitation-badges {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 3px;
+        }
+
+        .pending-invitation-badges .club-status-badge {
+            padding: 2px 6px;
+            font-size: 11px;
+            line-height: 1.2;
         }
 
         .club-status-badge {
@@ -2705,6 +3151,19 @@
             $poulesReady = $eligiblePouleRegistrations->isEmpty() && $draftPoules->isEmpty() && $frozenPoules->isNotEmpty();
             $roleLabel = $competition->roleLabelForClub($currentUser->club);
             $requestedTab = in_array(request('tab'), ['suivi', 'clubs', 'participants', 'poules', 'combats'], true) ? request('tab') : 'suivi';
+            $tabConfirmedClubsCount = $invitationSummary[\App\Models\Invitation::STATUS_PARTICIPATION_CONFIRMED] ?? 0;
+            $tabValidatedParticipantsCount = $participantValidationSummary['global']['validated'] ?? 0;
+            $tabPendingParticipantsCount = $participantValidationSummary['global']['not_validated'] ?? 0;
+            $tabPoulesCount = $competition->poules->count();
+            $tabFinishedCombatsCount = $finishedCombats->count();
+            $tabCombatsTotalCount = $allCombats->count();
+            $tabStateClasses = [
+                'suivi' => $pendingActions->isNotEmpty() ? 'is-current' : 'is-done',
+                'clubs' => $tabConfirmedClubsCount > 0 ? 'is-done' : 'is-upcoming',
+                'participants' => $tabValidatedParticipantsCount > 0 && $tabPendingParticipantsCount === 0 ? 'is-done' : ($tabValidatedParticipantsCount > 0 || $tabPendingParticipantsCount > 0 ? 'is-current' : 'is-upcoming'),
+                'poules' => $tabPoulesCount > 0 ? 'is-done' : 'is-upcoming',
+                'combats' => $tabCombatsTotalCount > 0 && $tabFinishedCombatsCount === $tabCombatsTotalCount ? 'is-done' : ($tabFinishedCombatsCount > 0 ? 'is-current' : 'is-upcoming'),
+            ];
         @endphp
 
         @if (session('status'))
@@ -2722,10 +3181,10 @@
                         <path d="m4 12 1 1 2-2"></path>
                         <path d="m4 18 1 1 2-2"></path>
                     </svg>
-                    <span>Suivi</span>
-                    @if ($pendingActions->isNotEmpty())
-                        <span>({{ $pendingActions->count() }})</span>
-                    @endif
+                    <span class="tab-label">
+                        <span class="tab-state {{ $tabStateClasses['suivi'] }}" aria-hidden="true"></span>
+                        Suivi
+                    </span>
                 </button>
                 <button class="tab-button" type="button" data-tab-target="clubs" data-tab-url="{{ route('competitions.show', ['competition' => $competition, 'tab' => 'clubs']) }}">
                     <svg aria-hidden="true" viewBox="0 0 24 24">
@@ -2736,7 +3195,10 @@
                         <path d="M8 15h4"></path>
                         <path d="M3 21h18"></path>
                     </svg>
-                    <span>Clubs</span>
+                    <span class="tab-label">
+                        <span class="tab-state {{ $tabStateClasses['clubs'] }}" aria-hidden="true"></span>
+                        Clubs <span class="tab-count">({{ $tabConfirmedClubsCount }})</span>
+                    </span>
                 </button>
                 <button class="tab-button" type="button" data-tab-target="participants" data-tab-url="{{ route('competitions.show', ['competition' => $competition, 'tab' => 'participants']) }}">
                     <svg aria-hidden="true" viewBox="0 0 24 24">
@@ -2745,7 +3207,10 @@
                         <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
                         <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
                     </svg>
-                    <span>Participants</span>
+                    <span class="tab-label">
+                        <span class="tab-state {{ $tabStateClasses['participants'] }}" aria-hidden="true"></span>
+                        Participants <span class="tab-count">({{ $tabValidatedParticipantsCount }})</span>
+                    </span>
                 </button>
                 @if ($isOrganizer)
                     <button class="tab-button" type="button" data-tab-target="poules" data-tab-url="{{ route('competitions.show', ['competition' => $competition, 'tab' => 'poules']) }}">
@@ -2755,7 +3220,10 @@
                             <rect x="3" y="14" width="7" height="7" rx="1"></rect>
                             <rect x="14" y="14" width="7" height="7" rx="1"></rect>
                         </svg>
-                        <span>Poules</span>
+                        <span class="tab-label">
+                            <span class="tab-state {{ $tabStateClasses['poules'] }}" aria-hidden="true"></span>
+                            Poules <span class="tab-count">({{ $tabPoulesCount }})</span>
+                        </span>
                     </button>
                     <button class="tab-button" type="button" data-tab-target="combats" data-tab-url="{{ route('competitions.show', ['competition' => $competition, 'tab' => 'combats']) }}">
                         <svg aria-hidden="true" viewBox="0 0 24 24">
@@ -2764,7 +3232,10 @@
                             <path d="M7.5 14.5 9.5 16.5"></path>
                             <path d="M16.5 14.5 14.5 16.5"></path>
                         </svg>
-                        <span>Combats</span>
+                        <span class="tab-label">
+                            <span class="tab-state {{ $tabStateClasses['combats'] }}" aria-hidden="true"></span>
+                            Combats <span class="tab-count">({{ $tabFinishedCombatsCount }})</span>
+                        </span>
                     </button>
                 @endif
             </div>
@@ -2773,78 +3244,318 @@
         <div class="competition-content">
 
         <section id="actions" class="tab-panel" data-tab-panel="suivi">
-            <div class="competition-overview">
-                <div class="competition-overview-heading">
-                    <div class="competition-overview-title">
-                        <div class="competition-name-display" data-competition-name-display>
-                            <h1>{{ $competition->name }}</h1>
+            @php
+                $confirmedClubsCount = $invitationSummary[\App\Models\Invitation::STATUS_PARTICIPATION_CONFIRMED] ?? 0;
+                $pendingClosedInvitationsCount = $competition->inscriptions_closed
+                    ? $competition->invitations->where('status', \App\Models\Invitation::STATUS_INVITE)->count()
+                    : 0;
+                $pendingValidationCount = $participantValidationSummary['global']['not_validated'] ?? 0;
+                $validatedParticipantsCount = $participantValidationSummary['global']['validated'] ?? 0;
+                $poulesCreatedCount = $competition->poules->count();
+                $frozenPoulesCount = $frozenPoules->count();
+                $combatsTotalCount = $allCombats->count();
+                $combatsToEnterCount = $combatsToEnter->count();
+                $finishedCombatsCount = $finishedCombats->count();
+
+                $progressSteps = [
+                    [
+                        'label' => 'Clubs invités',
+                        'status' => 'Terminé',
+                    ],
+                    [
+                        'label' => 'Inscriptions',
+                        'status' => $competition->inscriptions_closed ? 'Fermées' : 'Ouvertes',
+                    ],
+                    [
+                        'label' => 'Participants validés',
+                        'status' => $pendingValidationCount > 0 ? 'En cours' : 'Terminé',
+                    ],
+                    [
+                        'label' => 'Poules créées',
+                        'status' => $poulesCreatedCount > 0
+                            ? ($frozenPoulesCount === 0 ? 'En cours' : 'Terminé')
+                            : 'À venir',
+                    ],
+                    [
+                        'label' => 'Poules figées',
+                        'status' => $frozenPoulesCount > 0 ? 'Terminé' : 'À venir',
+                    ],
+                    [
+                        'label' => 'Combats saisis',
+                        'status' => $finishedCombatsCount === 0
+                            ? 'À venir'
+                            : ($combatsToEnterCount > 0 ? 'En cours' : 'Terminé'),
+                    ],
+                ];
+
+                if ($pendingValidationCount > 0) {
+                    $currentStepTitle = 'Validation des participants';
+                    $currentStepText = 'Validez ou retirez les participants en attente avant de finaliser les poules.';
+                } elseif ($poulesCreatedCount === 0) {
+                    $currentStepTitle = 'Préparation des poules';
+                    $currentStepText = 'Créez les premières poules, puis affectez les participants validés.';
+                } elseif ($frozenPoulesCount === 0) {
+                    $currentStepTitle = 'Préparation des poules';
+                    $currentStepText = 'Affectez les derniers participants, puis figez les poules prêtes.';
+                } elseif ($combatsToEnterCount > 0) {
+                    $currentStepTitle = 'Saisie des combats';
+                    $currentStepText = 'Les poules figées sont prêtes : saisissez les résultats restants.';
+                } else {
+                    $currentStepTitle = 'Compétition à jour';
+                    $currentStepText = 'Aucune action urgente détectée pour le moment.';
+                }
+
+                $attentionPoints = [];
+
+                if ($pendingClosedInvitationsCount > 0) {
+                    $attentionPoints[] = $pendingClosedInvitationsCount.' club'.($pendingClosedInvitationsCount > 1 ? 's' : '').' encore en attente alors que les inscriptions sont fermées.';
+                }
+
+                if ($pendingValidationCount > 0) {
+                    $attentionPoints[] = $pendingValidationCount.' participant'.($pendingValidationCount > 1 ? 's' : '').' en attente de validation.';
+                }
+
+                if ($frozenPoulesCount === 0) {
+                    $attentionPoints[] = 'Aucune poule figée pour le moment.';
+                }
+
+                $recommendedActions = [];
+
+                if ($pendingValidationCount > 0) {
+                    $recommendedActions[] = [
+                        'label' => 'Traiter les participants en attente',
+                        'url' => route('competitions.show', ['competition' => $competition, 'tab' => 'participants']),
+                    ];
+                }
+
+                if ($validatedParticipantsCount > 0 && $poulesCreatedCount === 0) {
+                    $recommendedActions[] = [
+                        'label' => 'Créer les poules',
+                        'url' => route('competitions.show', ['competition' => $competition, 'tab' => 'poules']),
+                    ];
+                } elseif ($poulesCreatedCount > 0 && $frozenPoulesCount === 0) {
+                    $recommendedActions[] = [
+                        'label' => 'Finaliser les poules',
+                        'url' => route('competitions.show', ['competition' => $competition, 'tab' => 'poules']),
+                    ];
+                }
+
+                if ($frozenPoulesCount > 0 && $combatsToEnterCount > 0) {
+                    $recommendedActions[] = [
+                        'label' => 'Saisir les combats restants',
+                        'url' => route('competitions.show', ['competition' => $competition, 'tab' => 'combats']),
+                    ];
+                }
+            @endphp
+
+            <div class="follow-dashboard">
+                <div class="follow-hero">
+                    <div class="follow-hero-header">
+                        <div class="competition-overview-title">
+                            <div class="competition-name-display" data-competition-name-display>
+                                <h1>{{ $competition->name }}</h1>
+                                @if ($isOrganizer)
+                                    <button class="title-icon-button" type="button" title="Modifier le nom de la compétition" data-competition-name-edit>✏️</button>
+                                @endif
+                            </div>
+
                             @if ($isOrganizer)
-                                <button class="title-icon-button" type="button" title="Modifier le nom de la compétition" data-competition-name-edit>✏️</button>
+                                <form class="competition-name-form" method="POST" action="{{ route('competitions.update', $competition) }}" data-competition-name-form>
+                                    @csrf
+                                    @method('PATCH')
+                                    <input type="text" name="name" value="{{ old('name', $competition->name) }}" required maxlength="255" aria-label="Nom de la compétition">
+                                    <button class="title-icon-button" type="submit" title="Enregistrer">✔</button>
+                                    <button class="title-icon-button cancel" type="button" title="Annuler" data-competition-name-cancel>✖</button>
+                                </form>
                             @endif
+
+                            <p class="competition-overview-meta">
+                                {{ $competition->date_competition?->format('d/m/Y') ?? 'Date non renseignée' }}
+                                · organisé par {{ $competition->organizerClub->name }}
+                            </p>
                         </div>
 
-                        @if ($isOrganizer)
-                            <form class="competition-name-form" method="POST" action="{{ route('competitions.update', $competition) }}" data-competition-name-form>
-                                @csrf
-                                @method('PATCH')
-                                <input type="text" name="name" value="{{ old('name', $competition->name) }}" required maxlength="255" aria-label="Nom de la compétition">
-                                <button class="title-icon-button" type="submit" title="Enregistrer">✔</button>
-                                <button class="title-icon-button cancel" type="button" title="Annuler" data-competition-name-cancel>✖</button>
-                            </form>
-                        @endif
-
-                        <p class="competition-overview-meta">
-                            {{ $competition->date_competition?->format('d/m/Y') ?? 'Date non renseignée' }}
-                            · organisé par {{ $competition->organizerClub->name }}
-                        </p>
                     </div>
 
+                    <div class="follow-current-step">
+                        <span class="follow-current-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M9 11l3 3L22 4"></path>
+                                <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+                            </svg>
+                        </span>
+                        <div class="follow-current-step-content">
+                            <strong>Étape actuelle : {{ $currentStepTitle }}</strong>
+                            <p>{{ $currentStepText }}</p>
+                        </div>
+
+                        <div class="follow-actions">
+                            <a class="primary-action" href="{{ route('competitions.show', ['competition' => $competition, 'tab' => 'poules']) }}">Aller aux poules</a>
+                            <a class="secondary-button" href="{{ route('competitions.show', ['competition' => $competition, 'tab' => 'participants']) }}">Voir les participants</a>
+                        </div>
+                    </div>
+
+                    <div class="follow-progress" aria-label="Progression compétition">
+                        @php
+                            $activeProgressIndex = collect($progressSteps)->search(fn ($step) => $step['status'] === 'En cours');
+                        @endphp
+                        @foreach ($progressSteps as $step)
+                            @php
+                                $stepStatusClass = [
+                                    'Terminé' => 'is-done',
+                                    'En cours' => 'is-current',
+                                    'À venir' => 'is-upcoming',
+                                    'Ouvertes' => 'is-registration-open',
+                                    'Fermées' => 'is-registration-closed',
+                                ][$step['status']] ?? 'is-upcoming';
+
+                                $activeStepClass = $loop->index === $activeProgressIndex ? 'is-active-step' : '';
+                            @endphp
+                            <div class="follow-step {{ $stepStatusClass }} {{ $activeStepClass }}">
+                                <strong>{{ $loop->iteration }}. {{ $step['label'] }}</strong>
+                                <span class="follow-status {{ $stepStatusClass }}">{{ $step['status'] }}</span>
+                            </div>
+                        @endforeach
+                    </div>
                 </div>
-            </div>
 
-            <div class="actions-summary">
-                <h2>Actions à faire</h2>
+                <div class="follow-indicators">
+                    <div class="follow-indicator">
+                        <span>Clubs confirmés</span>
+                        <strong>{{ $confirmedClubsCount }}</strong>
+                    </div>
+                    <div class="follow-indicator">
+                        <span>Participants validés</span>
+                        <strong>{{ $validatedParticipantsCount }}</strong>
+                    </div>
+                    <div class="follow-indicator">
+                        <span>Poules créées</span>
+                        <strong>{{ $poulesCreatedCount }}</strong>
+                    </div>
+                    <div class="follow-indicator">
+                        <span>Combats saisis</span>
+                        <strong>{{ $finishedCombatsCount }}</strong>
+                    </div>
+                </div>
 
-                <ul class="actions-todo-list">
-                    @foreach ($actionsToDo as $actionToDo)
-                        <li>{{ $actionToDo }}</li>
-                    @endforeach
-                </ul>
-            </div>
-
-            <div class="subsection info-summary">
-                <h2>Informations compétition</h2>
-                <dl class="compact-info">
-                    <div>
-                        <dt>Organisateur :</dt>
-                        <dd>{{ $competition->organizerClub->name }}</dd>
+                <div class="follow-grid">
+                    <div class="follow-panel">
+                        <h2>Points d’attention</h2>
+                        @if (count($attentionPoints) > 0)
+                            <ul class="follow-list is-attention">
+                                @foreach ($attentionPoints as $attentionPoint)
+                                    <li>{{ $attentionPoint }}</li>
+                                @endforeach
+                            </ul>
+                        @else
+                            <p class="follow-empty">Aucun point d’attention majeur.</p>
+                        @endif
                     </div>
 
-                    <div>
-                        <dt>Date :</dt>
-                        <dd>{{ $competition->date_competition?->format('d/m/Y') ?? 'Date non renseignée' }}</dd>
-                    </div>
+                    <div class="follow-panel">
+                        <h2>Prochaines actions recommandées</h2>
+                        <h2 class="sr-only">Actions à faire</h2>
+                        @if (count($actionsToDo) > 0)
+                            <ul class="follow-list">
+                                @foreach ($actionsToDo as $actionToDo)
+                                    @php
+                                        $actionText = mb_strtolower($actionToDo);
+                                        $actionTab = 'suivi';
 
-                    <div>
-                        <dt>Clubs confirmés :</dt>
-                        <dd>{{ $invitationSummary[\App\Models\Invitation::STATUS_PARTICIPATION_CONFIRMED] }}</dd>
-                    </div>
+                                        if (str_contains($actionText, 'invitation') || str_contains($actionText, 'participation')) {
+                                            $actionTab = 'clubs';
+                                        } elseif (str_contains($actionText, 'affecter')) {
+                                            $actionTab = 'poules';
+                                        } elseif (str_contains($actionText, 'participant') || str_contains($actionText, 'participants')) {
+                                            $actionTab = 'participants';
+                                        } elseif (str_contains($actionText, 'poule') || str_contains($actionText, 'poules')) {
+                                            $actionTab = 'poules';
+                                        } elseif (str_contains($actionText, 'générer')) {
+                                            $actionTab = 'poules';
+                                        } elseif (str_contains($actionText, 'score') || str_contains($actionText, 'combat')) {
+                                            $actionTab = 'combats';
+                                        }
 
-                    <div>
-                        <dt>Participants actifs :</dt>
-                        <dd>{{ $participantTotal }}</dd>
-                    </div>
-                </dl>
+                                        $actionDescription = [
+                                            'clubs' => 'Ouvrir le suivi des clubs invités.',
+                                            'participants' => 'Aller à la liste des participants.',
+                                            'poules' => 'Passer à l’organisation des poules.',
+                                            'combats' => 'Ouvrir la saisie des combats.',
+                                            'suivi' => 'Continuer le suivi de la compétition.',
+                                        ][$actionTab];
 
-                @if ($isOrganizer)
-                    <div class="subsection">
-                        <h3>Modifier la date</h3>
-                        <form method="POST" action="{{ route('competitions.date.update', $competition) }}">
+                                        if (str_contains($actionText, 'affecter')) {
+                                            $actionDescription = 'Aller à l’onglet Poules pour créer ou ajuster les poules.';
+                                        } elseif (str_contains($actionText, 'générer')) {
+                                            $actionDescription = 'Aller à l’onglet Poules pour générer les combats depuis une poule figée.';
+                                        }
+                                    @endphp
+                                    <li>
+                                        <a class="follow-action-line" href="{{ route('competitions.show', ['competition' => $competition, 'tab' => $actionTab]) }}">
+                                            <span class="follow-action-icon" aria-hidden="true">→</span>
+                                            <span class="follow-action-copy">
+                                                <strong>{{ $actionToDo }}</strong>
+                                                <span>{{ $actionDescription }}</span>
+                                            </span>
+                                            <span class="follow-action-chevron" aria-hidden="true">›</span>
+                                        </a>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        @elseif (count($recommendedActions) > 0)
+                            <ul class="follow-list">
+                                @foreach ($recommendedActions as $recommendedAction)
+                                    <li>
+                                        <a class="follow-action-line" href="{{ $recommendedAction['url'] }}">
+                                            <span class="follow-action-icon" aria-hidden="true">→</span>
+                                            <span class="follow-action-copy">
+                                                <strong>{{ $recommendedAction['label'] }}</strong>
+                                                <span>Ouvrir la section concernée.</span>
+                                            </span>
+                                            <span class="follow-action-chevron" aria-hidden="true">›</span>
+                                        </a>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        @else
+                            <p class="follow-empty">Aucune action urgente.</p>
+                        @endif
+                    </div>
+                </div>
+
+                <div class="follow-panel info-summary">
+                    <h2>Informations compétition</h2>
+                    <dl class="compact-info">
+                        <div>
+                            <dt>Organisateur :</dt>
+                            <dd>{{ $competition->organizerClub->name }}</dd>
+                        </div>
+
+                        <div>
+                            <dt>Date :</dt>
+                            <dd>{{ $competition->date_competition?->format('d/m/Y') ?? 'Date non renseignée' }}</dd>
+                        </div>
+
+                        <div>
+                            <dt>Clubs confirmés :</dt>
+                            <dd>{{ $confirmedClubsCount }}</dd>
+                        </div>
+
+                        <div>
+                            <dt>Participants actifs :</dt>
+                            <dd>{{ $participantTotal }}</dd>
+                        </div>
+                    </dl>
+
+                    @if ($isOrganizer)
+                        <form class="follow-date-form" method="POST" action="{{ route('competitions.date.update', $competition) }}">
                             @csrf
                             @method('PATCH')
 
-                            <label for="date_competition">Date de la compétition</label>
-                            <input id="date_competition" type="date" name="date_competition" value="{{ old('date_competition', $competition->date_competition?->format('Y-m-d')) }}">
+                            <label for="date_competition">
+                                Modifier la date
+                                <input id="date_competition" type="date" name="date_competition" value="{{ old('date_competition', $competition->date_competition?->format('Y-m-d')) }}">
+                            </label>
 
                             @error('date_competition')
                                 <div class="error">{{ $message }}</div>
@@ -2852,41 +3563,41 @@
 
                             <button type="submit">Enregistrer la date</button>
                         </form>
-                    </div>
-                @endif
-
-                <div class="additional-info">
-                    <div class="additional-info-header">
-                        <strong>Informations complémentaires</strong>
-                        @if ($isOrganizer)
-                            <button class="title-icon-button" type="button" title="Modifier les informations complémentaires" data-additional-info-edit>✏️</button>
-                        @endif
-                    </div>
-
-                    <div data-additional-info-display>
-                        @if (filled($competition->informations_complementaires))
-                            <p>{!! nl2br(e($competition->informations_complementaires)) !!}</p>
-                        @else
-                            <p class="additional-info-empty">Aucune information complémentaire renseignée.</p>
-                        @endif
-                    </div>
-
-                    @if ($isOrganizer)
-                        <form class="additional-info-form" method="POST" action="{{ route('competitions.informations-complementaires.update', $competition) }}" data-additional-info-form>
-                            @csrf
-                            @method('PATCH')
-
-                            <label for="informations_complementaires">Texte visible par les clubs</label>
-                            <textarea id="informations_complementaires" name="informations_complementaires" maxlength="1000">{{ old('informations_complementaires', $competition->informations_complementaires) }}</textarea>
-
-                            @error('informations_complementaires')
-                                <div class="error">{{ $message }}</div>
-                            @enderror
-
-                            <button type="submit">Enregistrer les informations</button>
-                            <button type="button" class="secondary-button" data-additional-info-cancel>Annuler</button>
-                        </form>
                     @endif
+
+                    <div class="additional-info">
+                        <div class="additional-info-header">
+                            <strong>Informations complémentaires</strong>
+                            @if ($isOrganizer)
+                                <button class="title-icon-button" type="button" title="Modifier les informations complémentaires" data-additional-info-edit>✏️</button>
+                            @endif
+                        </div>
+
+                        <div data-additional-info-display>
+                            @if (filled($competition->informations_complementaires))
+                                <p>{!! nl2br(e($competition->informations_complementaires)) !!}</p>
+                            @else
+                                <p class="additional-info-empty">Aucune information complémentaire renseignée.</p>
+                            @endif
+                        </div>
+
+                        @if ($isOrganizer)
+                            <form class="additional-info-form" method="POST" action="{{ route('competitions.informations-complementaires.update', $competition) }}" data-additional-info-form>
+                                @csrf
+                                @method('PATCH')
+
+                                <label for="informations_complementaires">Texte visible par les clubs</label>
+                                <textarea id="informations_complementaires" name="informations_complementaires" maxlength="1000">{{ old('informations_complementaires', $competition->informations_complementaires) }}</textarea>
+
+                                @error('informations_complementaires')
+                                    <div class="error">{{ $message }}</div>
+                                @enderror
+
+                                <button type="submit">Enregistrer les informations</button>
+                                <button type="button" class="secondary-button" data-additional-info-cancel>Annuler</button>
+                            </form>
+                        @endif
+                    </div>
                 </div>
             </div>
         </section>
@@ -2949,17 +3660,21 @@
                     <p>Statut : <span class="status">{{ $currentInvitation->statusLabel() }}</span></p>
 
                     @if ($currentInvitation->status === \App\Models\Invitation::STATUS_INVITE)
-                        <div class="response-actions">
-                            <form method="POST" action="{{ route('competitions.invitations.confirm', [$competition, $currentInvitation]) }}">
-                                @csrf
-                                <button type="submit">Confirmer la participation</button>
-                            </form>
+                        @if ($competition->inscriptions_closed)
+                            <p class="empty-state">Inscriptions fermées. Votre club est considéré comme non participant.</p>
+                        @else
+                            <div class="response-actions">
+                                <form method="POST" action="{{ route('competitions.invitations.confirm', [$competition, $currentInvitation]) }}">
+                                    @csrf
+                                    <button type="submit">Confirmer la participation</button>
+                                </form>
 
-                            <form method="POST" action="{{ route('competitions.invitations.decline', [$competition, $currentInvitation]) }}">
-                                @csrf
-                                <button class="decline-button" type="submit">Refuser la participation</button>
-                            </form>
-                        </div>
+                                <form method="POST" action="{{ route('competitions.invitations.decline', [$competition, $currentInvitation]) }}">
+                                    @csrf
+                                    <button class="decline-button" type="submit">Refuser la participation</button>
+                                </form>
+                            </div>
+                        @endif
                     @endif
                 </div>
             @endif
@@ -3055,9 +3770,14 @@
                                         <div class="club-invitation-info">
                                             <div class="club-invitation-title">
                                                 <strong>{{ $invitation->club->name }}</strong>
-                                                <span class="club-status-badge pending">Envoyée – en attente</span>
                                             </div>
                                             <span class="club-invitation-meta">Envoyée le {{ $invitation->updated_at?->format('d/m/Y') ?? 'date non renseignée' }}</span>
+                                        </div>
+                                        <div class="pending-invitation-badges">
+                                            <span class="club-status-badge pending">Envoyée — en attente</span>
+                                            @if ($competition->inscriptions_closed)
+                                                <span class="club-status-badge declined">Inscription fermée / non participant</span>
+                                            @endif
                                         </div>
                                     </div>
                                 @endforeach
@@ -3124,6 +3844,15 @@
                                         </div>
                                         <span class="club-invitation-meta">Refusée le {{ $invitation->updated_at?->format('d/m/Y') ?? 'date non renseignée' }}</span>
                                     </div>
+
+                                    @if ($isOrganizer)
+                                        <div class="club-invitation-actions">
+                                            <form class="inline-form" method="POST" action="{{ route('competitions.invitations.relaunch', [$competition, $invitation]) }}">
+                                                @csrf
+                                                <button type="submit">Relancer l’invitation</button>
+                                            </form>
+                                        </div>
+                                    @endif
                                 </div>
                             @endforeach
                         </div>
@@ -3556,9 +4285,6 @@
                         <a href="#participants" data-tab-link-target="participants">👉 Voir les participants</a>
                     </div>
                 @endif
-                @if ($eligiblePouleRegistrations->isNotEmpty())
-                    <p class="tab-hint">{{ $eligiblePouleRegistrations->count() }} participant(s) non affecté(s)</p>
-                @endif
                 <div class="poule-guidance">
                     @if ($eligiblePouleRegistrations->isNotEmpty())
                         <p>{{ $eligiblePouleRegistrations->count() }} participant(s) non affecté(s)</p>
@@ -3755,7 +4481,7 @@
                                     </div>
 
                                     @if ($competition->poules->isEmpty())
-                                        <span class="participant-card-meta">Créer une poule d'abord</span>
+                                        <span class="participant-card-meta">Créer une poule d’abord</span>
                                     @endif
                                 </div>
                             @endforeach
@@ -3905,7 +4631,7 @@
 
                                         @else
                                             <div class="participant-card-list poule-participant-grid" data-poule-list></div>
-                                            <p class="empty-state">Aucun participant inscrit</p>
+                                            <p class="empty-state">Aucun participant dans cette poule</p>
                                         @endif
                                     </div>
                                 @endforeach
@@ -3997,7 +4723,7 @@
                 @if ($combatsToEnter->isNotEmpty())
                     <p class="tab-hint">{{ $combatsToEnter->count() }} score(s) à saisir</p>
                 @endif
-                <p class="section-intro">Saisissez les scores pour générer le classement.</p>
+                <p class="section-intro">Saisissez les résultats pour mettre à jour le classement.</p>
                 @if ($allCombats->isNotEmpty())
                     <button class="print-combats-button" type="button" data-print-combats>Imprimer la feuille combats</button>
                 @endif
