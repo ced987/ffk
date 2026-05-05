@@ -53,7 +53,7 @@ class CurrentUserSimulationTest extends TestCase
             ->assertSee('Tableau de bord')
             ->assertSee('Actions à faire')
             ->assertSee('Prochaines compétitions')
-            ->assertSee('Résumé')
+            ->assertDontSee('Résumé')
             ->assertSee($clubA->name)
             ->assertDontSee($userA->name.' - '.$clubA->name)
             ->assertDontSee('Vous êtes')

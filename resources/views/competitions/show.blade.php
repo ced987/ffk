@@ -126,7 +126,7 @@
             background: #ffffff;
             color: #17202a;
             cursor: pointer;
-            font-size: 13px;
+            font-size: 15px;
             line-height: 1;
             text-decoration: none;
         }
@@ -257,7 +257,7 @@
             background: transparent;
             color: #475569;
             box-shadow: none;
-            font-size: 13px;
+            font-size: 13.5px;
             font-weight: 700;
         }
 
@@ -286,7 +286,7 @@
 
         .tab-count {
             color: #64748b;
-            font-size: 12px;
+            font-size: 13px;
             font-weight: 800;
         }
 
@@ -363,11 +363,81 @@
 
         .poule-guidance {
             display: grid;
-            gap: 8px;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 10px;
             margin-bottom: 16px;
         }
 
-        .poule-guidance p,
+        .poule-info-banner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin: 0 0 14px;
+            padding: 12px 14px;
+            border: 1px solid #bfdbfe;
+            border-radius: 9px;
+            background: #eff6ff;
+            color: #1d4ed8;
+            font-size: 14px;
+            font-weight: 650;
+            line-height: 1.35;
+        }
+
+        .poule-info-banner span:first-child {
+            display: inline-flex;
+            align-items: center;
+            gap: 9px;
+        }
+
+        .poule-metric-card {
+            display: grid;
+            grid-template-columns: auto minmax(0, 1fr);
+            gap: 10px;
+            align-items: center;
+            padding: 12px;
+            border: 1px solid #dbe3ef;
+            border-radius: 10px;
+            background: #ffffff;
+            box-shadow: 0 5px 14px rgba(15, 23, 42, 0.035);
+        }
+
+        .poule-metric-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: #eff6ff;
+            color: #1d4ed8;
+            font-size: 18px;
+            font-weight: 850;
+        }
+
+        .poule-metric-card.warning .poule-metric-icon {
+            background: #fff7ed;
+            color: #c2410c;
+        }
+
+        .poule-metric-card.ready .poule-metric-icon {
+            background: #f0fdf4;
+            color: #166534;
+        }
+
+        .poule-metric-card strong {
+            display: block;
+            color: #17202a;
+            font-size: 21px;
+            line-height: 1;
+        }
+
+        .poule-metric-card span:last-child {
+            color: #64748b;
+            font-size: 12px;
+            font-weight: 750;
+        }
+
         .poule-ready,
         .warning-message {
             margin: 0;
@@ -375,17 +445,18 @@
             border-radius: 8px;
         }
 
-        .poule-guidance p {
-            border: 1px solid #dbeafe;
-            background: #f8fafc;
-            color: #475569;
-        }
-
         .poule-ready {
+            grid-column: 1 / -1;
             border: 1px solid #bbf7d0;
             background: #f0fdf4;
             color: #166534;
             font-weight: 700;
+        }
+
+        .poule-ready.caution {
+            border-color: #fde68a;
+            background: #fffbeb;
+            color: #92400e;
         }
 
         .warning-message {
@@ -421,13 +492,13 @@
 
         .poule-assistant {
             display: grid;
-            gap: 9px;
+            gap: 12px;
             margin: 0 0 12px;
-            padding: 12px;
+            padding: 18px;
             border: 1px solid #d8e1ec;
-            border-radius: 10px;
+            border-radius: 12px;
             background: #ffffff;
-            box-shadow: 0 5px 14px rgba(15, 23, 42, 0.04);
+            box-shadow: 0 12px 28px rgba(15, 23, 42, 0.06);
         }
 
         .poule-assistant-header {
@@ -444,22 +515,25 @@
         }
 
         .poule-assistant-header h3 {
-            font-size: 15px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 18px;
         }
 
         .poule-assistant-header .section-intro {
-            margin-top: 2px;
+            margin-top: 4px;
             max-width: 680px;
-            font-size: 11px;
+            color: #475569;
+            font-size: 13px;
         }
 
         .poule-assistant-form {
             display: grid;
-            gap: 8px;
-            padding: 8px;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            background: #f8fafc;
+            gap: 12px;
+            padding: 0;
+            border: 0;
+            background: transparent;
         }
 
         .poule-assistant-criteria {
@@ -478,11 +552,26 @@
         .poule-assistant-criteria input,
         .poule-assistant-criteria select {
             max-width: none;
-            min-height: 30px;
-            padding: 5px 7px;
+            min-height: 36px;
+            padding: 7px 9px;
             border-color: #cbd5e1;
             background: #ffffff;
             font-size: 12px;
+        }
+
+        .poule-assistant-advice {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            width: fit-content;
+            max-width: 520px;
+            padding: 8px 10px;
+            border: 1px solid #bfdbfe;
+            border-radius: 9px;
+            background: #eff6ff;
+            color: #1e3a8a;
+            font-size: 12px;
+            font-weight: 650;
         }
 
         .poule-assistant-actions,
@@ -505,6 +594,28 @@
             margin-top: 0;
             padding: 4px 8px;
             font-size: 12px;
+        }
+
+        .app-page .competition-page .poule-assistant-actions button:first-child {
+            min-height: 36px;
+            padding: 8px 12px;
+            font-size: 13px;
+        }
+
+        .manual-poule-action {
+            display: flex;
+            justify-content: flex-end;
+            margin: 10px 0 12px;
+        }
+
+        .manual-poule-action .form-accordion {
+            margin-top: 0;
+        }
+
+        .manual-poule-action .form-accordion summary {
+            border-color: #93c5fd;
+            background: #eff6ff;
+            color: #1d4ed8;
         }
 
         .app-page .competition-page .poule-assistant-actions .secondary-button,
@@ -667,6 +778,10 @@
         }
 
         @media (max-width: 1180px) {
+            .poule-guidance {
+                grid-template-columns: 1fr;
+            }
+
             .poule-assistant-criteria {
                 grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
             }
@@ -778,54 +893,95 @@
             position: relative;
             display: grid;
             grid-template-columns: repeat(6, minmax(0, 1fr));
-            gap: 6px;
+            gap: 0;
+            padding: 18px 14px 14px;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            background: #ffffff;
+        }
+
+        .follow-progress::before {
+            content: "";
+            position: absolute;
+            top: 35px;
+            right: 8.5%;
+            left: 8.5%;
+            height: 2px;
+            border-radius: 999px;
+            background: #dbe3ef;
         }
 
         .follow-step {
             position: relative;
             display: grid;
-            gap: 4px;
+            justify-items: center;
+            gap: 7px;
             min-width: 0;
-            padding: 8px 9px;
-            border: 1px solid #e2e8f0;
-            border-radius: 7px;
+            padding: 0 6px;
+            text-align: center;
+            cursor: default;
+            z-index: 1;
+        }
+
+        .follow-step-marker {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 34px;
+            height: 34px;
+            border: 2px solid #cbd5e1;
+            border-radius: 999px;
             background: #f8fafc;
+            color: #475569;
+            font-size: 14px;
+            font-weight: 900;
+            line-height: 1;
+            box-shadow: 0 0 0 5px #ffffff;
         }
 
-        .follow-step::before {
-            content: "";
-            position: absolute;
-            top: 16px;
-            left: calc(-6px - 1px);
-            width: 6px;
-            height: 2px;
-            background: #d9e2ec;
+        .follow-step.is-done .follow-step-marker {
+            border-color: #16a34a;
+            background: #16a34a;
+            color: #ffffff;
         }
 
-        .follow-step:first-child::before {
-            display: none;
-        }
-
-        .follow-step.is-active-step {
+        .follow-step.is-active-step .follow-step-marker {
+            width: 42px;
+            height: 42px;
             border-color: #60a5fa;
+            background: #2563eb;
+            color: #ffffff;
+            font-size: 16px;
+            box-shadow: 0 0 0 5px #dbeafe, 0 8px 16px rgba(37, 99, 235, 0.18);
+        }
+
+        .follow-step.is-registration-open .follow-step-marker,
+        .follow-step.is-registration-closed .follow-step-marker {
+            border-color: #bfdbfe;
             background: #eff6ff;
-            box-shadow: inset 0 -2px 0 #2563eb, 0 6px 14px rgba(37, 99, 235, 0.08);
+            color: #1d4ed8;
         }
 
         .follow-step strong {
             color: #17202a;
             font-size: 12px;
             line-height: 1.2;
-            white-space: nowrap;
+            white-space: normal;
+        }
+
+        .follow-step.is-active-step strong {
+            color: #1d4ed8;
+            font-weight: 900;
         }
 
         .follow-status {
             width: fit-content;
-            padding: 2px 6px;
+            padding: 3px 8px;
             border-radius: 999px;
             font-size: 10px;
             font-weight: 800;
             line-height: 1.15;
+            white-space: nowrap;
         }
 
         .follow-status.is-done {
@@ -1034,8 +1190,26 @@
                 display: none;
             }
 
-            .follow-step::before {
+            .follow-progress::before {
                 display: none;
+            }
+
+            .follow-progress {
+                gap: 12px;
+                padding: 14px;
+            }
+
+            .follow-step {
+                grid-template-columns: auto minmax(0, 1fr) auto;
+                justify-items: start;
+                align-items: center;
+                text-align: left;
+            }
+
+            .follow-step.is-active-step .follow-step-marker {
+                width: 34px;
+                height: 34px;
+                font-size: 14px;
             }
         }
 
@@ -1376,6 +1550,104 @@
             box-shadow: 0 6px 14px rgba(15, 23, 42, 0.025);
         }
 
+        .club-add-panel {
+            margin: 0 0 14px;
+            border: 1px solid #dbe3ef;
+            border-radius: 10px;
+            background: #ffffff;
+            box-shadow: 0 8px 18px rgba(15, 23, 42, 0.035);
+            overflow: hidden;
+        }
+
+        .club-add-panel summary {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            padding: 12px 14px;
+            cursor: pointer;
+            list-style: none;
+        }
+
+        .club-add-panel summary::-webkit-details-marker {
+            display: none;
+        }
+
+        .club-add-panel summary::after {
+            content: "⌄";
+            flex: 0 0 auto;
+            color: #64748b;
+            font-size: 18px;
+            font-weight: 800;
+            line-height: 1;
+            transition: transform 140ms ease;
+        }
+
+        .club-add-panel[open] summary::after {
+            transform: rotate(180deg);
+        }
+
+        .club-add-summary {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            gap: 12px;
+            min-width: 0;
+            width: 100%;
+        }
+
+        .club-add-summary-title {
+            color: #17202e;
+            font-size: 16px;
+            font-weight: 850;
+            white-space: nowrap;
+        }
+
+        .club-add-summary-meta {
+            color: #64748b;
+            font-size: 13px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .club-add-body {
+            padding: 12px 14px 14px;
+            border-top: 1px solid #e5eaf0;
+            background: #fbfdff;
+        }
+
+        .club-add-panel .searchable-checklist {
+            margin-top: 0;
+        }
+
+        .club-add-panel .searchable-checklist-search {
+            max-width: 360px;
+            margin-bottom: 7px;
+        }
+
+        .club-add-panel .searchable-checklist-items {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            max-height: 242px;
+            gap: 5px;
+            padding: 7px;
+        }
+
+        .club-add-panel .searchable-checklist-item {
+            padding: 7px 9px;
+        }
+
+        .club-add-actions {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .club-add-panel .searchable-checklist-empty {
+            grid-column: 1 / -1;
+        }
+
         .club-section-header {
             display: flex;
             justify-content: space-between;
@@ -1646,6 +1918,52 @@
             white-space: nowrap;
         }
 
+        .participant-action-panel {
+            display: grid;
+            gap: 10px;
+            margin: 12px 0 14px;
+        }
+
+        .participant-action-buttons {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .app-page .competition-page .participant-action-toggle {
+            min-height: 34px;
+            margin-top: 0;
+            padding: 8px 12px;
+            border-radius: 7px;
+            font-size: 13px;
+            white-space: nowrap;
+        }
+
+        .app-page .competition-page .participant-action-toggle.secondary {
+            border-color: #cbd5e1;
+            background: #ffffff;
+            color: #334155;
+        }
+
+        .participant-form-panel {
+            display: none;
+            padding: 12px;
+            border: 1px solid #dbe3ef;
+            border-radius: 10px;
+            background: #ffffff;
+            box-shadow: 0 6px 14px rgba(15, 23, 42, 0.025);
+        }
+
+        .participant-form-panel.is-open {
+            display: block;
+        }
+
+        .participant-form-panel form,
+        .participant-form-panel .empty-state {
+            margin: 0;
+        }
+
         .searchable-checklist {
             margin-top: 12px;
         }
@@ -1802,6 +2120,10 @@
             .participant-filter-bar {
                 grid-template-columns: 1fr;
             }
+
+            .participant-action-panel {
+                grid-template-columns: 1fr;
+            }
         }
 
         .participant-name-line {
@@ -1809,6 +2131,29 @@
             align-items: center;
             gap: 8px;
             flex-wrap: wrap;
+        }
+
+        .participant-status-dot {
+            flex: 0 0 auto;
+            width: 9px;
+            height: 9px;
+            border-radius: 999px;
+            box-shadow: 0 0 0 3px rgba(148, 163, 184, 0.16);
+        }
+
+        .participant-status-dot.pending {
+            background: #f97316;
+            box-shadow: 0 0 0 3px #ffedd5;
+        }
+
+        .participant-status-dot.validated {
+            background: #16a34a;
+            box-shadow: 0 0 0 3px #dcfce7;
+        }
+
+        .participant-status-dot.withdrawn {
+            background: #94a3b8;
+            box-shadow: 0 0 0 3px #e2e8f0;
         }
 
         .state-badges {
@@ -1961,6 +2306,26 @@
             padding: 12px 14px 14px;
         }
 
+        .participant-row-extra.is-hidden {
+            display: none;
+        }
+
+        .participant-list-toggle {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 10px;
+        }
+
+        .app-page .competition-page .participant-list-toggle button {
+            min-height: 30px;
+            margin-top: 0;
+            padding: 5px 9px;
+            border-color: #cbd5e1;
+            background: #ffffff;
+            color: #334155;
+            font-size: 12px;
+        }
+
         .participant-note {
             margin-top: 14px;
             color: #64748b;
@@ -1971,11 +2336,11 @@
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
             gap: 10px;
-            margin: 16px 0;
+            margin: 12px 0;
         }
 
         .summary-item {
-            padding: 12px 14px;
+            padding: 10px 12px;
             border: 1px solid #dce1e7;
             border-radius: 8px;
             background: #f8fafc;
@@ -1983,8 +2348,8 @@
 
         .summary-item strong {
             display: block;
-            margin-bottom: 4px;
-            font-size: 24px;
+            margin-bottom: 2px;
+            font-size: 21px;
         }
 
         .participant-group {
@@ -2574,6 +2939,16 @@
                 justify-content: flex-start;
             }
 
+            .club-add-summary {
+                align-items: flex-start;
+                flex-direction: column;
+                gap: 4px;
+            }
+
+            .club-add-panel .searchable-checklist-items {
+                grid-template-columns: 1fr;
+            }
+
             .assignment-modal-grid {
                 grid-template-columns: 1fr;
             }
@@ -2581,26 +2956,27 @@
 
         .combat-list {
             display: grid;
-            gap: 3px;
+            gap: 8px;
         }
 
         .app-page .competition-page .combat-row {
             display: grid;
-            grid-template-columns: 58px minmax(120px, 1.15fr) 26px minmax(120px, 1.15fr) 38px 38px 64px 64px minmax(110px, 1fr) 148px;
+            grid-template-columns: 72px minmax(180px, 1fr) 118px minmax(180px, 1fr) minmax(160px, 0.72fr) 168px;
             align-items: center;
-            gap: 4px;
+            gap: 12px;
             margin-top: 0;
-            padding: 3px 6px 3px 8px;
+            padding: 8px 12px;
             border: 1px solid #e5eaf0;
-            border-left: 4px solid #2563eb;
-            border-radius: 8px;
+            border-left: 4px solid #f59e0b;
+            border-radius: 10px;
             background: #ffffff;
+            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.025);
             scroll-margin-top: 80px;
         }
 
         .app-page .competition-page .combat-row.is-finished {
             border-left-color: #22c55e;
-            background: #f0fdf4;
+            background: #fbfefc;
         }
 
         .app-page .competition-page .combat-row.is-editing {
@@ -2610,74 +2986,123 @@
 
         .combat-number {
             color: #334155;
-            font-size: 12px;
+            font-size: 16px;
             font-weight: 800;
             line-height: 1.1;
         }
 
         .combat-status {
-            display: block;
-            margin-top: 2px;
-            color: #1d4ed8;
-            font-size: 10px;
+            display: inline-flex;
+            width: fit-content;
+            margin-top: 6px;
+            min-width: max-content;
+            padding: 3px 7px;
+            border-radius: 999px;
+            border: 1px solid #fde68a;
+            background: #fffbeb;
+            color: #92400e;
+            font-size: 11px;
             font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 0.02em;
+            line-height: 1;
+            white-space: nowrap;
         }
 
         .combat-row.is-finished .combat-status {
+            border-color: #bbf7d0;
+            background: #dcfce7;
             color: #15803d;
         }
 
         .combat-row.is-editing .combat-status {
+            border-color: #fed7aa;
+            background: #ffedd5;
             color: #c2410c;
-        }
-
-        .combat-vs {
-            color: #64748b;
-            text-align: center;
         }
 
         .app-page .competition-page .combat-fighter-button,
         .app-page .competition-page .combat-choice-button {
             margin-top: 0;
             border: 1px solid #cfd6df;
-            border-radius: 7px;
+            border-radius: 9px;
             background: #ffffff;
             color: #17202a;
             text-align: left;
         }
 
         .app-page .competition-page .combat-choice-button {
-            min-height: 26px;
-            padding: 3px 6px;
+            min-height: 24px;
+            padding: 3px 7px;
+            font-size: 12px;
             text-align: center;
         }
 
         .app-page .competition-page .combat-fighter-button {
-            display: block;
+            display: grid;
+            grid-template-columns: auto minmax(0, 1fr);
+            gap: 8px;
+            align-items: center;
             overflow: hidden;
             min-width: 0;
-            min-height: 26px;
-            padding: 3px 7px;
+            min-height: 56px;
+            padding: 8px 10px;
             text-overflow: ellipsis;
             white-space: nowrap;
-            font-size: 13px;
+            font-size: 14px;
             font-weight: 500;
+        }
+
+        .combat-color-chip {
+            width: 18px;
+            height: 18px;
+            border-radius: 5px;
+            box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.16);
+        }
+
+        .combat-color-chip.red {
+            background: #e11d48;
+        }
+
+        .combat-color-chip.blue {
+            background: #2563eb;
+        }
+
+        .combat-fighter-text {
+            display: grid;
+            gap: 2px;
+            min-width: 0;
         }
 
         .combat-fighter-name {
             font-weight: 750;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
 
         .combat-fighter-club {
             color: #64748b;
             font-size: 12px;
             font-weight: 500;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
 
         .app-page .competition-page .combat-fighter-button.winner {
+            border-color: #bfdbfe;
+            background: #eff6ff;
+            color: #17202a;
             font-weight: 800;
+        }
+
+        .app-page .competition-page .combat-fighter-button.winner.red-winner {
+            border-color: #fecdd3;
+            background: #fff1f2;
+        }
+
+        .app-page .competition-page .combat-fighter-button.winner.blue-winner {
+            border-color: #bfdbfe;
+            background: #eff6ff;
         }
 
         .app-page .competition-page .combat-fighter-button.muted {
@@ -2691,36 +3116,213 @@
             color: #1e3a8a;
         }
 
-        .app-page .competition-page .combat-row:not(.is-finished) .combat-fighter-button:not(:disabled):hover {
+        .app-page .competition-page .combat-row:not(.is-finished) .combat-fighter-button:not(:disabled):hover,
+        .app-page .competition-page .combat-row.is-editing .combat-fighter-button:not(:disabled):hover {
             border-color: #1d4ed8;
             background: #eff6ff;
             color: #1e3a8a;
         }
 
-        .app-page .competition-page .combat-row.is-finished .combat-fighter-button:hover {
+        .app-page .competition-page .combat-row.is-finished:not(.is-editing) .combat-fighter-button:hover {
             border-color: #cfd6df;
             background: #ffffff;
             color: #17202a;
         }
 
-        .app-page .competition-page .combat-row.is-finished .combat-fighter-button.muted:hover {
+        .app-page .competition-page .combat-row.is-finished:not(.is-editing) .combat-fighter-button.muted:hover {
             color: #94a3b8;
         }
 
-        .app-page .competition-page .combat-row.is-finished .combat-fighter-button.selected:hover {
+        .app-page .competition-page .combat-row.is-finished:not(.is-editing) .combat-fighter-button.selected:hover {
             border-color: #1d4ed8;
             background: #eff6ff;
             color: #1e3a8a;
         }
 
+        .app-page .competition-page .combat-row.is-finished:not(.is-editing) .combat-choice-button,
+        .app-page .competition-page .combat-row.is-finished:not(.is-editing) .combat-choice-button.selected,
+        .app-page .competition-page .combat-row.is-finished:not(.is-editing) .combat-choice-button:hover,
+        .app-page .competition-page .combat-row.is-finished:not(.is-editing) .combat-choice-button.selected:hover {
+            border-color: #e2e8f0;
+            background: #f8fafc;
+            color: #64748b;
+            cursor: default;
+            box-shadow: none;
+        }
+
         .app-page .competition-page .combat-row input {
             width: 100%;
             max-width: none;
-            min-height: 26px;
-            padding: 3px 6px;
+            min-height: 28px;
+            padding: 4px 7px;
             border: 1px solid #cfd6df;
             border-radius: 7px;
             font-size: 13px;
+        }
+
+        .combat-score-box {
+            display: grid;
+            gap: 3px;
+            justify-items: center;
+            min-width: 0;
+        }
+
+        .combat-score-readonly {
+            display: none;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            min-height: 34px;
+            padding: 5px 10px;
+            border: 1px solid #dbe3ef;
+            border-radius: 8px;
+            background: #ffffff;
+            color: #17202a;
+            font-size: 18px;
+            font-weight: 850;
+            line-height: 1;
+        }
+
+        .combat-score-readonly span:nth-child(2) {
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        .combat-score-fields {
+            display: grid;
+            grid-template-columns: minmax(42px, 1fr) auto minmax(42px, 1fr);
+            gap: 5px;
+            align-items: center;
+            width: 100%;
+            padding: 0;
+            border: 0;
+            background: transparent;
+        }
+
+        .combat-score-box input[type="number"] {
+            min-width: 0;
+            min-height: 28px;
+            padding: 4px 5px;
+            font-weight: 800;
+            text-align: center;
+            -moz-appearance: textfield;
+            appearance: textfield;
+        }
+
+        .combat-score-box input[type="number"]::-webkit-outer-spin-button,
+        .combat-score-box input[type="number"]::-webkit-inner-spin-button {
+            margin: 0;
+            -webkit-appearance: none;
+        }
+
+        .combat-score-separator {
+            color: #64748b;
+            font-weight: 900;
+        }
+
+        .combat-quick-results {
+            display: flex;
+            justify-content: center;
+            gap: 4px;
+        }
+
+        .combat-result-panel {
+            display: grid;
+            gap: 6px;
+            min-width: 0;
+        }
+
+        .combat-result-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 34px;
+            padding: 6px 10px;
+            border: 1px solid #cbd5e1;
+            border-radius: 9px;
+            background: #f8fafc;
+            color: #334155;
+            font-size: 13px;
+            font-weight: 850;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        .combat-result-badge.result-red {
+            border-color: #fecdd3;
+            background: #fff1f2;
+            color: #be123c;
+        }
+
+        .combat-result-badge.result-blue {
+            border-color: #bfdbfe;
+            background: #eff6ff;
+            color: #1d4ed8;
+        }
+
+        .combat-result-badge.result-draw {
+            border-color: #cbd5e1;
+            background: #f8fafc;
+            color: #334155;
+        }
+
+        .combat-result-badge.result-none {
+            border-color: #e2e8f0;
+            background: #f1f5f9;
+            color: #64748b;
+        }
+
+        .combat-result-badge.result-check {
+            border-color: #fde68a;
+            background: #fffbeb;
+            color: #92400e;
+        }
+
+        .app-page .competition-page .combat-row:not(.is-finished) .combat-result-badge.result-upcoming {
+            border-color: #fde68a;
+            background: #fffbeb;
+            color: #92400e;
+        }
+
+        .combat-comment {
+            min-width: 0;
+        }
+
+        .combat-comment-readonly {
+            display: none;
+            margin: 0;
+            overflow: hidden;
+            color: #64748b;
+            font-size: 12px;
+            line-height: 1.25;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .app-page .competition-page .combat-row.is-finished:not(.is-editing) {
+            padding-top: 6px;
+            padding-bottom: 6px;
+        }
+
+        .app-page .competition-page .combat-row.is-finished:not(.is-editing) .combat-fighter-button {
+            min-height: 48px;
+            padding-top: 6px;
+            padding-bottom: 6px;
+        }
+
+        .app-page .competition-page .combat-row.is-finished:not(.is-editing) .combat-score-fields,
+        .app-page .competition-page .combat-row.is-finished:not(.is-editing) .combat-quick-results,
+        .app-page .competition-page .combat-row.is-finished:not(.is-editing) .combat-comment {
+            display: none;
+        }
+
+        .app-page .competition-page .combat-row.is-finished:not(.is-editing) .combat-score-readonly {
+            display: flex;
+        }
+
+        .app-page .competition-page .combat-row.is-finished:not(.is-editing) .combat-comment-readonly:not(.is-empty) {
+            display: block;
         }
 
         .combat-row input:disabled,
@@ -2732,10 +3334,10 @@
 
         .combat-actions {
             display: grid;
-            grid-template-columns: repeat(4, 34px);
+            grid-template-columns: minmax(68px, 1fr) repeat(3, 34px);
             gap: 4px;
             justify-content: flex-end;
-            width: 148px;
+            width: 168px;
         }
 
         .app-page .competition-page .combat-actions button {
@@ -2766,6 +3368,12 @@
             background: #dcfce7;
             color: #166534;
             font-weight: 800;
+        }
+
+        .app-page .competition-page .combat-actions [data-combat-validate][data-combat-saisie]:not(:disabled) {
+            border-color: #2563eb;
+            background: #2563eb;
+            color: #ffffff;
         }
 
         .app-page .competition-page .combat-actions [data-combat-validate]:not(:disabled):hover {
@@ -2845,17 +3453,11 @@
             }
 
             .combat-row {
-                grid-template-columns: 44px minmax(0, 1fr) 28px minmax(0, 1fr);
+                grid-template-columns: 52px minmax(0, 1fr);
             }
 
-            .combat-result-draw,
-            .combat-result-none,
-            .combat-score-red,
-            .combat-score-blue {
-                grid-column: span 2;
-            }
-
-            .combat-comment,
+            .combat-score-box,
+            .combat-result-panel,
             .combat-actions {
                 grid-column: 1 / -1;
             }
@@ -3131,8 +3733,8 @@
                 };
             };
             $participantGroups = [
-                'Participants validés' => $filterParticipantRegistrations($allRegistrations->filter(fn ($registration) => $registration->is_active && $registration->is_validated)->values()),
                 'Participants en attente de validation' => $filterParticipantRegistrations($allRegistrations->filter(fn ($registration) => $registration->is_active && ! $registration->is_validated)->values()),
+                'Participants validés' => $filterParticipantRegistrations($allRegistrations->filter(fn ($registration) => $registration->is_active && $registration->is_validated)->values()),
                 'Participants retirés' => $filterParticipantRegistrations($allRegistrations->filter(fn ($registration) => ! $registration->is_active)->values()),
             ];
             $participantGroupEmptyMessages = [
@@ -3161,7 +3763,7 @@
                 'suivi' => $pendingActions->isNotEmpty() ? 'is-current' : 'is-done',
                 'clubs' => $tabConfirmedClubsCount > 0 ? 'is-done' : 'is-upcoming',
                 'participants' => $tabValidatedParticipantsCount > 0 && $tabPendingParticipantsCount === 0 ? 'is-done' : ($tabValidatedParticipantsCount > 0 || $tabPendingParticipantsCount > 0 ? 'is-current' : 'is-upcoming'),
-                'poules' => $tabPoulesCount > 0 ? 'is-done' : 'is-upcoming',
+                'poules' => $poulesReady ? 'is-done' : ($tabPoulesCount > 0 || $eligiblePouleRegistrations->isNotEmpty() ? 'is-current' : 'is-upcoming'),
                 'combats' => $tabCombatsTotalCount > 0 && $tabFinishedCombatsCount === $tabCombatsTotalCount ? 'is-done' : ($tabFinishedCombatsCount > 0 ? 'is-current' : 'is-upcoming'),
             ];
         @endphp
@@ -3412,7 +4014,8 @@
                                 $activeStepClass = $loop->index === $activeProgressIndex ? 'is-active-step' : '';
                             @endphp
                             <div class="follow-step {{ $stepStatusClass }} {{ $activeStepClass }}">
-                                <strong>{{ $loop->iteration }}. {{ $step['label'] }}</strong>
+                                <span class="follow-step-marker">{{ $loop->iteration }}</span>
+                                <strong>{{ $step['label'] }}</strong>
                                 <span class="follow-status {{ $stepStatusClass }}">{{ $step['status'] }}</span>
                             </div>
                         @endforeach
@@ -3715,6 +4318,64 @@
                 </div>
             @endif
 
+            @if ($isOrganizer)
+                <details class="club-add-panel" data-club-add-panel @if ($errors->has('club_id') || $errors->has('club_ids') || $errors->has('club_ids.*')) open @endif>
+                    <summary>
+                        <span class="club-add-summary">
+                            <span class="club-add-summary-title">Ajouter un club à inviter</span>
+                            <span class="club-add-summary-meta">{{ $availableClubs->count() }} club(s) disponible(s)</span>
+                        </span>
+                    </summary>
+
+                    <div class="club-add-body">
+                        @if ($availableClubs->isNotEmpty())
+                            <form method="POST" action="{{ route('competitions.invitations.store', $competition) }}">
+                                @csrf
+
+                                <div class="searchable-checklist" data-searchable-checklist>
+                                    <label for="club_search">Rechercher un club</label>
+                                    <input class="searchable-checklist-search" id="club_search" type="search" placeholder="Rechercher un club" data-searchable-checklist-input>
+
+                                    <div class="searchable-checklist-meta">
+                                        <span data-searchable-checklist-count>0 sélectionné(s)</span>
+                                        <span>{{ $availableClubs->count() }} club(s) disponible(s)</span>
+                                    </div>
+
+                                    <div class="searchable-checklist-items">
+                                        @foreach ($availableClubs as $club)
+                                            <label class="searchable-checklist-item" data-searchable-checklist-item data-search-text="{{ \Illuminate\Support\Str::lower($club->name) }}">
+                                                <input type="checkbox" name="club_ids[]" value="{{ $club->id }}" @checked(collect(old('club_ids', []))->contains((string) $club->id))>
+                                                <span>
+                                                    <strong>{{ $club->name }}</strong>
+                                                </span>
+                                            </label>
+                                        @endforeach
+                                        <p class="searchable-checklist-empty" data-searchable-checklist-empty>Aucun résultat</p>
+                                    </div>
+                                </div>
+
+                                @error('club_id')
+                                    <div class="error">{{ $message }}</div>
+                                @enderror
+                                @error('club_ids')
+                                    <div class="error">{{ $message }}</div>
+                                @enderror
+                                @error('club_ids.*')
+                                    <div class="error">{{ $message }}</div>
+                                @enderror
+
+                                <div class="club-add-actions">
+                                    <button class="secondary-button" type="button" data-club-add-cancel>Annuler</button>
+                                    <button type="submit">Ajouter les clubs sélectionnés</button>
+                                </div>
+                            </form>
+                        @else
+                            <p class="empty-state">Aucun club disponible à inviter.</p>
+                        @endif
+                    </div>
+                </details>
+            @endif
+
             <div class="club-sections">
                 <div class="club-sections-top">
                     <div class="club-invitation-section">
@@ -3861,54 +4522,6 @@
                     @endif
                 </div>
             </div>
-
-            @if ($isOrganizer)
-                <div class="subsection">
-                    <h3>Ajouter un club pré-invité</h3>
-
-                    @if ($availableClubs->isNotEmpty())
-                        <form method="POST" action="{{ route('competitions.invitations.store', $competition) }}">
-                            @csrf
-
-                            <div class="searchable-checklist" data-searchable-checklist>
-                                <label for="club_search">Rechercher un club</label>
-                                <input class="searchable-checklist-search" id="club_search" type="search" placeholder="Rechercher un club" data-searchable-checklist-input>
-
-                                <div class="searchable-checklist-meta">
-                                    <span data-searchable-checklist-count>0 sélectionné(s)</span>
-                                    <span>{{ $availableClubs->count() }} club(s) disponible(s)</span>
-                                </div>
-
-                                <div class="searchable-checklist-items">
-                                    @foreach ($availableClubs as $club)
-                                        <label class="searchable-checklist-item" data-searchable-checklist-item data-search-text="{{ \Illuminate\Support\Str::lower($club->name) }}">
-                                            <input type="checkbox" name="club_ids[]" value="{{ $club->id }}" @checked(collect(old('club_ids', []))->contains((string) $club->id))>
-                                            <span>
-                                                <strong>{{ $club->name }}</strong>
-                                            </span>
-                                        </label>
-                                    @endforeach
-                                    <p class="searchable-checklist-empty" data-searchable-checklist-empty>Aucun résultat</p>
-                                </div>
-                            </div>
-
-                            @error('club_id')
-                                <div class="error">{{ $message }}</div>
-                            @enderror
-                            @error('club_ids')
-                                <div class="error">{{ $message }}</div>
-                            @enderror
-                            @error('club_ids.*')
-                                <div class="error">{{ $message }}</div>
-                            @enderror
-
-                            <button type="submit">Ajouter les clubs sélectionnés</button>
-                        </form>
-                    @else
-                        <p class="empty-state">Aucun club disponible à inviter.</p>
-                    @endif
-                </div>
-            @endif
         </section>
 
         <section id="participants" class="tab-panel" data-tab-panel="participants">
@@ -3967,10 +4580,26 @@
             @endif
 
             @if ($canRegisterParticipants)
-                <div class="subsection">
-                    <details id="participants-ajout" class="form-accordion">
-                        <summary>Ajouter un participant</summary>
+                <div class="participant-action-panel">
+                    @php
+                        $manualParticipantFormOpen = $errors->has('club_id')
+                            || $errors->has('last_name')
+                            || $errors->has('first_name')
+                            || $errors->has('sex')
+                            || $errors->has('age')
+                            || $errors->has('approximate_weight')
+                            || $errors->has('license_number');
+                        $licencieParticipantFormOpen = $errors->has('licencie_id')
+                            || $errors->has('licencie_ids')
+                            || $errors->has('licencie_ids.*');
+                    @endphp
 
+                    <div class="participant-action-buttons">
+                        <button class="participant-action-toggle" type="button" data-participant-form-toggle="manual">Ajouter un participant</button>
+                        <button class="participant-action-toggle secondary" type="button" data-participant-form-toggle="licencies">Ajouter depuis mes licenciés</button>
+                    </div>
+
+                    <div id="participants-ajout" @class(['participant-form-panel', 'is-open' => $manualParticipantFormOpen]) data-participant-form-panel="manual">
                         <form method="POST" action="{{ route('competitions.participants.store', $competition) }}">
                             @csrf
 
@@ -4045,11 +4674,9 @@
 
                             <button type="submit">Ajouter un participant</button>
                         </form>
-                    </details>
+                    </div>
 
-                    <details class="form-accordion">
-                        <summary>Ajouter depuis mes licenciés</summary>
-
+                    <div @class(['participant-form-panel', 'is-open' => $licencieParticipantFormOpen]) data-participant-form-panel="licencies">
                         @if ($currentClubLicencies->isNotEmpty())
                             <form method="POST" action="{{ route('competitions.participants.store-from-licencie', $competition) }}">
                                 @csrf
@@ -4101,7 +4728,7 @@
                         @else
                             <p class="empty-state">Aucun licencié disponible pour ce club.</p>
                         @endif
-                    </details>
+                    </div>
                 </div>
             @elseif (!$isOrganizer && $competition->inscriptions_closed)
                 <p class="empty-state">Inscriptions fermées</p>
@@ -4163,6 +4790,14 @@
                             'Participants retirés' => 'participants-retires',
                             default => null,
                         };
+                        $participantGroupStatus = match ($groupTitle) {
+                            'Participants validés' => 'validated',
+                            'Participants en attente de validation' => 'pending',
+                            'Participants retirés' => 'withdrawn',
+                            default => 'pending',
+                        };
+                        $visibleParticipantRows = 5;
+                        $hiddenParticipantRows = max(0, $groupRegistrations->count() - $visibleParticipantRows);
                     @endphp
                     <div @if ($participantGroupId) id="{{ $participantGroupId }}" @endif class="participant-section-card">
                         <div class="participant-section-header">
@@ -4188,12 +4823,13 @@
                                 </thead>
                                 <tbody>
                                     @foreach ($groupRegistrations as $registration)
-                                        <tr @class(['inactive' => ! $registration->is_active])>
+                                        <tr @class(['inactive' => ! $registration->is_active, 'participant-row-extra' => $loop->iteration > $visibleParticipantRows, 'is-hidden' => $loop->iteration > $visibleParticipantRows]) data-participant-row-extra="{{ $participantGroupId }}">
                                             @if ($isOrganizer)
                                                 <td>{{ $registration->club->name }}</td>
                                             @endif
                                             <td>
                                                 <span class="participant-name-line">
+                                                    <span class="participant-status-dot {{ $participantGroupStatus }}" aria-hidden="true"></span>
                                                     <strong>{{ $registration->participantSource->last_name }} {{ $registration->participantSource->first_name }}</strong>
 	                                                    <span class="state-badges">
 	                                                        @if (! $registration->is_active)
@@ -4264,6 +4900,13 @@
                                     @endforeach
                                 </tbody>
                             </table>
+                            @if ($hiddenParticipantRows > 0)
+                                <div class="participant-list-toggle">
+                                    <button type="button" data-participant-toggle="{{ $participantGroupId }}" data-collapsed-label="Voir les {{ $groupRegistrations->count() }} {{ \Illuminate\Support\Str::lower($groupTitle) }}" data-expanded-label="Réduire la liste">
+                                        Voir les {{ $groupRegistrations->count() }} {{ \Illuminate\Support\Str::lower($groupTitle) }}
+                                    </button>
+                                </div>
+                            @endif
                         @else
                             <p class="empty-state">{{ $participantGroupEmptyMessages[$groupTitle] }}</p>
                         @endif
@@ -4279,33 +4922,63 @@
         @if ($isOrganizer)
             <section id="poules" class="tab-panel" data-tab-panel="poules">
                 <h2>Organisation des poules</h2>
+                <div class="poule-info-banner">
+                    <span><strong>i</strong> Organisez les poules avant de générer les combats. Le logiciel peut proposer une première répartition, puis vous gardez la main pour ajuster.</span>
+                </div>
+                <p class="sr-only">Affectez les participants puis figez les poules pour générer les combats.</p>
                 @if ($participantValidationSummary['global']['not_validated'] > 0)
                     <div class="poule-validation-alert">
                         <span>⚠️ {{ $participantValidationSummary['global']['not_validated'] }} participant(s) non validé(s) — continuer quand même ?</span>
-                        <a href="#participants" data-tab-link-target="participants">👉 Voir les participants</a>
+                        <a href="{{ route('competitions.show', ['competition' => $competition, 'tab' => 'participants']) }}" data-tab-link-target="participants">👉 Voir les participants</a>
                     </div>
                 @endif
                 <div class="poule-guidance">
-                    @if ($eligiblePouleRegistrations->isNotEmpty())
-                        <p>{{ $eligiblePouleRegistrations->count() }} participant(s) non affecté(s)</p>
-                    @endif
+                    <p class="sr-only">{{ $eligiblePouleRegistrations->count() }} participant(s) non affecté(s)</p>
+                    <p class="sr-only">{{ $draftPoules->count() }} poule(s) en préparation (non figée(s))</p>
+                    <div class="poule-metric-card">
+                        <span class="poule-metric-icon" aria-hidden="true">👥</span>
+                        <span>
+                            <strong>{{ $eligiblePouleRegistrations->count() }}</strong>
+                            <span>Participants non affectés</span>
+                        </span>
+                    </div>
 
-                    @if ($draftPoules->isNotEmpty())
-                        <p>{{ $draftPoules->count() }} poule(s) en préparation (non figée(s))</p>
-                    @endif
+                    <div class="poule-metric-card ready">
+                        <span class="poule-metric-icon" aria-hidden="true">⌛</span>
+                        <span>
+                            <strong>{{ $draftPoules->count() }}</strong>
+                            <span>Poules en préparation</span>
+                        </span>
+                    </div>
 
-                    @if ($poulesReady)
-                        <div class="poule-ready">Poules prêtes — tous les participants sont affectés et les poules sont figées</div>
+                    <div class="poule-metric-card warning">
+                        <span class="poule-metric-icon" aria-hidden="true">!</span>
+                        <span>
+                            <strong>{{ $participantValidationSummary['global']['not_validated'] }}</strong>
+                            <span>Participants non validés</span>
+                        </span>
+                    </div>
+
+                    @if ($poulesReady && $participantValidationSummary['global']['not_validated'] === 0)
+                        <div class="poule-ready">
+                            Poules prêtes — tous les participants validés sont affectés et les poules sont figées.
+                            <span class="sr-only">Poules prêtes — tous les participants validés sont affectés et les poules sont figées</span>
+                        </div>
+                    @elseif ($poulesReady)
+                        <div class="poule-ready caution">
+                            Les participants validés sont affectés, mais {{ $participantValidationSummary['global']['not_validated'] }} participant(s) restent à valider.
+                            <span class="sr-only">Les participants validés sont affectés, mais certains participants restent à valider.</span>
+                        </div>
                     @endif
                 </div>
-                <p class="section-intro">Affectez les participants puis figez les poules pour générer les combats.</p>
 
                 <div class="subsection">
                     <div id="assistant-poules" class="poule-assistant">
                         <div class="poule-assistant-header">
                             <div>
-                                <h3>Assistant de génération des poules</h3>
-                                <p class="section-intro">Le logiciel propose des groupes à partir des participants disponibles. Vous gardez la décision finale.</p>
+                                <h3><span aria-hidden="true">✨</span> Proposer des poules automatiquement</h3>
+                                <span class="sr-only">Assistant de génération des poules</span>
+                                <p class="section-intro">Le logiciel analyse les participants et propose une répartition équilibrée selon vos critères.</p>
                             </div>
                         </div>
 
@@ -4337,8 +5010,12 @@
                                     <input id="adult_access_age" name="adult_access_age" type="number" min="12" max="30" value="{{ $pouleAssistantCriteria['adult_access_age'] }}">
                                 </div>
                             </div>
+                            <div class="poule-assistant-advice">
+                                <span aria-hidden="true">💡</span>
+                                <span>Conseil : les critères peuvent être adaptés avant de figer les poules.</span>
+                            </div>
                             <div class="poule-assistant-actions">
-                                <button type="submit">Analyser les participants</button>
+                                <button type="submit">Proposer des poules <span class="sr-only">Analyser les participants</span></button>
                                 @if ($pouleAssistantResult)
                                     <button class="secondary-button" type="submit">Recalculer</button>
                                     <a class="secondary-button" href="{{ route('competitions.show', ['competition' => $competition, 'tab' => 'poules']) }}#assistant-poules">Fermer les suggestions</a>
@@ -4422,27 +5099,27 @@
                         @endif
                     </div>
 
-                    <h3>Poules</h3>
+                    <div class="manual-poule-action">
+                        <details id="creation-poule" class="form-accordion">
+                            <summary>Créer une poule manuellement</summary>
 
-                    <details id="creation-poule" class="form-accordion">
-                        <summary>Créer une poule</summary>
+                            <form method="POST" action="{{ route('competitions.poules.store', $competition) }}">
+                                @csrf
 
-                        <form method="POST" action="{{ route('competitions.poules.store', $competition) }}">
-                            @csrf
-
-                            <div class="form-grid">
-                                <div>
-                                    <label for="poule_name">Nom de la poule</label>
-                                    <input id="poule_name" name="name" value="{{ old('name') }}" required>
-                                    @error('name')
-                                        <div class="error">{{ $message }}</div>
-                                    @enderror
+                                <div class="form-grid">
+                                    <div>
+                                        <label for="poule_name">Nom de la poule</label>
+                                        <input id="poule_name" name="name" value="{{ old('name') }}" required>
+                                        @error('name')
+                                            <div class="error">{{ $message }}</div>
+                                        @enderror
+                                    </div>
                                 </div>
-                            </div>
 
-                            <button type="submit">Créer une poule</button>
-                        </form>
-                    </details>
+                                <button type="submit">Créer une poule</button>
+                            </form>
+                        </details>
+                    </div>
                 </div>
 
                 <div class="poule-assignment-layout">
@@ -4756,16 +5433,45 @@
                                             @php
                                                 $leftState = '';
                                                 $rightState = '';
+                                                $leftWinnerClass = '';
+                                                $rightWinnerClass = '';
+                                                $resultBadgeClass = 'result-upcoming';
+                                                $resultLabel = 'À venir';
+                                                $hasScoreA = $combat->score_a !== null;
+                                                $hasScoreB = $combat->score_b !== null;
+                                                $scoreAValue = $hasScoreA ? (float) $combat->score_a : null;
+                                                $scoreBValue = $hasScoreB ? (float) $combat->score_b : null;
+                                                $hasCompleteScore = $hasScoreA && $hasScoreB;
+                                                $scoreMatchesResult = true;
 
                                                 if ($combat->resultat === \App\Models\Combat::RESULT_LEFT_WIN) {
                                                     $leftState = 'winner';
+                                                    $leftWinnerClass = 'red-winner';
                                                     $rightState = 'muted';
+                                                    $resultBadgeClass = 'result-red';
+                                                    $resultLabel = $combat->absence_forfait ? 'Forfait bleu' : 'Rouge vainqueur';
+                                                    $scoreMatchesResult = ! $hasCompleteScore || $scoreAValue > $scoreBValue;
                                                 } elseif ($combat->resultat === \App\Models\Combat::RESULT_RIGHT_WIN) {
                                                     $leftState = 'muted';
                                                     $rightState = 'winner';
+                                                    $rightWinnerClass = 'blue-winner';
+                                                    $resultBadgeClass = 'result-blue';
+                                                    $resultLabel = $combat->absence_forfait ? 'Forfait rouge' : 'Bleu vainqueur';
+                                                    $scoreMatchesResult = ! $hasCompleteScore || $scoreBValue > $scoreAValue;
+                                                } elseif ($combat->resultat === \App\Models\Combat::RESULT_DRAW) {
+                                                    $resultBadgeClass = 'result-draw';
+                                                    $resultLabel = 'Match nul';
+                                                    $scoreMatchesResult = ! $hasCompleteScore || $scoreAValue === $scoreBValue;
                                                 } elseif ($combat->resultat === \App\Models\Combat::RESULT_NO_CONTEST) {
                                                     $leftState = 'muted';
                                                     $rightState = 'muted';
+                                                    $resultBadgeClass = 'result-none';
+                                                    $resultLabel = 'Combat non effectué';
+                                                }
+
+                                                if ($combat->statut === \App\Models\Combat::STATUS_FINISHED && ! $scoreMatchesResult) {
+                                                    $resultBadgeClass = 'result-check';
+                                                    $resultLabel = 'À vérifier';
                                                 }
                                             @endphp
                                             <form id="combat-{{ $combat->id }}" @class(['combat-row', 'is-finished' => $combat->statut === \App\Models\Combat::STATUS_FINISHED]) method="POST" action="{{ route('competitions.combats.update', [$competition, $combat]) }}" data-combat-row>
@@ -4778,26 +5484,47 @@
                                                         {{ $combat->statut === \App\Models\Combat::STATUS_FINISHED ? 'Terminé' : 'À saisir' }}
                                                     </span>
                                                 </span>
-                                                <button @class(['combat-fighter-button', 'selected' => $combat->resultat === \App\Models\Combat::RESULT_LEFT_WIN, $leftState]) type="button" data-result-button data-result-value="{{ \App\Models\Combat::RESULT_LEFT_WIN }}" @disabled($combat->statut === \App\Models\Combat::STATUS_FINISHED)>
-                                                    🟥
-                                                    <span class="combat-fighter-name">{{ $combat->inscriptionA->participantSource->last_name }} {{ $combat->inscriptionA->participantSource->first_name }}</span>
-                                                    <span class="combat-fighter-club">({{ $combat->inscriptionA->club->name }})</span>
+                                                <button @class(['combat-fighter-button', 'selected' => $combat->resultat === \App\Models\Combat::RESULT_LEFT_WIN, $leftState, $leftWinnerClass]) type="button" data-result-button data-result-value="{{ \App\Models\Combat::RESULT_LEFT_WIN }}" @disabled($combat->statut === \App\Models\Combat::STATUS_FINISHED)>
+                                                    <span class="combat-color-chip red" aria-hidden="true"></span>
+                                                    <span class="sr-only">🟥</span>
+                                                    <span class="combat-fighter-text">
+                                                        <span class="combat-fighter-name">{{ $combat->inscriptionA->participantSource->last_name }} {{ $combat->inscriptionA->participantSource->first_name }}</span>
+                                                        <span class="combat-fighter-club">{{ $combat->inscriptionA->club->name }}</span>
+                                                    </span>
                                                 </button>
-                                                <strong class="combat-vs">vs</strong>
-                                                <button @class(['combat-fighter-button', 'selected' => $combat->resultat === \App\Models\Combat::RESULT_RIGHT_WIN, $rightState]) type="button" data-result-button data-result-value="{{ \App\Models\Combat::RESULT_RIGHT_WIN }}" @disabled($combat->statut === \App\Models\Combat::STATUS_FINISHED)>
-                                                    🟦
-                                                    <span class="combat-fighter-name">{{ $combat->inscriptionB->participantSource->last_name }} {{ $combat->inscriptionB->participantSource->first_name }}</span>
-                                                    <span class="combat-fighter-club">({{ $combat->inscriptionB->club->name }})</span>
+                                                <div class="combat-score-box">
+                                                    <div class="combat-score-readonly" data-combat-score-readonly>
+                                                        <span data-score-a-display>{{ $combat->score_a ?? '-' }}</span>
+                                                        <span>-</span>
+                                                        <span data-score-b-display>{{ $combat->score_b ?? '-' }}</span>
+                                                    </div>
+                                                    <div class="combat-score-fields">
+                                                        <input class="combat-score-red" id="score_a_{{ $combat->id }}" name="score_a" type="number" min="0" inputmode="numeric" placeholder="-" value="{{ old('score_a', $combat->score_a) }}" data-combat-control @disabled($combat->statut === \App\Models\Combat::STATUS_FINISHED)>
+                                                        <span class="combat-score-separator">-</span>
+                                                        <input class="combat-score-blue" id="score_b_{{ $combat->id }}" name="score_b" type="number" min="0" inputmode="numeric" placeholder="-" value="{{ old('score_b', $combat->score_b) }}" data-combat-control @disabled($combat->statut === \App\Models\Combat::STATUS_FINISHED)>
+                                                    </div>
+                                                    <div class="combat-quick-results">
+                                                        <button @class(['combat-choice-button', 'combat-result-draw', 'selected' => $combat->resultat === \App\Models\Combat::RESULT_DRAW]) type="button" data-result-button data-result-value="{{ \App\Models\Combat::RESULT_DRAW }}" title="Nul" @disabled($combat->statut === \App\Models\Combat::STATUS_FINISHED)>Nul</button>
+                                                        <button @class(['combat-choice-button', 'combat-result-none', 'selected' => $combat->resultat === \App\Models\Combat::RESULT_NO_CONTEST]) type="button" data-result-button data-result-value="{{ \App\Models\Combat::RESULT_NO_CONTEST }}" title="Pas de combat" @disabled($combat->statut === \App\Models\Combat::STATUS_FINISHED)>NF</button>
+                                                    </div>
+                                                </div>
+                                                <button @class(['combat-fighter-button', 'selected' => $combat->resultat === \App\Models\Combat::RESULT_RIGHT_WIN, $rightState, $rightWinnerClass]) type="button" data-result-button data-result-value="{{ \App\Models\Combat::RESULT_RIGHT_WIN }}" @disabled($combat->statut === \App\Models\Combat::STATUS_FINISHED)>
+                                                    <span class="combat-color-chip blue" aria-hidden="true"></span>
+                                                    <span class="sr-only">🟦</span>
+                                                    <span class="combat-fighter-text">
+                                                        <span class="combat-fighter-name">{{ $combat->inscriptionB->participantSource->last_name }} {{ $combat->inscriptionB->participantSource->first_name }}</span>
+                                                        <span class="combat-fighter-club">{{ $combat->inscriptionB->club->name }}</span>
+                                                    </span>
                                                 </button>
-                                                <button @class(['combat-choice-button', 'combat-result-draw', 'selected' => $combat->resultat === \App\Models\Combat::RESULT_DRAW]) type="button" data-result-button data-result-value="{{ \App\Models\Combat::RESULT_DRAW }}" title="Nul" @disabled($combat->statut === \App\Models\Combat::STATUS_FINISHED)>🤝</button>
-                                                <button @class(['combat-choice-button', 'combat-result-none', 'selected' => $combat->resultat === \App\Models\Combat::RESULT_NO_CONTEST]) type="button" data-result-button data-result-value="{{ \App\Models\Combat::RESULT_NO_CONTEST }}" title="Pas de combat" @disabled($combat->statut === \App\Models\Combat::STATUS_FINISHED)>🚫</button>
                                                 <input type="hidden" name="resultat" value="{{ old('resultat', $combat->resultat) }}" data-result-input>
-                                                <input class="combat-score-red" id="score_a_{{ $combat->id }}" name="score_a" type="number" min="0" inputmode="numeric" placeholder="Rouge" value="{{ old('score_a', $combat->score_a) }}" data-combat-control @disabled($combat->statut === \App\Models\Combat::STATUS_FINISHED)>
-                                                <input class="combat-score-blue" id="score_b_{{ $combat->id }}" name="score_b" type="number" min="0" inputmode="numeric" placeholder="Bleu" value="{{ old('score_b', $combat->score_b) }}" data-combat-control @disabled($combat->statut === \App\Models\Combat::STATUS_FINISHED)>
-                                                <input class="combat-comment" id="commentaire_{{ $combat->id }}" name="commentaire" type="text" placeholder="Commentaire" value="{{ old('commentaire', $combat->commentaire) }}" data-combat-control @disabled($combat->statut === \App\Models\Combat::STATUS_FINISHED)>
+                                                <div class="combat-result-panel">
+                                                    <span class="combat-result-badge {{ $resultBadgeClass }}" data-combat-result-badge>{{ $resultLabel }}</span>
+                                                    <input class="combat-comment" id="commentaire_{{ $combat->id }}" name="commentaire" type="text" placeholder="Commentaire" value="{{ old('commentaire', $combat->commentaire) }}" data-combat-control @disabled($combat->statut === \App\Models\Combat::STATUS_FINISHED)>
+                                                    <p @class(['combat-comment-readonly', 'is-empty' => blank($combat->commentaire)]) data-combat-comment-readonly>{{ $combat->commentaire }}</p>
+                                                </div>
 
 	                                                <div class="combat-actions">
-	                                                    <button type="submit" title="Valider" aria-label="Valider" data-combat-validate @disabled($combat->statut === \App\Models\Combat::STATUS_FINISHED)>✔</button>
+	                                                    <button type="submit" data-combat-validate @disabled($combat->statut === \App\Models\Combat::STATUS_FINISHED) title="Valider" aria-label="Valider" @if ($combat->statut !== \App\Models\Combat::STATUS_FINISHED) data-combat-saisie @endif>{{ $combat->statut === \App\Models\Combat::STATUS_FINISHED ? '✔' : 'Saisir' }}</button>
 	                                                    <button type="button" title="Modifier" aria-label="Modifier" data-combat-edit @disabled($combat->statut !== \App\Models\Combat::STATUS_FINISHED)>✏️</button>
 	                                                    <button class="combat-clear-button" type="submit" name="action" value="clear" formnovalidate title="Effacer" aria-label="Effacer" data-combat-clear @disabled($combat->statut !== \App\Models\Combat::STATUS_FINISHED)>🗑️</button>
                                                         <button type="button" title="Annuler" aria-label="Annuler" data-combat-cancel disabled>✖</button>
@@ -5005,6 +5732,43 @@
                 input?.addEventListener('input', updateChecklist);
                 items.forEach((item) => item.querySelector('input[type="checkbox"]')?.addEventListener('change', updateChecklist));
                 updateChecklist();
+            });
+
+            document.querySelectorAll('[data-club-add-cancel]').forEach((button) => {
+                button.addEventListener('click', () => {
+                    const panel = button.closest('[data-club-add-panel]');
+                    const form = button.closest('form');
+                    form?.reset();
+                    panel?.removeAttribute('open');
+                    form?.querySelector('[data-searchable-checklist-input]')?.dispatchEvent(new Event('input', { bubbles: true }));
+                });
+            });
+
+            document.querySelectorAll('[data-participant-form-toggle]').forEach((button) => {
+                button.addEventListener('click', () => {
+                    const target = button.dataset.participantFormToggle;
+                    const panel = document.querySelector(`[data-participant-form-panel="${target}"]`);
+                    const shouldOpen = ! panel?.classList.contains('is-open');
+
+                    document.querySelectorAll('[data-participant-form-panel]').forEach((formPanel) => {
+                        formPanel.classList.remove('is-open');
+                    });
+
+                    if (shouldOpen) {
+                        panel?.classList.add('is-open');
+                    }
+                });
+            });
+
+            document.querySelectorAll('[data-participant-toggle]').forEach((button) => {
+                button.addEventListener('click', () => {
+                    const group = button.dataset.participantToggle;
+                    const rows = Array.from(document.querySelectorAll(`[data-participant-row-extra="${group}"]`));
+                    const shouldExpand = rows.some((row) => row.classList.contains('is-hidden'));
+
+                    rows.forEach((row) => row.classList.toggle('is-hidden', ! shouldExpand));
+                    button.textContent = shouldExpand ? button.dataset.expandedLabel : button.dataset.collapsedLabel;
+                });
             });
 
             const competitionNameDisplay = document.querySelector('[data-competition-name-display]');
@@ -5551,30 +6315,120 @@
                 }
 
                 input.value = result;
+                const badge = row.querySelector('[data-combat-result-badge]');
+                const resultLabels = {
+                    '{{ \App\Models\Combat::RESULT_LEFT_WIN }}': 'Rouge vainqueur',
+                    '{{ \App\Models\Combat::RESULT_RIGHT_WIN }}': 'Bleu vainqueur',
+                    '{{ \App\Models\Combat::RESULT_DRAW }}': 'Match nul',
+                    '{{ \App\Models\Combat::RESULT_NO_CONTEST }}': 'Combat non effectué',
+                    '': 'À venir',
+                };
+                const resultClasses = {
+                    '{{ \App\Models\Combat::RESULT_LEFT_WIN }}': 'result-red',
+                    '{{ \App\Models\Combat::RESULT_RIGHT_WIN }}': 'result-blue',
+                    '{{ \App\Models\Combat::RESULT_DRAW }}': 'result-draw',
+                    '{{ \App\Models\Combat::RESULT_NO_CONTEST }}': 'result-none',
+                    '': 'result-upcoming',
+                };
 
                 row.querySelectorAll('[data-result-button]').forEach((button) => {
                     button.classList.toggle('selected', button.dataset.resultValue === result);
-                    button.classList.remove('winner', 'muted');
+                    button.classList.remove('winner', 'muted', 'red-winner', 'blue-winner');
                 });
 
                 const leftButton = row.querySelector('[data-result-value="{{ \App\Models\Combat::RESULT_LEFT_WIN }}"]');
                 const rightButton = row.querySelector('[data-result-value="{{ \App\Models\Combat::RESULT_RIGHT_WIN }}"]');
 
                 if (result === '{{ \App\Models\Combat::RESULT_LEFT_WIN }}') {
-                    leftButton?.classList.add('winner');
+                    leftButton?.classList.add('winner', 'red-winner');
                     rightButton?.classList.add('muted');
                 } else if (result === '{{ \App\Models\Combat::RESULT_RIGHT_WIN }}') {
                     leftButton?.classList.add('muted');
-                    rightButton?.classList.add('winner');
+                    rightButton?.classList.add('winner', 'blue-winner');
 	                } else if (result === '{{ \App\Models\Combat::RESULT_NO_CONTEST }}') {
 	                    leftButton?.classList.add('muted');
 	                    rightButton?.classList.add('muted');
 		                }
 
+                if (badge) {
+                    badge.classList.remove('result-red', 'result-blue', 'result-draw', 'result-none', 'result-upcoming', 'result-check');
+                    badge.classList.add(resultClasses[result] || 'result-upcoming');
+                    badge.textContent = resultLabels[result] || 'À venir';
+                }
+
 	                if (markAsModified) {
 	                    setCombatEditing(row, true);
 	                }
 		            };
+
+	            const updateCombatReadOnlyDisplays = (row) => {
+	                const scoreAInput = row.querySelector('[name="score_a"]');
+	                const scoreBInput = row.querySelector('[name="score_b"]');
+	                const commentInput = row.querySelector('[name="commentaire"]');
+	                const scoreADisplay = row.querySelector('[data-score-a-display]');
+	                const scoreBDisplay = row.querySelector('[data-score-b-display]');
+	                const commentDisplay = row.querySelector('[data-combat-comment-readonly]');
+	                const badge = row.querySelector('[data-combat-result-badge]');
+	                const result = row.querySelector('[data-result-input]')?.value || '';
+	                const scoreA = scoreAInput?.value ?? '';
+	                const scoreB = scoreBInput?.value ?? '';
+
+	                if (scoreADisplay) {
+	                    scoreADisplay.textContent = scoreA !== '' ? scoreA : '-';
+	                }
+
+	                if (scoreBDisplay) {
+	                    scoreBDisplay.textContent = scoreB !== '' ? scoreB : '-';
+	                }
+
+	                if (commentDisplay) {
+	                    const comment = commentInput?.value || '';
+	                    commentDisplay.textContent = comment;
+	                    commentDisplay.classList.toggle('is-empty', ! comment);
+	                }
+
+	                if (! badge) {
+	                    return;
+	                }
+
+	                const resultLabels = {
+	                    '{{ \App\Models\Combat::RESULT_LEFT_WIN }}': 'Rouge vainqueur',
+	                    '{{ \App\Models\Combat::RESULT_RIGHT_WIN }}': 'Bleu vainqueur',
+	                    '{{ \App\Models\Combat::RESULT_DRAW }}': 'Match nul',
+	                    '{{ \App\Models\Combat::RESULT_NO_CONTEST }}': 'Combat non effectué',
+	                    '': 'À venir',
+	                };
+	                const resultClasses = {
+	                    '{{ \App\Models\Combat::RESULT_LEFT_WIN }}': 'result-red',
+	                    '{{ \App\Models\Combat::RESULT_RIGHT_WIN }}': 'result-blue',
+	                    '{{ \App\Models\Combat::RESULT_DRAW }}': 'result-draw',
+	                    '{{ \App\Models\Combat::RESULT_NO_CONTEST }}': 'result-none',
+	                    '': 'result-upcoming',
+	                };
+	                const scoreANumber = scoreA === '' ? null : Number(scoreA);
+	                const scoreBNumber = scoreB === '' ? null : Number(scoreB);
+	                const hasCompleteScore = Number.isFinite(scoreANumber) && Number.isFinite(scoreBNumber);
+	                let isConsistent = true;
+
+	                if (hasCompleteScore && result === '{{ \App\Models\Combat::RESULT_LEFT_WIN }}') {
+	                    isConsistent = scoreANumber > scoreBNumber;
+	                } else if (hasCompleteScore && result === '{{ \App\Models\Combat::RESULT_RIGHT_WIN }}') {
+	                    isConsistent = scoreBNumber > scoreANumber;
+	                } else if (hasCompleteScore && result === '{{ \App\Models\Combat::RESULT_DRAW }}') {
+	                    isConsistent = scoreANumber === scoreBNumber;
+	                }
+
+	                badge.classList.remove('result-red', 'result-blue', 'result-draw', 'result-none', 'result-upcoming', 'result-check');
+
+	                if (! isConsistent && row.classList.contains('is-finished') && ! row.classList.contains('is-editing')) {
+	                    badge.classList.add('result-check');
+	                    badge.textContent = 'À vérifier';
+	                    return;
+	                }
+
+	                badge.classList.add(resultClasses[result] || 'result-upcoming');
+	                badge.textContent = resultLabels[result] || 'À venir';
+	            };
 
 	            const getCombatState = (row) => ({
 	                result: row.querySelector('[data-result-input]')?.value || '',
@@ -5597,9 +6451,10 @@
 	                const status = row.querySelector('.combat-status');
 
 	                if (validateButton) {
-	                    validateButton.textContent = '✔';
+	                    validateButton.textContent = isEditing ? '✔' : (row.classList.contains('is-finished') ? '✔' : 'Saisir');
 	                    validateButton.title = isEditing ? 'Enregistrer' : 'Valider';
 	                    validateButton.setAttribute('aria-label', isEditing ? 'Enregistrer' : 'Valider');
+                        validateButton.toggleAttribute('data-combat-saisie', ! isEditing && ! row.classList.contains('is-finished'));
 	                }
 
 	                if (editButton && isEditing) {
@@ -5611,7 +6466,7 @@
 	                }
 
 	                if (status && isEditing) {
-	                    status.textContent = 'Modifié';
+	                    status.textContent = 'En modification';
 	                }
 		            };
 
@@ -5626,6 +6481,7 @@
 		                row.querySelector('[name="commentaire"]').value = state.comment;
 		                setCombatResult(row, state.result, false);
 		                setCombatFinished(row, state.isFinished);
+		                updateCombatReadOnlyDisplays(row);
 		            };
 
 	            const setCombatFinished = (row, isFinished) => {
@@ -5644,6 +6500,8 @@
 
                 if (validateButton) {
                     validateButton.disabled = isFinished;
+                    validateButton.textContent = isFinished ? '✔' : 'Saisir';
+                    validateButton.toggleAttribute('data-combat-saisie', ! isFinished);
                 }
 
                 if (editButton) {
@@ -5661,13 +6519,15 @@
                 if (status) {
                     status.textContent = isFinished ? 'Terminé' : 'À saisir';
                 }
+
+	                updateCombatReadOnlyDisplays(row);
             };
 
             const resetCombatRow = (row) => {
                 row.querySelector('[data-result-input]').value = '';
 
                 row.querySelectorAll('[data-result-button]').forEach((button) => {
-                    button.classList.remove('selected', 'winner', 'muted');
+                    button.classList.remove('selected', 'winner', 'muted', 'red-winner', 'blue-winner');
                 });
 
                 row.querySelectorAll('[data-combat-control]').forEach((control) => {
@@ -5675,6 +6535,8 @@
                 });
 
 	                setCombatFinished(row, false);
+                    setCombatResult(row, '', false);
+	                updateCombatReadOnlyDisplays(row);
 	                storeCombatState(row);
 	            };
 
@@ -5737,6 +6599,7 @@
 	            });
 
 	            document.querySelectorAll('[data-combat-row]').forEach((row) => {
+	                updateCombatReadOnlyDisplays(row);
 	                storeCombatState(row);
 
 	                row.addEventListener('submit', (event) => {

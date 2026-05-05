@@ -198,7 +198,7 @@ class PoulePreparationTest extends TestCase
         $this->withSession(['current_user_id' => $userA->id])
             ->get('/competitions/'.$competition->id.'/registrations/'.$registration->id.'/withdraw-assignment')
             ->assertRedirect(route('competitions.show', ['competition' => $competition, 'tab' => 'poules']))
-            ->assertSessionHas('status', 'Utilisez le formulaire pour retirer l affectation.');
+            ->assertSessionHas('status', 'Utilisez le formulaire pour retirer l’affectation.');
 
         $this->assertSame($poule->id, $registration->refresh()->poule_id);
         $this->assertSame($clubA->id, $competition->organizer_club_id);
@@ -865,7 +865,7 @@ class PoulePreparationTest extends TestCase
             ->assertOk()
             ->assertSee('⚠️ 1 participant(s) non validé(s) — continuer quand même ?')
             ->assertSee('👉 Voir les participants')
-            ->assertSee('href="#participants"', false)
+            ->assertSee('href="'.route('competitions.show', ['competition' => $competition, 'tab' => 'participants']).'"', false)
             ->assertSee('data-tab-link-target="participants"', false)
             ->assertSee('1 participant(s) non affecté(s)')
             ->assertSee('1 poule(s) en préparation (non figée(s))')
@@ -877,7 +877,8 @@ class PoulePreparationTest extends TestCase
         $this->withSession(['current_user_id' => $userA->id])
             ->get(route('competitions.show', $competition))
             ->assertOk()
-            ->assertSee('Poules prêtes — tous les participants sont affectés et les poules sont figées');
+            ->assertSee('Les participants validés sont affectés, mais 1 participant(s) restent à valider.')
+            ->assertDontSee('Poules prêtes — tous les participants validés sont affectés et les poules sont figées');
     }
 
     public function test_organizer_can_unfreeze_poule_and_delete_combats_with_score_warning(): void

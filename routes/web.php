@@ -127,8 +127,45 @@ if (! function_exists('combat_work_section')) {
 }
 
 Route::get('/', function () use ($currentDemoUser) {
+    $currentUser = $currentDemoUser();
+    $currentClub = $currentUser?->club;
+    $visibleCompetitions = $currentClub
+        ? Competition::with('organizerClub')->visibleForClub($currentClub)->get()
+        : collect();
+    $today = now()->startOfDay();
+    $upcomingCompetitions = $visibleCompetitions
+        ->filter(fn (Competition $competition) => $competition->date_competition === null || $competition->date_competition->greaterThanOrEqualTo($today))
+        ->sortBy(fn (Competition $competition) => $competition->date_competition?->timestamp ?? PHP_INT_MAX)
+        ->take(3)
+        ->values();
+    $urgentActions = $currentClub
+        ? $visibleCompetitions
+            ->flatMap(fn (Competition $competition) => collect($competition->actionsToDoForClub($currentClub))
+                ->reject(fn (string $action) => $action === 'Aucune action urgente')
+                ->map(fn (string $action) => [
+                    'label' => $action,
+                    'competition' => $competition,
+                ]))
+            ->values()
+        : collect();
+    $nextCompetition = $upcomingCompetitions->first();
+    $competitionIds = $visibleCompetitions->pluck('id');
+    $remainingCombatsCount = Combat::query()
+        ->where('statut', Combat::STATUS_TO_ENTER)
+        ->whereHas('poule', fn ($query) => $query->whereIn('competition_id', $competitionIds))
+        ->count();
+
     return view('welcome', [
-        'currentUser' => $currentDemoUser(),
+        'currentUser' => $currentUser,
+        'competitionCount' => $visibleCompetitions->count(),
+        'urgentActions' => $urgentActions,
+        'upcomingCompetitions' => $upcomingCompetitions,
+        'nextCompetition' => $nextCompetition,
+        'licencieCount' => $currentClub ? Licencie::where('club_id', $currentClub->id)->count() : 0,
+        'participantCount' => $competitionIds->isNotEmpty()
+            ? InscriptionOperationnelle::whereIn('competition_id', $competitionIds)->where('is_active', true)->count()
+            : 0,
+        'remainingCombatsCount' => $remainingCombatsCount,
     ]);
 })->name('home');
 
@@ -643,7 +680,7 @@ Route::post('/competitions/{competition}/poules/{poule}/registrations', function
 
     $registration->update(['poule_id' => $poule->id]);
 
-    return redirect_to_competition_fragment($competition, 'participants-disponibles', 'Participant affecte a la poule.');
+    return redirect_to_competition_fragment($competition, 'participants-disponibles', 'Participant affecté à la poule.');
 })->name('competitions.poules.registrations.store');
 
 Route::get('/competitions/{competition}/poules/{poule}/freeze', function (Competition $competition) {
@@ -819,7 +856,7 @@ Route::patch('/competitions/{competition}/combats/{combat}', function (Request $
 })->name('competitions.combats.update');
 
 Route::get('/competitions/{competition}/registrations/{registration}/withdraw-assignment', function (Competition $competition) {
-    return redirect_to_competition_detail($competition, 'Utilisez le formulaire pour retirer l affectation.', 'poules');
+    return redirect_to_competition_detail($competition, 'Utilisez le formulaire pour retirer l’affectation.', 'poules');
 });
 
 Route::patch('/competitions/{competition}/registrations/{registration}/withdraw-assignment', function (Competition $competition, InscriptionOperationnelle $registration) use ($currentDemoUser) {
@@ -838,7 +875,7 @@ Route::patch('/competitions/{competition}/registrations/{registration}/withdraw-
     $fragment = $registration->poule ? poule_work_section($registration->poule) : participant_work_section($registration);
     $registration->update(['poule_id' => null]);
 
-    return redirect_to_competition_fragment($competition, $fragment, 'Affectation retiree.');
+    return redirect_to_competition_fragment($competition, $fragment, 'Affectation retirée.');
 })->name('competitions.registrations.withdraw-assignment');
 
 Route::get('/competitions/{competition}/registrations/{registration}/move-assignment', function (Competition $competition) {
@@ -908,7 +945,7 @@ Route::post('/competitions/{competition}/invitations', function (Request $reques
 
     if (! $isMultiSelection && $alreadyInvitedClubIds->isNotEmpty()) {
         return back()
-            ->withErrors(['club_id' => 'Ce club est deja invite a cette competition.'])
+            ->withErrors(['club_id' => 'Ce club est déjà invité à cette compétition.'])
             ->withInput();
     }
 
@@ -934,7 +971,7 @@ Route::post('/competitions/{competition}/invitations', function (Request $reques
 })->name('competitions.invitations.store');
 
 Route::get('/competitions/{competition}/invitations/{invitation}/mark-sent', function (Competition $competition) {
-    return redirect_to_competition_detail($competition, 'Utilisez le formulaire pour marquer l invitation envoyee.', 'clubs');
+    return redirect_to_competition_detail($competition, 'Utilisez le formulaire pour marquer l’invitation envoyée.', 'clubs');
 });
 
 Route::post('/competitions/{competition}/invitations/{invitation}/mark-sent', function (Competition $competition, Invitation $invitation) use ($currentDemoUser) {
@@ -948,7 +985,7 @@ Route::post('/competitions/{competition}/invitations/{invitation}/mark-sent', fu
         $invitation->markAsSent();
     }
 
-    return redirect_to_competition_section($competition, 'clubs', 'Invitation marquee comme envoyee.');
+    return redirect_to_competition_section($competition, 'clubs', 'Invitation marquée comme envoyée.');
 })->name('competitions.invitations.mark-sent');
 
 Route::get('/competitions/{competition}/invitations/{invitation}/relaunch', function (Competition $competition) {
@@ -1314,7 +1351,7 @@ Route::patch('/competitions/{competition}/participants/{registration}', function
         'license_number' => $validated['license_number'] ?? null,
     ]);
 
-    return redirect_to_competition_fragment($competition, participant_work_section($registration), 'Participant modifie.');
+    return redirect_to_competition_fragment($competition, participant_work_section($registration), 'Participant modifié.');
 })->name('competitions.participants.update');
 
 Route::get('/competitions/{competition}/participants/{registration}/withdraw', function (Competition $competition) {
@@ -1431,7 +1468,7 @@ Route::patch('/competitions/{competition}/participants/{registration}/reactivate
 
     $registration->update(['is_active' => true]);
 
-    return redirect_to_competition_fragment($competition, 'participants-retires', 'Participant reactive.');
+    return redirect_to_competition_fragment($competition, 'participants-retires', 'Participant réactivé.');
 })->name('competitions.participants.reactivate');
 
 Route::post('/competitions', function (Request $request) use ($currentDemoUser) {
@@ -1450,5 +1487,5 @@ Route::post('/competitions', function (Request $request) use ($currentDemoUser) 
 
     return redirect()
         ->route('competitions.index')
-        ->with('status', 'Competition creee pour '.$currentUser->club->name.'.');
+        ->with('status', 'Compétition créée pour '.$currentUser->club->name.'.');
 })->name('competitions.store');
