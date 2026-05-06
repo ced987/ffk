@@ -4698,6 +4698,11 @@
 
                     <div @class(['participant-form-panel', 'is-open' => $licencieParticipantFormOpen]) data-participant-form-panel="licencies">
                         @if ($currentClubLicencies->isNotEmpty())
+                            @php
+                                $availableLicencieCount = $currentClubLicencies
+                                    ->reject(fn ($licencie) => $registeredLicencieIds->contains($licencie->id))
+                                    ->count();
+                            @endphp
                             <form method="POST" action="{{ route('competitions.participants.store-from-licencie', $competition) }}">
                                 @csrf
 
@@ -4710,7 +4715,7 @@
 
                                         <div class="searchable-checklist-meta">
                                             <span data-searchable-checklist-count>0 sélectionné(s)</span>
-                                            <span>{{ $currentClubLicencies->count() }} licencié(s)</span>
+                                            <span>{{ $availableLicencieCount }} disponible(s) sur {{ $currentClubLicencies->count() }} licencié(s)</span>
                                         </div>
                                     </div>
 
