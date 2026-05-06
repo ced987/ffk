@@ -210,14 +210,10 @@ Route::get('/guide/jeu-test-demo', function () {
 })->name('guide.jeu-test-demo');
 
 Route::get('/demo/reset', function () {
-    abort_if(app()->environment('production'), 404);
-
     return view('demo.reset');
 })->name('demo.reset');
 
 Route::post('/demo/reset', function (Request $request) {
-    abort_if(app()->environment('production'), 404);
-
     $request->validate([
         'password' => ['required', 'string'],
     ]);
@@ -236,14 +232,23 @@ Route::post('/demo/reset', function (Request $request) {
             ->withInput();
     }
 
+    $helpVideoIframe = Setting::where('key', 'help_video_iframe')->value('value');
+
     Artisan::call('migrate:fresh', [
         '--seed' => true,
         '--force' => true,
     ]);
 
+    if (filled($helpVideoIframe)) {
+        Setting::updateOrCreate(
+            ['key' => 'help_video_iframe'],
+            ['value' => $helpVideoIframe],
+        );
+    }
+
     return redirect()
-        ->route('demo.reset')
-        ->with('status', 'Démo réinitialisée.');
+        ->route('guide')
+        ->with('status', 'Démo réinitialisée avec succès.');
 })->name('demo.reset.run');
 
 Route::get('/licencies', function () use ($currentDemoUser) {

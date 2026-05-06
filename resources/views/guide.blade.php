@@ -55,6 +55,16 @@
             text-decoration: none;
         }
 
+        .status-message {
+            margin-bottom: 18px;
+            padding: 10px 12px;
+            border: 1px solid #86efac;
+            border-radius: 8px;
+            background: #f0fdf4;
+            color: #166534;
+            font-weight: 700;
+        }
+
         a {
             color: #1d4ed8;
         }
@@ -110,6 +120,10 @@
 <main>
 <div class="guide">
 
+    @if (session('status'))
+        <div class="status-message">{{ session('status') }}</div>
+    @endif
+
     @if (filled($helpVideoIframe))
         <div class="guide-video">
             {!! $helpVideoIframe !!}
@@ -129,11 +143,9 @@
             <a href="{{ route('guide.jeu-test-demo') }}">
                 🧪 Jeu de test démo
             </a>
-            @if (! app()->environment('production'))
-                <a href="{{ route('demo.reset') }}">
-                    ♻️ Réinitialiser cette démo
-                </a>
-            @endif
+            <a href="{{ route('demo.reset') }}">
+                ♻️ Réinitialiser cette démo
+            </a>
         </div>
     @else
         <p class="back-link">

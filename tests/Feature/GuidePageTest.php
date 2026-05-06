@@ -62,6 +62,12 @@ class GuidePageTest extends TestCase
     public function test_demo_reset_page_runs_seed_reset_with_valid_password(): void
     {
         config(['demo.reset_password' => 'secret-demo']);
+        $iframe = '<iframe width="100%" height="400" src="https://www.youtube.com/embed/demo-video" frameborder="0" allowfullscreen></iframe>';
+
+        Setting::create([
+            'key' => 'help_video_iframe',
+            'value' => $iframe,
+        ]);
 
         Artisan::shouldReceive('call')
             ->once()
@@ -74,8 +80,13 @@ class GuidePageTest extends TestCase
         $this->post(route('demo.reset.run'), [
             'password' => 'secret-demo',
         ])
-            ->assertRedirect(route('demo.reset'))
-            ->assertSessionHas('status', 'Démo réinitialisée.');
+            ->assertRedirect(route('guide'))
+            ->assertSessionHas('status', 'Démo réinitialisée avec succès.');
+
+        $this->assertDatabaseHas('settings', [
+            'key' => 'help_video_iframe',
+            'value' => $iframe,
+        ]);
     }
 
     public function test_help_video_can_be_changed_from_demo_user_page(): void

@@ -158,7 +158,7 @@
         <p>Cette action remet les données de démonstration dans leur état initial.</p>
 
         <div class="reset-warning">
-            Cette action est réservée à la démonstration et n’est pas disponible en production.
+            Cette action est réservée à la démonstration et nécessite le mot de passe défini dans l’environnement.
         </div>
 
         <div>
