@@ -135,6 +135,22 @@
             box-shadow: none;
         }
 
+        .competition-list li[data-card-url] {
+            cursor: pointer;
+            transition: background 140ms ease, box-shadow 140ms ease;
+        }
+
+        .competition-list li[data-card-url]:hover {
+            background: #f8fbff;
+        }
+
+        .competition-list li[data-card-url]:focus-visible {
+            position: relative;
+            z-index: 1;
+            outline: 2px solid #2563eb;
+            outline-offset: -2px;
+        }
+
         .competition-list li.demo-competition {
             background: #fbfdff;
         }
@@ -498,7 +514,13 @@
                         @php($date = $competition->date_competition)
                         @php($dateMonth = $date ? $dateMonths[$date->month] : 'DATE')
                         @php($dateWeekday = $date ? $dateWeekdays[$date->dayOfWeekIso] : 'N/R')
-                        <li @class(['demo-competition' => $isDemoCompetition])>
+                        <li
+                            @class(['demo-competition' => $isDemoCompetition])
+                            data-card-url="{{ $competitionUrl }}"
+                            role="link"
+                            tabindex="0"
+                            aria-label="Ouvrir {{ $competition->name }}"
+                        >
                             <span class="competition-date-card">
                                 <strong>{{ $dateMonth }}</strong>
                                 <span>{{ $date?->format('d') ?? '--' }}</span>
@@ -544,3 +566,29 @@
         @endforeach
     </main>
 @endsection
+
+@push('scripts')
+<script>
+    document.querySelectorAll('[data-card-url]').forEach((card) => {
+        const interactiveSelector = 'a, button, input, select, textarea, label, [role="button"]';
+
+        const openCard = (event) => {
+            if (event.target.closest(interactiveSelector)) {
+                return;
+            }
+
+            window.location.href = card.dataset.cardUrl;
+        };
+
+        card.addEventListener('click', openCard);
+        card.addEventListener('keydown', (event) => {
+            if (event.key !== 'Enter' && event.key !== ' ') {
+                return;
+            }
+
+            event.preventDefault();
+            openCard(event);
+        });
+    });
+</script>
+@endpush

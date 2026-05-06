@@ -313,9 +313,32 @@
                         @php
                             preg_match('/\d+/', $action['label'], $matches);
                             $actionCount = $matches[0] ?? '!';
+                            $actionText = mb_strtolower($action['label']);
+                            $actionTab = 'suivi';
+                            $actionFragment = null;
+
+                            if (str_contains($actionText, 'valider') && str_contains($actionText, 'participant')) {
+                                $actionTab = 'participants';
+                                $actionFragment = 'participants-non-valides';
+                            } elseif (str_contains($actionText, 'affecter') && str_contains($actionText, 'poule')) {
+                                $actionTab = 'poules';
+                                $actionFragment = 'participants-disponibles';
+                            } elseif (
+                                str_contains($actionText, 'saisir')
+                                || str_contains($actionText, 'score')
+                                || str_contains($actionText, 'combat')
+                            ) {
+                                $actionTab = 'combats';
+                            }
+
+                            $actionUrl = route('competitions.show', ['competition' => $action['competition'], 'tab' => $actionTab]);
+
+                            if ($actionFragment) {
+                                $actionUrl .= '#'.$actionFragment;
+                            }
                         @endphp
                         <li>
-                            <a class="home-action-row" href="{{ route('competitions.show', ['competition' => $action['competition'], 'tab' => 'suivi']) }}">
+                            <a class="home-action-row" href="{{ $actionUrl }}">
                                 <span class="home-action-count">{{ $actionCount }}</span>
                                 <span>
                                     <strong>{{ $action['label'] }}</strong>

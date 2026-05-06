@@ -2004,6 +2004,26 @@
             background: #ffffff;
         }
 
+        .searchable-checklist-item.is-disabled {
+            cursor: not-allowed;
+            border-color: #d8dee7;
+            background: #f1f5f9;
+            opacity: 0.72;
+            pointer-events: none;
+        }
+
+        .searchable-checklist-item.is-disabled strong {
+            color: #475569;
+        }
+
+        .searchable-checklist-item.is-disabled span {
+            color: #7c8ca0;
+        }
+
+        .searchable-checklist-item.is-disabled input {
+            cursor: not-allowed;
+        }
+
         .searchable-checklist-item input {
             width: auto;
             margin: 0;
@@ -4701,7 +4721,7 @@
                                                 $licencieDetails = "{$licencie->date_naissance->age} ans · {$licencie->poids} kg";
                                                 $licencieSearchText = \Illuminate\Support\Str::lower("{$licencie->nom} {$licencie->prenom} {$currentUser->club->name}");
                                             @endphp
-                                            <label class="searchable-checklist-item" data-searchable-checklist-item data-search-text="{{ $licencieSearchText }}">
+                                            <label @class(['searchable-checklist-item', 'is-disabled' => $isLicencieAlreadyRegistered]) data-searchable-checklist-item data-search-text="{{ $licencieSearchText }}" @if($isLicencieAlreadyRegistered) aria-disabled="true" @endif>
                                                 <input type="checkbox" name="licencie_ids[]" value="{{ $licencie->id }}" @checked(collect(old('licencie_ids', []))->contains((string) $licencie->id)) @disabled($isLicencieAlreadyRegistered)>
                                                 <span class="searchable-checklist-line">
                                                     <strong>{{ $licencie->nom }} {{ $licencie->prenom }}</strong>
