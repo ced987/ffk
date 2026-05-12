@@ -249,6 +249,87 @@
         font-size: 14px;
     }
 
+    .home-splash {
+        position: fixed;
+        inset: 0;
+        z-index: 5000;
+        display: grid;
+        place-items: center;
+        padding: 24px;
+        background: radial-gradient(circle at 50% 35%, rgba(29, 78, 216, 0.28), transparent 34%), #0b1733;
+        color: #ffffff;
+        transition: opacity 900ms ease, visibility 900ms ease;
+    }
+
+    .home-splash.is-hidden {
+        visibility: hidden;
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    .home-splash-card {
+        display: grid;
+        justify-items: center;
+        gap: 12px;
+        text-align: center;
+        animation: splashEnter 700ms ease both;
+    }
+
+    .home-splash-logo {
+        width: min(286px, 82vw);
+        height: auto;
+        object-fit: contain;
+        filter: drop-shadow(0 18px 34px rgba(0, 0, 0, 0.34));
+    }
+
+    .home-splash-title {
+        margin: 8px 0 0;
+        font-size: clamp(24px, 4vw, 36px);
+        font-weight: 850;
+        letter-spacing: 0;
+    }
+
+    .home-splash-subtitle {
+        margin: 0;
+        color: #cbd5e1;
+        font-size: 15px;
+        font-weight: 750;
+    }
+
+    .home-splash-skip {
+        margin-top: 10px;
+        padding: 7px 12px;
+        border: 1px solid rgba(255, 255, 255, 0.28);
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.08);
+        color: #e5edf8;
+        cursor: pointer;
+        font-weight: 800;
+    }
+
+    .home-splash-skip:hover {
+        background: rgba(255, 255, 255, 0.14);
+    }
+
+    @keyframes splashEnter {
+        from {
+            opacity: 0;
+            transform: translateY(10px) scale(0.98);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .home-splash,
+        .home-splash-card {
+            animation: none;
+            transition: none;
+        }
+    }
+
     @media (max-width: 980px) {
         .home-kpi-grid,
         .home-content-grid,
@@ -265,6 +346,15 @@
 @endpush
 
 @section('content')
+<div class="home-splash" data-home-splash>
+    <div class="home-splash-card">
+        <img class="home-splash-logo" src="{{ asset('images/interclub_ffka.png') }}" alt="Interclub FFK">
+        <p class="home-splash-title">Organisez vos interclubs simplement</p>
+        <p class="home-splash-subtitle">Clubs • Participants • Poules • Combats</p>
+        <button class="home-splash-skip" type="button" data-home-splash-skip>Passer</button>
+    </div>
+</div>
+
 <main class="home-dashboard">
     <div class="home-hero">
         <div>
@@ -418,3 +508,35 @@
     </section>
 </main>
 @endsection
+
+@push('scripts')
+<script>
+    (() => {
+        const splash = document.querySelector('[data-home-splash]');
+        const skipButton = document.querySelector('[data-home-splash-skip]');
+        const storageKey = 'ffk-home-splash-seen';
+        const forceIntro = new URLSearchParams(window.location.search).get('intro') === '1';
+
+        if (! splash) {
+            return;
+        }
+
+        const hideSplash = () => {
+            splash.classList.add('is-hidden');
+            sessionStorage.setItem(storageKey, '1');
+        };
+
+        if (! forceIntro && sessionStorage.getItem(storageKey) === '1') {
+            hideSplash();
+            return;
+        }
+
+        const timer = window.setTimeout(hideSplash, 3300);
+
+        skipButton?.addEventListener('click', () => {
+            window.clearTimeout(timer);
+            hideSplash();
+        });
+    })();
+</script>
+@endpush

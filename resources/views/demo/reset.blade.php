@@ -66,6 +66,9 @@
         }
 
         .reset-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
             min-height: 36px;
             padding: 8px 12px;
             border: 1px solid #b91c1c;
@@ -74,6 +77,13 @@
             color: #b91c1c;
             cursor: pointer;
             font-weight: 800;
+            text-decoration: none;
+        }
+
+        .reset-button.demo-launch {
+            border-color: #1d4ed8;
+            background: #1d4ed8;
+            color: #ffffff;
         }
 
         .reset-confirmation[hidden] {
@@ -194,6 +204,7 @@
 
             <div class="reset-actions">
                 <button class="reset-button" type="button" data-reset-open-confirmation>Remettre à zéro la démo</button>
+                <a class="reset-button demo-launch" href="{{ route('home', ['intro' => 1]) }}">Relancer la démo avec animation</a>
                 <a class="reset-link" href="{{ route('guide') }}">Annuler</a>
             </div>
 

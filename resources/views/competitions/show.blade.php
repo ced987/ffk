@@ -2352,6 +2352,228 @@
             font-size: 13px;
         }
 
+        .app-page .competition-page .tab-button.is-active[data-tab-target="participants"]::after {
+            background: linear-gradient(90deg, #1d4ed8 0%, #dc2626 100%);
+        }
+
+        #participants {
+            --participant-navy: #0b1733;
+            --participant-red: #dc2626;
+            --participant-blue: #1d4ed8;
+        }
+
+        #participants h2 {
+            margin-bottom: 6px;
+        }
+
+        #participants .section-intro {
+            margin: 8px 0 12px;
+            color: #526078;
+        }
+
+        #participants .participant-registration-tools {
+            display: flex;
+            justify-content: flex-end;
+            margin: 0 0 8px;
+            padding-top: 0;
+            border-top: 0;
+        }
+
+        .app-page .competition-page #participants .participant-registration-tools button {
+            min-height: 32px;
+            margin: 0;
+            padding: 6px 10px;
+            border-color: #cbd5e1;
+            background: #ffffff;
+            color: #334155;
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .app-page .competition-page #participants .participant-registration-tools button:hover {
+            border-color: #94a3b8;
+            background: #f8fafc;
+        }
+
+        #participants .summary-grid {
+            gap: 12px;
+            margin: 14px 0 12px;
+        }
+
+        #participants .summary-item {
+            position: relative;
+            display: grid;
+            gap: 5px;
+            align-items: center;
+            padding: 12px 14px 12px 16px;
+            overflow: hidden;
+            border-color: #dbe3ef;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #ffffff 0%, #f8fbff 100%);
+            box-shadow: 0 8px 18px rgba(15, 23, 42, 0.035);
+        }
+
+        #participants .summary-item::before {
+            content: "";
+            position: absolute;
+            top: 12px;
+            bottom: 12px;
+            left: 0;
+            width: 4px;
+            border-radius: 0 999px 999px 0;
+            background: var(--participant-blue);
+        }
+
+        #participants .summary-item:nth-child(2)::before {
+            background: #16a34a;
+        }
+
+        #participants .summary-item:nth-child(3)::before {
+            background: #f97316;
+        }
+
+        #participants .summary-item strong {
+            margin: 0;
+            color: var(--participant-navy);
+            font-size: 24px;
+            line-height: 1;
+        }
+
+        #participants .summary-item span {
+            color: #64748b;
+            font-size: 12px;
+            font-weight: 750;
+            line-height: 1.25;
+        }
+
+        .app-page .competition-page .participant-action-toggle {
+            border: 1px solid #0b1733;
+            background: linear-gradient(135deg, #102047 0%, #1d4ed8 100%);
+            color: #ffffff;
+            box-shadow: 0 8px 16px rgba(29, 78, 216, 0.18);
+        }
+
+        .app-page .competition-page .participant-action-toggle:hover {
+            border-color: #1e40af;
+            background: linear-gradient(135deg, #0b1733 0%, #1d4ed8 100%);
+        }
+
+        .app-page .competition-page .participant-action-toggle.secondary {
+            border-color: #cbd5e1;
+            background: #ffffff;
+            color: var(--participant-navy);
+            box-shadow: none;
+        }
+
+        .app-page .competition-page .participant-action-toggle.secondary:hover {
+            border-color: #94a3b8;
+            background: #f8fafc;
+        }
+
+        #participants .participant-section-card {
+            border-color: #dbe3ef;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(15, 23, 42, 0.04);
+        }
+
+        #participants .participant-section-header {
+            background: linear-gradient(90deg, #f8fafc 0%, #ffffff 100%);
+        }
+
+        #participants .participant-section-header h3 {
+            color: var(--participant-navy);
+            font-weight: 850;
+        }
+
+        #participants .participant-section-count {
+            border-color: #dbe3ef;
+            background: #ffffff;
+            color: #475569;
+        }
+
+        #participants .participant-table {
+            border-color: #edf1f6;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        #participants .participant-table th {
+            background: #f8fafc;
+            color: #475569;
+            font-size: 11.5px;
+            letter-spacing: 0.02em;
+            text-transform: uppercase;
+        }
+
+        #participants .participant-table td {
+            padding: 9px 11px;
+            color: #334155;
+            vertical-align: middle;
+        }
+
+        #participants .participant-table tbody tr:hover {
+            background: #fbfdff;
+        }
+
+        #participants .participant-name-line strong {
+            color: #17202a;
+        }
+
+        #participants .participant-actions {
+            gap: 6px;
+        }
+
+        .app-page .competition-page #participants .participant-actions button,
+        .app-page .competition-page #participants .participant-actions a {
+            min-height: 30px;
+            padding: 5px 9px;
+            border-radius: 999px;
+            font-weight: 800;
+        }
+
+        .app-page .competition-page #participants .participant-actions button:not(.withdraw-button),
+        .app-page .competition-page #participants .participant-actions a,
+        .app-page .competition-page #participants .reactivate-button {
+            border-color: #bfdbfe;
+            background: #eff6ff;
+            color: #1d4ed8;
+        }
+
+        .app-page .competition-page #participants .participant-actions button:not(.withdraw-button):hover,
+        .app-page .competition-page #participants .participant-actions a:hover,
+        .app-page .competition-page #participants .reactivate-button:hover {
+            border-color: #93c5fd;
+            background: #dbeafe;
+        }
+
+        .app-page .competition-page #participants .withdraw-button {
+            border-color: #fecaca;
+            background: #fffafa;
+            color: #b91c1c;
+        }
+
+        .app-page .competition-page #participants .withdraw-button:hover {
+            border-color: #fca5a5;
+            background: #fff1f2;
+        }
+
+        .app-page .competition-page #participants .participant-filter-actions button {
+            border-color: var(--participant-navy);
+            background: var(--participant-navy);
+            color: #ffffff;
+        }
+
+        .app-page .competition-page #participants .participant-filter-actions button:hover {
+            border-color: #172554;
+            background: #172554;
+        }
+
+        .app-page .competition-page #participants .participant-filter-actions a {
+            border-color: #cbd5e1;
+            background: #ffffff;
+            color: #334155;
+        }
+
         .summary-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -4547,18 +4769,18 @@
         <section id="participants" class="tab-panel" data-tab-panel="participants">
             <h2>Participants inscrits</h2>
             @if ($isOrganizer)
-                <div class="subsection">
+                <div class="subsection participant-registration-tools">
                     @if ($competition->inscriptions_closed)
                         <form class="inline-form" method="POST" action="{{ route('competitions.open-inscriptions', $competition) }}">
                             @csrf
                             @method('PATCH')
-                            <button type="submit">Réouvrir les inscriptions</button>
+                            <button type="submit">🔓 Réouvrir les inscriptions</button>
                         </form>
                     @else
                         <form class="inline-form" method="POST" action="{{ route('competitions.close-inscriptions', $competition) }}">
                             @csrf
                             @method('PATCH')
-                            <button type="submit">Fermer les inscriptions</button>
+                            <button type="submit">🔒 Fermer les inscriptions</button>
                         </form>
                     @endif
                 </div>
