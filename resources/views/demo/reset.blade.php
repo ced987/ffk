@@ -203,16 +203,16 @@
             </div>
 
             <div class="reset-actions">
-                <button class="reset-button" type="button" data-reset-open-confirmation>Remettre à zéro la démo</button>
-                <a class="reset-button demo-launch" href="{{ route('home', ['intro' => 1]) }}">Relancer la démo avec animation</a>
-                <a class="reset-link" href="{{ route('guide') }}">Annuler</a>
+                <button class="btn btn-danger" type="button" data-reset-open-confirmation>Remettre à zéro la démo</button>
+                <a class="btn btn-primary" href="{{ route('home', ['intro' => 1]) }}">Relancer la démo avec animation</a>
+                <a class="btn btn-ghost" href="{{ route('guide') }}">Annuler</a>
             </div>
 
             <div class="reset-confirmation" data-reset-confirmation hidden>
                 <p>Vous allez effacer toutes les données et revenir au jeu de démonstration initial. Voulez-vous continuer ?</p>
                 <div class="reset-confirmation-actions">
-                    <button class="reset-confirm-button" type="submit">Oui, réinitialiser</button>
-                    <button class="reset-cancel-button" type="button" data-reset-cancel-confirmation>Non, annuler</button>
+                    <button class="btn btn-danger" type="submit">Oui, réinitialiser</button>
+                    <button class="btn btn-ghost" type="button" data-reset-cancel-confirmation>Non, annuler</button>
                 </div>
             </div>
         </form>

@@ -219,10 +219,10 @@
             display: flex;
             align-items: center;
             justify-content: flex-start;
-            gap: 0;
+            gap: 16px;
             margin-top: 0;
-            margin-bottom: 8px;
-            padding: 0 14px;
+            margin-bottom: 10px;
+            padding: 10px 14px;
             border: 0;
             border-bottom: 1px solid #e5eaf0;
             border-radius: 0;
@@ -235,12 +235,27 @@
         }
 
         .tabs-list {
+            position: relative;
             display: flex;
             align-items: center;
+            justify-content: space-between;
             flex-wrap: nowrap;
-            gap: 0;
+            gap: 10px;
+            min-width: 0;
+            flex: 1 1 auto;
             min-width: 0;
             overflow-x: auto;
+        }
+
+        .tabs-list::before {
+            content: "";
+            position: absolute;
+            top: 22px;
+            right: 34px;
+            left: 34px;
+            height: 1px;
+            background: #dbe3ef;
+            pointer-events: none;
         }
 
         .app-page .competition-page .tab-button {
@@ -248,35 +263,68 @@
             position: relative;
             display: inline-flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
             margin-top: 0;
-            min-height: 34px;
-            padding: 0 11px;
-            border: 0 !important;
-            border-radius: 3px 3px 0 0;
-            background: transparent;
+            min-height: 48px;
+            padding: 4px 10px;
+            border: 1px solid transparent !important;
+            border-radius: 8px;
+            background: #ffffff;
             color: #475569;
             box-shadow: none;
             font-size: 13.5px;
-            font-weight: 700;
+            font-weight: 750;
+            cursor: pointer;
+            z-index: 1;
         }
 
-        .app-page .competition-page .tab-button svg {
-            width: 13px;
-            height: 13px;
-            flex: 0 0 13px;
+        .tab-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 16px;
+            height: 16px;
+            flex: 0 0 16px;
             color: currentColor;
+        }
+
+        .tab-icon svg {
+            display: block;
+            width: 16px;
+            height: 16px;
             stroke: currentColor;
             stroke-width: 1.9;
+            fill: none;
             stroke-linecap: round;
             stroke-linejoin: round;
-            fill: none;
+        }
+
+        .tab-step-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 22px;
+            height: 22px;
+            flex: 0 0 22px;
+            border: 1px solid #cbd5e1;
+            border-radius: 999px;
+            background: #ffffff;
+            color: #64748b;
+            font-size: 11px;
+            font-weight: 850;
+            line-height: 1;
+        }
+
+        .tab-text {
+            display: grid;
+            gap: 3px;
+            min-width: 0;
         }
 
         .tab-label {
             display: inline-flex;
             align-items: center;
-            gap: 5px;
+            gap: 4px;
             overflow: hidden;
             color: inherit;
             line-height: 1.1;
@@ -284,42 +332,12 @@
             white-space: nowrap;
         }
 
-        .tab-count {
+        .tab-subtitle {
             color: #64748b;
-            font-size: 13px;
-            font-weight: 800;
-        }
-
-        .tab-state {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 6px;
-            height: 6px;
-            flex: 0 0 6px;
-            border-radius: 999px;
-            font-size: 6px;
-            line-height: 1;
-        }
-
-        .tab-state.is-done {
-            width: 8px;
-            height: 8px;
-            background: #dcfce7;
-            color: #166534;
-        }
-
-        .tab-state.is-done::before {
-            content: "✓";
-            font-weight: 900;
-        }
-
-        .tab-state.is-current {
-            background: #2563eb;
-        }
-
-        .tab-state.is-upcoming {
-            background: #cbd5e1;
+            font-size: 11px;
+            font-weight: 700;
+            line-height: 1.1;
+            white-space: nowrap;
         }
 
         .app-page .competition-page .tab-button::after {
@@ -338,17 +356,152 @@
             color: #1e3a8a;
         }
 
+        .app-page .competition-page .tab-button:focus-visible {
+            outline: 2px solid #93c5fd;
+            outline-offset: 2px;
+        }
+
+        .app-page .competition-page .tab-button.is-done .tab-step-number {
+            border-color: #bbf7d0;
+            background: #15803d;
+            color: #ffffff;
+        }
+
+        .app-page .competition-page .tab-button.is-done:not(.is-active) {
+            color: #334155;
+        }
+
+        .app-page .competition-page .tab-button.is-attention .tab-step-number,
+        .app-page .competition-page .tab-button.is-current .tab-step-number {
+            border-color: #fed7aa;
+            background: #fff7ed;
+            color: #b45309;
+        }
+
+        .app-page .competition-page .tab-button.is-attention:not(.is-active),
+        .app-page .competition-page .tab-button.is-current:not(.is-active) {
+            color: #334155;
+        }
+
+        .app-page .competition-page .tab-button.is-upcoming .tab-step-number {
+            border-color: #e2e8f0;
+            background: #f8fafc;
+            color: #64748b;
+        }
+
+        .app-page .competition-page .tab-button.is-upcoming {
+            color: #64748b;
+        }
+
+        .app-page .competition-page .tab-button.is-overview {
+            color: #475569;
+        }
+
+        .app-page .competition-page .tab-button.is-overview .tab-step-number {
+            border-color: #dbe3ef;
+            background: #ffffff;
+            color: #64748b;
+        }
+
         .app-page .competition-page .tab-button.is-active {
-            background: transparent;
+            background: #f8fbff;
             color: #1d4ed8;
         }
 
-        .app-page .competition-page .tab-button.is-active .tab-count {
+        .app-page .competition-page .tab-button.is-active .tab-subtitle {
             color: #1e40af;
         }
 
         .app-page .competition-page .tab-button.is-active::after {
-            background: #2563eb;
+            background: linear-gradient(90deg, #2563eb 0%, #dc2626 100%);
+        }
+
+        .tabs-legend {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex: 0 0 auto;
+            width: 24px;
+            height: 24px;
+            padding: 0;
+            border-left: 1px solid #e5eaf0;
+            color: #94a3b8;
+            font-size: 12px;
+            font-weight: 750;
+            white-space: nowrap;
+        }
+
+        .app-page .competition-page .tabs-legend-trigger {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 18px;
+            height: 18px;
+            min-height: 18px;
+            margin-left: 8px;
+            padding: 0;
+            border: 1px solid #dbe3ef;
+            border-radius: 999px;
+            background: #ffffff;
+            color: #64748b;
+            font-size: 11px;
+            font-weight: 800;
+            line-height: 1;
+            box-shadow: none;
+        }
+
+        .tabs-legend-popover {
+            position: absolute;
+            top: calc(100% + 8px);
+            right: 0;
+            display: none;
+            min-width: 154px;
+            padding: 8px;
+            border: 1px solid #dbe3ef;
+            border-radius: 8px;
+            background: #ffffff;
+            box-shadow: 0 10px 24px rgba(15, 23, 42, 0.12);
+            color: #475569;
+            z-index: 10;
+        }
+
+        .tabs-legend:hover .tabs-legend-popover,
+        .tabs-legend:focus-within .tabs-legend-popover {
+            display: grid;
+            gap: 6px;
+        }
+
+        .tabs-legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            font-weight: 750;
+        }
+
+        .tabs-legend-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 999px;
+            background: #cbd5e1;
+        }
+
+        .tabs-legend-dot.done {
+            background: #16a34a;
+        }
+
+        .tabs-legend-dot.attention {
+            background: #f97316;
+        }
+
+        .tabs-legend-note {
+            display: block;
+            padding-top: 6px;
+            border-top: 1px solid #eef2f7;
+            color: #64748b;
+            font-size: 10.5px;
+            font-weight: 700;
         }
 
         .tab-panel[hidden] {
@@ -364,8 +517,8 @@
         .poule-guidance {
             display: grid;
             grid-template-columns: repeat(3, minmax(0, 1fr));
-            gap: 10px;
-            margin-bottom: 16px;
+            gap: 8px;
+            margin-bottom: 12px;
         }
 
         .poule-info-banner {
@@ -373,13 +526,13 @@
             align-items: center;
             justify-content: space-between;
             gap: 12px;
-            margin: 0 0 14px;
-            padding: 12px 14px;
-            border: 1px solid #bfdbfe;
+            margin: 0 0 10px;
+            padding: 8px 10px;
+            border: 1px solid #dbe3ef;
             border-radius: 9px;
-            background: #eff6ff;
-            color: #1d4ed8;
-            font-size: 14px;
+            background: #f8fafc;
+            color: #475569;
+            font-size: 12px;
             font-weight: 650;
             line-height: 1.35;
         }
@@ -393,9 +546,9 @@
         .poule-metric-card {
             display: grid;
             grid-template-columns: auto minmax(0, 1fr);
-            gap: 10px;
+            gap: 9px;
             align-items: center;
-            padding: 12px;
+            padding: 10px;
             border: 1px solid #dbe3ef;
             border-radius: 10px;
             background: #ffffff;
@@ -406,12 +559,12 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            width: 36px;
-            height: 36px;
+            width: 32px;
+            height: 32px;
             border-radius: 10px;
             background: #eff6ff;
             color: #1d4ed8;
-            font-size: 18px;
+            font-size: 16px;
             font-weight: 850;
         }
 
@@ -428,7 +581,7 @@
         .poule-metric-card strong {
             display: block;
             color: #17202a;
-            font-size: 21px;
+            font-size: 19px;
             line-height: 1;
         }
 
@@ -475,26 +628,36 @@
             align-items: center;
             justify-content: space-between;
             gap: 12px;
-            margin: 0 0 16px;
-            padding: 12px 14px;
+            margin: 0 0 12px;
+            padding: 10px 12px;
             border: 1px solid #fde68a;
             border-radius: 8px;
             background: #fffbeb;
             color: #92400e;
+            font-size: 13px;
             font-weight: 700;
         }
 
         .poule-validation-alert a {
             flex: 0 0 auto;
+            display: inline-flex;
+            align-items: center;
+            min-height: 30px;
+            padding: 5px 9px;
+            border: 1px solid #fcd34d;
+            border-radius: 8px;
+            background: #ffffff;
             color: #92400e;
+            font-size: 12px;
             font-weight: 800;
+            text-decoration: none;
         }
 
         .poule-assistant {
             display: grid;
-            gap: 12px;
+            gap: 10px;
             margin: 0 0 12px;
-            padding: 18px;
+            padding: 14px;
             border: 1px solid #d8e1ec;
             border-radius: 12px;
             background: #ffffff;
@@ -518,19 +681,19 @@
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            font-size: 18px;
+            font-size: 16px;
         }
 
         .poule-assistant-header .section-intro {
-            margin-top: 4px;
+            margin-top: 3px;
             max-width: 680px;
             color: #475569;
-            font-size: 13px;
+            font-size: 12px;
         }
 
         .poule-assistant-form {
             display: grid;
-            gap: 12px;
+            gap: 10px;
             padding: 0;
             border: 0;
             background: transparent;
@@ -538,20 +701,35 @@
 
         .poule-assistant-criteria {
             display: grid;
-            grid-template-columns: repeat(5, minmax(120px, 1fr));
-            gap: 8px;
+            grid-template-columns: repeat(5, minmax(0, 1fr));
+            gap: 12px;
+            align-items: end;
+        }
+
+        .poule-assistant-criteria > div {
+            display: grid;
+            grid-template-rows: auto 36px;
+            gap: 4px;
+            min-width: 0;
         }
 
         .poule-assistant-criteria label {
-            margin-bottom: 3px;
-            color: #475569;
-            font-size: 10px;
-            font-weight: 800;
+            display: flex;
+            align-items: flex-end;
+            min-height: 22px;
+            margin-bottom: 0;
+            color: #64748b;
+            font-size: 9.5px;
+            font-weight: 700;
+            letter-spacing: 0;
+            line-height: 1.12;
         }
 
         .poule-assistant-criteria input,
         .poule-assistant-criteria select {
             max-width: none;
+            width: 100%;
+            height: 36px;
             min-height: 36px;
             padding: 7px 9px;
             border-color: #cbd5e1;
@@ -559,18 +737,28 @@
             font-size: 12px;
         }
 
+        .poule-assistant-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding-top: 2px;
+            border-top: 1px solid #eef2f7;
+        }
+
         .poule-assistant-advice {
             display: inline-flex;
             align-items: center;
+            flex: 1 1 auto;
             gap: 8px;
             width: fit-content;
             max-width: 520px;
-            padding: 8px 10px;
-            border: 1px solid #bfdbfe;
+            padding: 6px 8px;
+            border: 1px solid #dbe3ef;
             border-radius: 9px;
-            background: #eff6ff;
-            color: #1e3a8a;
-            font-size: 12px;
+            background: #f8fafc;
+            color: #475569;
+            font-size: 11px;
             font-weight: 650;
         }
 
@@ -583,6 +771,9 @@
         }
 
         .poule-assistant-actions {
+            flex: 0 0 auto;
+            justify-content: flex-end;
+            flex-wrap: nowrap;
             padding-top: 0;
         }
 
@@ -605,17 +796,26 @@
         .manual-poule-action {
             display: flex;
             justify-content: flex-end;
-            margin: 10px 0 12px;
+            margin: 0;
         }
 
         .manual-poule-action .form-accordion {
             margin-top: 0;
+            min-width: min(340px, 100%);
         }
 
         .manual-poule-action .form-accordion summary {
             border-color: #93c5fd;
             background: #eff6ff;
             color: #1d4ed8;
+        }
+
+        .manual-poule-action.inline-manual-poule {
+            justify-content: flex-end;
+        }
+
+        .manual-poule-action.inline-manual-poule .form-accordion {
+            position: relative;
         }
 
         .app-page .competition-page .poule-assistant-actions .secondary-button,
@@ -758,7 +958,14 @@
             justify-content: space-between;
             gap: 8px;
             flex-wrap: wrap;
-            padding: 2px 0;
+            padding: 8px 10px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            background: #f8fafc;
+        }
+
+        .poule-assistant-results-header form {
+            margin: 0;
         }
 
         .poule-assistant-results-header strong,
@@ -786,6 +993,16 @@
                 grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
             }
 
+            .poule-assistant-footer {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .poule-assistant-actions {
+                justify-content: flex-start;
+                flex-wrap: wrap;
+            }
+
             .poule-proposals {
                 grid-template-columns: 1fr;
             }
@@ -799,7 +1016,7 @@
 
         .follow-dashboard {
             display: grid;
-            gap: 16px;
+            gap: 12px;
         }
 
         .follow-hero,
@@ -889,89 +1106,48 @@
             text-decoration: none;
         }
 
-        .follow-progress {
-            position: relative;
+        .follow-status-summary {
             display: grid;
-            grid-template-columns: repeat(6, minmax(0, 1fr));
-            gap: 0;
-            padding: 18px 14px 14px;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 8px;
+            padding: 10px;
             border: 1px solid #e2e8f0;
-            border-radius: 12px;
+            border-radius: 10px;
             background: #ffffff;
         }
 
-        .follow-progress::before {
-            content: "";
-            position: absolute;
-            top: 35px;
-            right: 8.5%;
-            left: 8.5%;
-            height: 2px;
-            border-radius: 999px;
-            background: #dbe3ef;
-        }
-
-        .follow-step {
-            position: relative;
-            display: grid;
-            justify-items: center;
-            gap: 7px;
-            min-width: 0;
-            padding: 0 6px;
-            text-align: center;
-            cursor: default;
-            z-index: 1;
-        }
-
-        .follow-step-marker {
-            display: inline-flex;
+        .follow-status-item {
+            display: flex;
             align-items: center;
-            justify-content: center;
-            width: 34px;
-            height: 34px;
-            border: 2px solid #cbd5e1;
-            border-radius: 999px;
+            justify-content: space-between;
+            gap: 8px;
+            min-width: 0;
+            padding: 8px 10px;
+            border: 1px solid #eef2f7;
+            border-radius: 8px;
             background: #f8fafc;
-            color: #475569;
-            font-size: 14px;
-            font-weight: 900;
-            line-height: 1;
-            box-shadow: 0 0 0 5px #ffffff;
         }
 
-        .follow-step.is-done .follow-step-marker {
-            border-color: #16a34a;
-            background: #16a34a;
-            color: #ffffff;
+        .follow-status-label {
+            display: grid;
+            gap: 2px;
+            min-width: 0;
         }
 
-        .follow-step.is-active-step .follow-step-marker {
-            width: 42px;
-            height: 42px;
-            border-color: #60a5fa;
-            background: #2563eb;
-            color: #ffffff;
-            font-size: 16px;
-            box-shadow: 0 0 0 5px #dbeafe, 0 8px 16px rgba(37, 99, 235, 0.18);
-        }
-
-        .follow-step.is-registration-open .follow-step-marker,
-        .follow-step.is-registration-closed .follow-step-marker {
-            border-color: #bfdbfe;
-            background: #eff6ff;
-            color: #1d4ed8;
-        }
-
-        .follow-step strong {
+        .follow-status-label strong {
             color: #17202a;
-            font-size: 12px;
-            line-height: 1.2;
-            white-space: normal;
+            font-size: 13px;
+            line-height: 1.15;
         }
 
-        .follow-step.is-active-step strong {
-            color: #1d4ed8;
-            font-weight: 900;
+        .follow-status-label span {
+            overflow: hidden;
+            color: #64748b;
+            font-size: 11px;
+            font-weight: 700;
+            line-height: 1.2;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
 
         .follow-status {
@@ -999,49 +1175,17 @@
             color: #475569;
         }
 
-        .follow-status.is-registration-open,
-        .follow-status.is-registration-closed {
-            background: #eef2ff;
-            color: #475569;
-        }
-
-        .follow-indicators {
-            display: grid;
-            grid-template-columns: repeat(4, minmax(0, 1fr));
-            gap: 10px;
-        }
-
-        .follow-indicator {
-            display: grid;
-            gap: 4px;
-            padding: 12px;
-            border: 1px solid #e2e8f0;
-            border-radius: 9px;
-            background: #ffffff;
-        }
-
-        .follow-indicator span {
-            color: #64748b;
-            font-size: 12px;
-            font-weight: 750;
-        }
-
-        .follow-indicator strong {
-            color: #17202a;
-            font-size: 24px;
-            line-height: 1;
-        }
-
         .follow-grid {
             display: grid;
             grid-template-columns: repeat(2, minmax(0, 1fr));
             gap: 12px;
+            align-items: start;
         }
 
         .follow-panel {
             display: grid;
-            gap: 10px;
-            padding: 14px;
+            gap: 8px;
+            padding: 12px;
         }
 
         .follow-panel h2 {
@@ -1146,12 +1290,13 @@
         }
 
         .follow-list.is-attention li {
+            padding: 8px 10px;
             background: #fffbeb;
             color: #78350f;
         }
 
         .follow-empty {
-            padding: 10px;
+            padding: 8px 10px;
             border-radius: 8px;
             background: #f8fafc;
             color: #64748b;
@@ -1176,8 +1321,7 @@
         }
 
         @media (max-width: 900px) {
-            .follow-progress,
-            .follow-indicators,
+            .follow-status-summary,
             .follow-grid {
                 grid-template-columns: 1fr;
             }
@@ -1190,26 +1334,8 @@
                 display: none;
             }
 
-            .follow-progress::before {
-                display: none;
-            }
-
-            .follow-progress {
-                gap: 12px;
-                padding: 14px;
-            }
-
-            .follow-step {
-                grid-template-columns: auto minmax(0, 1fr) auto;
-                justify-items: start;
-                align-items: center;
-                text-align: left;
-            }
-
-            .follow-step.is-active-step .follow-step-marker {
-                width: 34px;
-                height: 34px;
-                font-size: 14px;
+            .follow-status-summary {
+                padding: 8px;
             }
         }
 
@@ -2179,21 +2305,21 @@
         .state-badges {
             display: inline-flex;
             align-items: center;
-            gap: 8px;
+            gap: 5px;
             flex-wrap: wrap;
         }
 
         .state-badge {
             display: inline-flex;
             align-items: center;
-            padding: 3px 8px;
+            padding: 2px 6px;
             border: 1px solid #cfd6df;
             border-radius: 999px;
             background: #f8fafc;
             color: #334155;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 700;
-            line-height: 1.4;
+            line-height: 1.25;
         }
 
         .state-badge.validated {
@@ -2531,7 +2657,7 @@
             font-weight: 800;
         }
 
-        .app-page .competition-page #participants .participant-actions button:not(.withdraw-button),
+        .app-page .competition-page #participants .participant-actions button:not(.withdraw-button):not(.btn),
         .app-page .competition-page #participants .participant-actions a,
         .app-page .competition-page #participants .reactivate-button {
             border-color: #bfdbfe;
@@ -2539,7 +2665,7 @@
             color: #1d4ed8;
         }
 
-        .app-page .competition-page #participants .participant-actions button:not(.withdraw-button):hover,
+        .app-page .competition-page #participants .participant-actions button:not(.withdraw-button):not(.btn):hover,
         .app-page .competition-page #participants .participant-actions a:hover,
         .app-page .competition-page #participants .reactivate-button:hover {
             border-color: #93c5fd;
@@ -2557,13 +2683,13 @@
             background: #fff1f2;
         }
 
-        .app-page .competition-page #participants .participant-filter-actions button {
+        .app-page .competition-page #participants .participant-filter-actions button:not(.btn) {
             border-color: var(--participant-navy);
             background: var(--participant-navy);
             color: #ffffff;
         }
 
-        .app-page .competition-page #participants .participant-filter-actions button:hover {
+        .app-page .competition-page #participants .participant-filter-actions button:not(.btn):hover {
             border-color: #172554;
             background: #172554;
         }
@@ -2817,6 +2943,32 @@
             font-weight: 850;
         }
 
+        .poule-section-heading {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+
+        .poule-section-heading h3 {
+            margin: 0;
+            padding-left: 2px;
+            color: #17202a;
+            font-size: 14px;
+            font-weight: 850;
+        }
+
+        .poule-section-heading .section-intro {
+            margin: 3px 0 0;
+        }
+
+        .poule-section-heading-actions {
+            display: flex;
+            justify-content: flex-end;
+            flex: 0 0 auto;
+        }
+
         .assignment-column {
             min-width: 0;
             width: 100%;
@@ -2889,6 +3041,10 @@
             background: #f8fbff;
         }
 
+        #participants-disponibles .participant-card.is-hidden {
+            display: none;
+        }
+
         #participants-disponibles .participant-card-main {
             gap: 0;
             line-height: 1.2;
@@ -2901,6 +3057,12 @@
         #participants-disponibles .participant-card-meta {
             font-size: 12px;
             line-height: 1.25;
+        }
+
+        .available-participants-toggle {
+            display: flex;
+            justify-content: center;
+            margin-top: 8px;
         }
 
         .poule-participant-grid {
@@ -3664,16 +3826,117 @@
 
         @media (max-width: 768px) {
             .tabs {
-                gap: 10px;
+                position: sticky;
+                gap: 0;
+                padding: 7px 0;
+                overflow: hidden;
+            }
+
+            .tabs-legend {
+                display: none;
+            }
+
+            .tabs-list::before {
+                display: none;
             }
 
             .tabs-list {
+                position: relative;
+                z-index: 1;
+                gap: 6px;
+                padding: 0 38px 0 14px;
                 overflow-x: auto;
                 flex-wrap: nowrap;
+                justify-content: flex-start;
+                scroll-padding-left: 14px;
+                scroll-padding-right: 38px;
+                scroll-snap-type: x proximity;
+                -webkit-overflow-scrolling: touch;
             }
 
-            .tab-button {
-                flex: 0 0 auto;
+            .tabs-list::-webkit-scrollbar {
+                display: none;
+            }
+
+            .tabs-list {
+                scrollbar-width: none;
+            }
+
+            .tabs::before,
+            .tabs::after {
+                content: "";
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                z-index: 2;
+                width: 44px;
+                pointer-events: none;
+            }
+
+            .tabs::before {
+                left: 0;
+                background: linear-gradient(90deg, #ffffff 0%, rgba(255, 255, 255, 0.72) 18%, rgba(255, 255, 255, 0) 100%);
+            }
+
+            .tabs::after {
+                right: 0;
+                background: linear-gradient(270deg, #ffffff 0%, rgba(255, 255, 255, 0.92) 24%, rgba(255, 255, 255, 0) 100%);
+            }
+
+            .app-page .competition-page .tab-button {
+                flex: 0 0 clamp(108px, 39vw, 140px);
+                min-height: 42px;
+                gap: 5px;
+                padding: 4px 7px;
+                border-radius: 7px;
+                scroll-snap-align: start;
+                font-size: 12px;
+            }
+
+            .tab-icon {
+                width: 14px;
+                height: 14px;
+                flex-basis: 14px;
+            }
+
+            .tab-icon svg {
+                width: 14px;
+                height: 14px;
+            }
+
+            .tab-step-number {
+                width: 19px;
+                height: 19px;
+                flex-basis: 19px;
+                font-size: 10px;
+            }
+
+            .tab-text {
+                gap: 2px;
+            }
+
+            .tab-label {
+                max-width: 86px;
+                font-size: 12px;
+            }
+
+            .tab-subtitle {
+                max-width: 86px;
+                overflow: hidden;
+                color: #64748b;
+                font-size: 9.5px;
+                line-height: 1.05;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+
+            .app-page .competition-page .tab-button::after {
+                right: 7px;
+                left: 7px;
+            }
+
+            .app-page .competition-page .tab-button.is-active {
+                background: #f8fbff;
             }
 
             .poule-header {
@@ -3694,18 +3957,243 @@
                 align-items: stretch;
             }
 
-            .combat-row {
-                grid-template-columns: 52px minmax(0, 1fr);
+            #combats .poule-title-row {
+                display: grid;
+                grid-template-columns: minmax(0, 1fr) auto;
+                align-items: center;
+                gap: 8px 10px;
             }
 
-            .combat-score-box,
-            .combat-result-panel,
-            .combat-actions {
+            #combats .poule-title-row h3 {
+                min-width: 0;
+            }
+
+            #combats .poule-title-row .poule-progress-badge {
+                justify-self: end;
+                max-width: 160px;
+                text-align: right;
+                white-space: normal;
+            }
+
+            #combats .poule-title-row .btn {
                 grid-column: 1 / -1;
+                justify-self: start;
+                width: auto;
+                max-width: 100%;
+                white-space: normal;
+            }
+
+            .combat-list {
+                gap: 10px;
+            }
+
+            .app-page .competition-page .combat-row {
+                grid-template-columns: minmax(0, 1fr) 74px;
+                align-items: stretch;
+                gap: 8px;
+                padding: 12px;
+                border-left-width: 5px;
+                border-radius: 12px;
+                box-shadow: 0 8px 20px rgba(15, 23, 42, 0.06);
+            }
+
+            .app-page .competition-page .combat-row > * {
+                min-width: 0;
+            }
+
+            .combat-number {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 10px;
+                grid-column: 1 / -1;
+                order: 1;
+                padding-bottom: 8px;
+                border-bottom: 1px solid #e5eaf0;
+                font-size: 15px;
+            }
+
+            .combat-number::before {
+                content: "Combat ";
+            }
+
+            .combat-status {
+                margin-top: 0;
+                padding: 5px 9px;
+                font-size: 11px;
+            }
+
+            .app-page .competition-page .combat-fighter-button {
+                position: relative;
+                grid-template-columns: auto minmax(0, 1fr);
+                min-height: 54px;
+                padding: 9px 10px;
+                border-radius: 11px;
+                white-space: normal;
+            }
+
+            .app-page .competition-page .combat-fighter-button[data-result-value="{{ \App\Models\Combat::RESULT_LEFT_WIN }}"] {
+                grid-column: 1;
+                order: 2;
+            }
+
+            .app-page .competition-page .combat-fighter-button[data-result-value="{{ \App\Models\Combat::RESULT_RIGHT_WIN }}"] {
+                grid-column: 1;
+                order: 4;
+            }
+
+            .combat-fighter-name,
+            .combat-fighter-club {
+                white-space: normal;
+            }
+
+            .combat-score-box {
+                display: contents;
+            }
+
+            .combat-score-box::before {
+                content: none;
+            }
+
+            .combat-score-fields {
+                display: contents;
+            }
+
+            .combat-score-readonly {
+                display: none;
+            }
+
+            .app-page .competition-page .combat-score-box input[type="number"] {
+                width: 74px;
+                min-height: 54px;
+                border-radius: 10px;
+                font-size: 20px;
+            }
+
+            .combat-score-red {
+                grid-column: 2;
+                order: 3;
+            }
+
+            .combat-score-blue {
+                grid-column: 2;
+                order: 5;
+            }
+
+            .combat-score-separator {
+                display: none;
+            }
+
+            .app-page .competition-page .combat-row.is-finished:not(.is-editing) .combat-score-readonly {
+                display: contents;
+            }
+
+            .combat-score-readonly span:nth-child(2) {
+                display: none;
+            }
+
+            .combat-score-readonly [data-score-a-display],
+            .combat-score-readonly [data-score-b-display] {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 74px;
+                min-height: 54px;
+                border: 1px solid #dbe3ef;
+                border-radius: 10px;
+                background: #ffffff;
+                color: #17202a;
+                font-size: 20px;
+                font-weight: 850;
+            }
+
+            .combat-score-readonly [data-score-a-display] {
+                grid-column: 2;
+                order: 3;
+            }
+
+            .combat-score-readonly [data-score-b-display] {
+                grid-column: 2;
+                order: 5;
+            }
+
+            .combat-quick-results {
+                display: grid;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                grid-column: 1 / -1;
+                order: 6;
+                gap: 8px;
+                width: 100%;
+            }
+
+            .app-page .competition-page .combat-choice-button {
+                min-height: 42px;
+                padding: 8px 10px;
+                border-radius: 10px;
+                font-size: 13px;
+                font-weight: 800;
+                text-align: center;
+            }
+
+            .combat-result-panel {
+                grid-column: 1 / -1;
+                order: 7;
+                gap: 8px;
+            }
+
+            .combat-result-badge {
+                min-height: 40px;
+                white-space: normal;
+            }
+
+            .app-page .competition-page .combat-row input.combat-comment {
+                min-height: 42px;
+                border-radius: 10px;
+            }
+
+            .combat-comment-readonly {
+                white-space: normal;
             }
 
             .combat-actions {
-                justify-content: flex-start;
+                display: grid;
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+                grid-column: 1 / -1;
+                order: 8;
+                gap: 8px;
+                width: 100%;
+                justify-content: stretch;
+            }
+
+            .app-page .competition-page .combat-actions button {
+                min-height: 42px;
+                padding: 8px 10px;
+                border-radius: 10px;
+                font-size: 13px;
+            }
+
+            .app-page .competition-page .combat-actions button:disabled {
+                display: none;
+            }
+
+            .app-page .competition-page .combat-actions [data-combat-validate][data-combat-saisie]:not(:disabled) {
+                grid-column: 1 / -1;
+                width: 100%;
+                font-size: 0;
+            }
+
+            .app-page .competition-page .combat-actions [data-combat-validate][data-combat-saisie]:not(:disabled)::after {
+                content: "Saisir le résultat";
+                font-size: 14px;
+            }
+
+            .app-page .competition-page .combat-row.is-editing .combat-actions [data-combat-validate]:not(:disabled) {
+                font-size: 0;
+            }
+
+            .app-page .competition-page .combat-row.is-editing .combat-actions [data-combat-validate]:not(:disabled)::after {
+                content: "Enregistrer";
+                font-size: 14px;
             }
         }
 
@@ -3732,6 +4220,17 @@
 
         .participant-table tr:last-child td {
             border-bottom: 0;
+        }
+
+        .combat-ranking-table-scroll {
+            max-width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .combat-ranking-table-scroll .participant-table {
+            min-width: 680px;
+            margin: 0;
         }
 
         .section-intro {
@@ -3996,17 +4495,38 @@
             $roleLabel = $competition->roleLabelForClub($currentUser->club);
             $requestedTab = in_array(request('tab'), ['suivi', 'clubs', 'participants', 'poules', 'combats'], true) ? request('tab') : 'suivi';
             $tabConfirmedClubsCount = $invitationSummary[\App\Models\Invitation::STATUS_PARTICIPATION_CONFIRMED] ?? 0;
+            $tabPendingClosedInvitationsCount = $competition->inscriptions_closed
+                ? $competition->invitations->where('status', \App\Models\Invitation::STATUS_INVITE)->count()
+                : 0;
+            $tabRegisteredParticipantsCount = $allRegistrations->filter(fn ($registration) => $registration->is_active)->count();
             $tabValidatedParticipantsCount = $participantValidationSummary['global']['validated'] ?? 0;
             $tabPendingParticipantsCount = $participantValidationSummary['global']['not_validated'] ?? 0;
             $tabPoulesCount = $competition->poules->count();
+            $tabDraftPoulesCount = $draftPoules->count();
+            $tabEligiblePouleRegistrationsCount = $eligiblePouleRegistrations->count();
             $tabFinishedCombatsCount = $finishedCombats->count();
             $tabCombatsTotalCount = $allCombats->count();
+            $tabCombatsToEnterCount = $combatsToEnter->count();
             $tabStateClasses = [
-                'suivi' => $pendingActions->isNotEmpty() ? 'is-current' : 'is-done',
-                'clubs' => $tabConfirmedClubsCount > 0 ? 'is-done' : 'is-upcoming',
-                'participants' => $tabValidatedParticipantsCount > 0 && $tabPendingParticipantsCount === 0 ? 'is-done' : ($tabValidatedParticipantsCount > 0 || $tabPendingParticipantsCount > 0 ? 'is-current' : 'is-upcoming'),
-                'poules' => $poulesReady ? 'is-done' : ($tabPoulesCount > 0 || $eligiblePouleRegistrations->isNotEmpty() ? 'is-current' : 'is-upcoming'),
-                'combats' => $tabCombatsTotalCount > 0 && $tabFinishedCombatsCount === $tabCombatsTotalCount ? 'is-done' : ($tabFinishedCombatsCount > 0 ? 'is-current' : 'is-upcoming'),
+                'suivi' => 'is-overview',
+                'clubs' => $tabPendingClosedInvitationsCount > 0 ? 'is-attention' : ($tabConfirmedClubsCount > 0 ? 'is-done' : 'is-upcoming'),
+                'participants' => $tabPendingParticipantsCount > 0 ? 'is-attention' : ($tabValidatedParticipantsCount > 0 ? 'is-done' : 'is-upcoming'),
+                'poules' => ($tabEligiblePouleRegistrationsCount > 0 || $tabDraftPoulesCount > 0) ? 'is-attention' : ($poulesReady ? 'is-done' : 'is-upcoming'),
+                'combats' => $tabCombatsToEnterCount > 0 ? 'is-attention' : ($tabCombatsTotalCount > 0 && $tabFinishedCombatsCount === $tabCombatsTotalCount ? 'is-done' : 'is-upcoming'),
+            ];
+            $tabSubtitles = [
+                'clubs' => $tabPendingClosedInvitationsCount > 0
+                    ? "{$tabPendingClosedInvitationsCount} en attente"
+                    : "{$tabConfirmedClubsCount} club(s)",
+                'participants' => $tabPendingParticipantsCount > 0
+                    ? "{$tabValidatedParticipantsCount} validé(s) · {$tabPendingParticipantsCount} à valider"
+                    : "{$tabRegisteredParticipantsCount} inscrit(s)",
+                'poules' => $tabDraftPoulesCount > 0
+                    ? "{$tabDraftPoulesCount} à figer"
+                    : ($tabEligiblePouleRegistrationsCount > 0 ? "{$tabEligiblePouleRegistrationsCount} à affecter" : "{$tabPoulesCount} poule(s)"),
+                'combats' => $tabCombatsToEnterCount > 0
+                    ? "{$tabCombatsToEnterCount} à saisir"
+                    : "{$tabCombatsTotalCount} combat(s)",
             ];
         @endphp
 
@@ -4016,72 +4536,93 @@
 
         <nav class="tabs" aria-label="Navigation compétition">
             <div class="tabs-list">
-                <button class="tab-button" type="button" data-tab-target="suivi" data-tab-url="{{ route('competitions.show', ['competition' => $competition, 'tab' => 'suivi']) }}">
-                    <svg aria-hidden="true" viewBox="0 0 24 24">
-                        <path d="M9 6h11"></path>
-                        <path d="M9 12h11"></path>
-                        <path d="M9 18h11"></path>
-                        <path d="m4 6 1 1 2-2"></path>
-                        <path d="m4 12 1 1 2-2"></path>
-                        <path d="m4 18 1 1 2-2"></path>
-                    </svg>
-                    <span class="tab-label">
-                        <span class="tab-state {{ $tabStateClasses['suivi'] }}" aria-hidden="true"></span>
-                        Suivi
+                <button class="tab-button {{ $tabStateClasses['suivi'] }}" type="button" data-tab-target="suivi" data-tab-url="{{ route('competitions.show', ['competition' => $competition, 'tab' => 'suivi']) }}" @if ($requestedTab === 'suivi') aria-current="page" @endif>
+                    <span class="tab-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M4 20V10"></path>
+                            <path d="M10 20V4"></path>
+                            <path d="M16 20v-7"></path>
+                            <path d="M22 20H2"></path>
+                        </svg>
+                    </span>
+                    <span class="tab-step-number">1</span>
+                    <span class="tab-text">
+                        <span class="tab-label">Suivi</span>
+                        <span class="tab-subtitle">pilotage</span>
                     </span>
                 </button>
-                <button class="tab-button" type="button" data-tab-target="clubs" data-tab-url="{{ route('competitions.show', ['competition' => $competition, 'tab' => 'clubs']) }}">
-                    <svg aria-hidden="true" viewBox="0 0 24 24">
-                        <path d="M4 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16"></path>
-                        <path d="M16 8h2a2 2 0 0 1 2 2v11"></path>
-                        <path d="M8 7h4"></path>
-                        <path d="M8 11h4"></path>
-                        <path d="M8 15h4"></path>
-                        <path d="M3 21h18"></path>
-                    </svg>
-                    <span class="tab-label">
-                        <span class="tab-state {{ $tabStateClasses['clubs'] }}" aria-hidden="true"></span>
-                        Clubs <span class="tab-count">({{ $tabConfirmedClubsCount }})</span>
+                <button class="tab-button {{ $tabStateClasses['clubs'] }}" type="button" data-tab-target="clubs" data-tab-url="{{ route('competitions.show', ['competition' => $competition, 'tab' => 'clubs']) }}" @if ($requestedTab === 'clubs') aria-current="page" @endif>
+                    <span class="tab-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M4 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16"></path>
+                            <path d="M16 8h2a2 2 0 0 1 2 2v11"></path>
+                            <path d="M8 7h4"></path>
+                            <path d="M8 11h4"></path>
+                            <path d="M3 21h18"></path>
+                        </svg>
+                    </span>
+                    <span class="tab-step-number">2</span>
+                    <span class="tab-text">
+                        <span class="tab-label">Clubs</span>
+                        <span class="tab-subtitle">{{ $tabSubtitles['clubs'] }}</span>
                     </span>
                 </button>
-                <button class="tab-button" type="button" data-tab-target="participants" data-tab-url="{{ route('competitions.show', ['competition' => $competition, 'tab' => 'participants']) }}">
-                    <svg aria-hidden="true" viewBox="0 0 24 24">
-                        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
-                        <circle cx="9" cy="7" r="4"></circle>
-                        <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
-                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                    </svg>
-                    <span class="tab-label">
-                        <span class="tab-state {{ $tabStateClasses['participants'] }}" aria-hidden="true"></span>
-                        Participants <span class="tab-count">({{ $tabValidatedParticipantsCount }})</span>
+                <button class="tab-button {{ $tabStateClasses['participants'] }}" type="button" data-tab-target="participants" data-tab-url="{{ route('competitions.show', ['competition' => $competition, 'tab' => 'participants']) }}" @if ($requestedTab === 'participants') aria-current="page" @endif>
+                    <span class="tab-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                            <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                        </svg>
+                    </span>
+                    <span class="tab-step-number">3</span>
+                    <span class="tab-text">
+                        <span class="tab-label">Participants</span>
+                        <span class="tab-subtitle">{{ $tabSubtitles['participants'] }}</span>
                     </span>
                 </button>
                 @if ($isOrganizer)
-                    <button class="tab-button" type="button" data-tab-target="poules" data-tab-url="{{ route('competitions.show', ['competition' => $competition, 'tab' => 'poules']) }}">
-                        <svg aria-hidden="true" viewBox="0 0 24 24">
-                            <rect x="3" y="3" width="7" height="7" rx="1"></rect>
-                            <rect x="14" y="3" width="7" height="7" rx="1"></rect>
-                            <rect x="3" y="14" width="7" height="7" rx="1"></rect>
-                            <rect x="14" y="14" width="7" height="7" rx="1"></rect>
-                        </svg>
-                        <span class="tab-label">
-                            <span class="tab-state {{ $tabStateClasses['poules'] }}" aria-hidden="true"></span>
-                            Poules <span class="tab-count">({{ $tabPoulesCount }})</span>
+                    <button class="tab-button {{ $tabStateClasses['poules'] }}" type="button" data-tab-target="poules" data-tab-url="{{ route('competitions.show', ['competition' => $competition, 'tab' => 'poules']) }}" @if ($requestedTab === 'poules') aria-current="page" @endif>
+                        <span class="tab-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24">
+                                <rect x="3" y="3" width="7" height="7" rx="1"></rect>
+                                <rect x="14" y="3" width="7" height="7" rx="1"></rect>
+                                <rect x="3" y="14" width="7" height="7" rx="1"></rect>
+                                <rect x="14" y="14" width="7" height="7" rx="1"></rect>
+                            </svg>
+                        </span>
+                        <span class="tab-step-number">4</span>
+                        <span class="tab-text">
+                            <span class="tab-label">Poules</span>
+                            <span class="tab-subtitle">{{ $tabSubtitles['poules'] }}</span>
                         </span>
                     </button>
-                    <button class="tab-button" type="button" data-tab-target="combats" data-tab-url="{{ route('competitions.show', ['competition' => $competition, 'tab' => 'combats']) }}">
-                        <svg aria-hidden="true" viewBox="0 0 24 24">
-                            <path d="M14.5 4.5 19 3l-1.5 4.5L7 18l-3 1 1-3 10.5-10.5Z"></path>
-                            <path d="M9.5 4.5 5 3l1.5 4.5L17 18l3 1-1-3L8.5 5.5Z"></path>
-                            <path d="M7.5 14.5 9.5 16.5"></path>
-                            <path d="M16.5 14.5 14.5 16.5"></path>
-                        </svg>
-                        <span class="tab-label">
-                            <span class="tab-state {{ $tabStateClasses['combats'] }}" aria-hidden="true"></span>
-                            Combats <span class="tab-count">({{ $tabFinishedCombatsCount }})</span>
+                    <button class="tab-button {{ $tabStateClasses['combats'] }}" type="button" data-tab-target="combats" data-tab-url="{{ route('competitions.show', ['competition' => $competition, 'tab' => 'combats']) }}" @if ($requestedTab === 'combats') aria-current="page" @endif>
+                        <span class="tab-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M14.5 4.5 19 3l-1.5 4.5L7 18l-3 1 1-3 10.5-10.5Z"></path>
+                                <path d="M9.5 4.5 5 3l1.5 4.5L17 18l3 1-1-3L8.5 5.5Z"></path>
+                                <path d="M7.5 14.5 9.5 16.5"></path>
+                                <path d="M16.5 14.5 14.5 16.5"></path>
+                            </svg>
+                        </span>
+                        <span class="tab-step-number">5</span>
+                        <span class="tab-text">
+                            <span class="tab-label">Combats</span>
+                            <span class="tab-subtitle">{{ $tabSubtitles['combats'] }}</span>
                         </span>
                     </button>
                 @endif
+            </div>
+            <div class="tabs-legend" aria-label="Légende de progression">
+                <button class="tabs-legend-trigger" type="button" title="Légende : vert terminé, orange attention, gris à venir. Souligné = page affichée.">i</button>
+                <div class="tabs-legend-popover" role="tooltip">
+                    <span class="tabs-legend-item"><span class="tabs-legend-dot done" aria-hidden="true"></span>Terminé</span>
+                    <span class="tabs-legend-item"><span class="tabs-legend-dot attention" aria-hidden="true"></span>Attention</span>
+                    <span class="tabs-legend-item"><span class="tabs-legend-dot" aria-hidden="true"></span>À venir</span>
+                    <span class="tabs-legend-note">Souligné = page affichée</span>
+                </div>
             </div>
         </nav>
 
@@ -4101,37 +4642,6 @@
                 $combatsToEnterCount = $combatsToEnter->count();
                 $finishedCombatsCount = $finishedCombats->count();
 
-                $progressSteps = [
-                    [
-                        'label' => 'Clubs invités',
-                        'status' => 'Terminé',
-                    ],
-                    [
-                        'label' => 'Inscriptions',
-                        'status' => $competition->inscriptions_closed ? 'Fermées' : 'Ouvertes',
-                    ],
-                    [
-                        'label' => 'Participants validés',
-                        'status' => $pendingValidationCount > 0 ? 'En cours' : 'Terminé',
-                    ],
-                    [
-                        'label' => 'Poules créées',
-                        'status' => $poulesCreatedCount > 0
-                            ? ($frozenPoulesCount === 0 ? 'En cours' : 'Terminé')
-                            : 'À venir',
-                    ],
-                    [
-                        'label' => 'Poules figées',
-                        'status' => $frozenPoulesCount > 0 ? 'Terminé' : 'À venir',
-                    ],
-                    [
-                        'label' => 'Combats saisis',
-                        'status' => $finishedCombatsCount === 0
-                            ? 'À venir'
-                            : ($combatsToEnterCount > 0 ? 'En cours' : 'Terminé'),
-                    ],
-                ];
-
                 if ($pendingValidationCount > 0) {
                     $currentStepTitle = 'Validation des participants';
                     $currentStepText = 'Validez ou retirez les participants en attente avant de finaliser les poules.';
@@ -4148,6 +4658,37 @@
                     $currentStepTitle = 'Compétition à jour';
                     $currentStepText = 'Aucune action urgente détectée pour le moment.';
                 }
+
+                $statusSummary = [
+                    [
+                        'label' => 'Clubs',
+                        'detail' => $pendingClosedInvitationsCount > 0
+                            ? $pendingClosedInvitationsCount.' en attente'
+                            : $confirmedClubsCount.' confirmé'.($confirmedClubsCount > 1 ? 's' : ''),
+                        'status' => $pendingClosedInvitationsCount > 0 ? 'Attention' : 'OK',
+                    ],
+                    [
+                        'label' => 'Participants',
+                        'detail' => $pendingValidationCount > 0
+                            ? $validatedParticipantsCount.' validé'.($validatedParticipantsCount > 1 ? 's' : '').' · '.$pendingValidationCount.' à valider'
+                            : $validatedParticipantsCount.' validé'.($validatedParticipantsCount > 1 ? 's' : ''),
+                        'status' => $pendingValidationCount > 0 ? 'Attention' : ($validatedParticipantsCount > 0 ? 'OK' : 'À venir'),
+                    ],
+                    [
+                        'label' => 'Poules',
+                        'detail' => $frozenPoulesCount > 0
+                            ? $frozenPoulesCount.' figée'.($frozenPoulesCount > 1 ? 's' : '')
+                            : $poulesCreatedCount.' créée'.($poulesCreatedCount > 1 ? 's' : ''),
+                        'status' => $poulesReady ? 'OK' : ($poulesCreatedCount > 0 ? 'Attention' : 'À venir'),
+                    ],
+                    [
+                        'label' => 'Combats',
+                        'detail' => $combatsToEnterCount > 0
+                            ? $combatsToEnterCount.' à saisir'
+                            : $finishedCombatsCount.' saisi'.($finishedCombatsCount > 1 ? 's' : ''),
+                        'status' => $combatsToEnterCount > 0 ? 'Attention' : ($combatsTotalCount > 0 ? 'OK' : 'À venir'),
+                    ],
+                ];
 
                 $attentionPoints = [];
 
@@ -4234,52 +4775,28 @@
                         </div>
 
                         <div class="follow-actions">
-                            <a class="primary-action" href="{{ route('competitions.show', ['competition' => $competition, 'tab' => 'poules']) }}">Aller aux poules</a>
-                            <a class="secondary-button" href="{{ route('competitions.show', ['competition' => $competition, 'tab' => 'participants']) }}">Voir les participants</a>
+                            <a class="btn btn-primary" href="{{ route('competitions.show', ['competition' => $competition, 'tab' => 'poules']) }}">Aller aux poules</a>
+                            <a class="btn btn-secondary" href="{{ route('competitions.show', ['competition' => $competition, 'tab' => 'participants']) }}">Voir les participants</a>
                         </div>
                     </div>
 
-                    <div class="follow-progress" aria-label="Progression compétition">
-                        @php
-                            $activeProgressIndex = collect($progressSteps)->search(fn ($step) => $step['status'] === 'En cours');
-                        @endphp
-                        @foreach ($progressSteps as $step)
+                    <div class="follow-status-summary" aria-label="Synthèse de l’état de la compétition">
+                        @foreach ($statusSummary as $summary)
                             @php
-                                $stepStatusClass = [
-                                    'Terminé' => 'is-done',
-                                    'En cours' => 'is-current',
+                                $summaryStatusClass = [
+                                    'OK' => 'is-done',
+                                    'Attention' => 'is-current',
                                     'À venir' => 'is-upcoming',
-                                    'Ouvertes' => 'is-registration-open',
-                                    'Fermées' => 'is-registration-closed',
-                                ][$step['status']] ?? 'is-upcoming';
-
-                                $activeStepClass = $loop->index === $activeProgressIndex ? 'is-active-step' : '';
+                                ][$summary['status']] ?? 'is-upcoming';
                             @endphp
-                            <div class="follow-step {{ $stepStatusClass }} {{ $activeStepClass }}">
-                                <span class="follow-step-marker">{{ $loop->iteration }}</span>
-                                <strong>{{ $step['label'] }}</strong>
-                                <span class="follow-status {{ $stepStatusClass }}">{{ $step['status'] }}</span>
+                            <div class="follow-status-item">
+                                <span class="follow-status-label">
+                                    <strong>{{ $summary['label'] }}</strong>
+                                    <span>{{ $summary['detail'] }}</span>
+                                </span>
+                                <span class="follow-status {{ $summaryStatusClass }}">{{ $summary['status'] }}</span>
                             </div>
                         @endforeach
-                    </div>
-                </div>
-
-                <div class="follow-indicators">
-                    <div class="follow-indicator">
-                        <span>Clubs confirmés</span>
-                        <strong>{{ $confirmedClubsCount }}</strong>
-                    </div>
-                    <div class="follow-indicator">
-                        <span>Participants validés</span>
-                        <strong>{{ $validatedParticipantsCount }}</strong>
-                    </div>
-                    <div class="follow-indicator">
-                        <span>Poules créées</span>
-                        <strong>{{ $poulesCreatedCount }}</strong>
-                    </div>
-                    <div class="follow-indicator">
-                        <span>Combats saisis</span>
-                        <strong>{{ $finishedCombatsCount }}</strong>
                     </div>
                 </div>
 
@@ -4406,7 +4923,7 @@
                                 <div class="error">{{ $message }}</div>
                             @enderror
 
-                            <button type="submit">Enregistrer la date</button>
+                            <button class="btn btn-success" type="submit">Enregistrer la date</button>
                         </form>
                     @endif
 
@@ -4438,8 +4955,8 @@
                                     <div class="error">{{ $message }}</div>
                                 @enderror
 
-                                <button type="submit">Enregistrer les informations</button>
-                                <button type="button" class="secondary-button" data-additional-info-cancel>Annuler</button>
+                                <button class="btn btn-success" type="submit">Enregistrer les informations</button>
+                                <button type="button" class="btn btn-ghost" data-additional-info-cancel>Annuler</button>
                             </form>
                         @endif
                     </div>
@@ -4511,12 +5028,12 @@
                             <div class="response-actions">
                                 <form method="POST" action="{{ route('competitions.invitations.confirm', [$competition, $currentInvitation]) }}">
                                     @csrf
-                                    <button type="submit">Confirmer la participation</button>
+                                    <button class="btn btn-success" type="submit">Confirmer la participation</button>
                                 </form>
 
                                 <form method="POST" action="{{ route('competitions.invitations.decline', [$competition, $currentInvitation]) }}">
                                     @csrf
-                                    <button class="decline-button" type="submit">Refuser la participation</button>
+                                    <button class="btn btn-danger" type="submit">Refuser la participation</button>
                                 </form>
                             </div>
                         @endif
@@ -4607,8 +5124,8 @@
                                 @enderror
 
                                 <div class="club-add-actions">
-                                    <button class="secondary-button" type="button" data-club-add-cancel>Annuler</button>
-                                    <button type="submit">Ajouter les clubs sélectionnés</button>
+                                    <button class="btn btn-ghost" type="button" data-club-add-cancel>Annuler</button>
+                                    <button class="btn btn-primary" type="submit">Ajouter les clubs sélectionnés</button>
                                 </div>
                             </form>
                         @else
@@ -4645,7 +5162,7 @@
                                             <div class="club-invitation-actions">
                                                 <form class="inline-form" method="POST" action="{{ route('competitions.invitations.mark-sent', [$competition, $invitation]) }}">
                                                     @csrf
-                                                    <button type="submit">Lancer l’invitation</button>
+                                                    <button class="btn btn-state btn-sm" type="submit">Lancer l’invitation</button>
                                                 </form>
                                             </div>
                                         @endif
@@ -4752,7 +5269,7 @@
                                         <div class="club-invitation-actions">
                                             <form class="inline-form" method="POST" action="{{ route('competitions.invitations.relaunch', [$competition, $invitation]) }}">
                                                 @csrf
-                                                <button type="submit">Relancer l’invitation</button>
+                                                <button class="btn btn-state btn-sm" type="submit">Relancer l’invitation</button>
                                             </form>
                                         </div>
                                     @endif
@@ -4774,13 +5291,13 @@
                         <form class="inline-form" method="POST" action="{{ route('competitions.open-inscriptions', $competition) }}">
                             @csrf
                             @method('PATCH')
-                            <button type="submit">🔓 Réouvrir les inscriptions</button>
+                            <button class="btn btn-state" type="submit">🔓 Réouvrir les inscriptions</button>
                         </form>
                     @else
                         <form class="inline-form" method="POST" action="{{ route('competitions.close-inscriptions', $competition) }}">
                             @csrf
                             @method('PATCH')
-                            <button type="submit">🔒 Fermer les inscriptions</button>
+                            <button class="btn btn-state" type="submit">🔒 Fermer les inscriptions</button>
                         </form>
                     @endif
                 </div>
@@ -4837,8 +5354,8 @@
                     @endphp
 
                     <div class="participant-action-buttons">
-                        <button class="participant-action-toggle" type="button" data-participant-form-toggle="manual">Ajouter un participant</button>
-                        <button class="participant-action-toggle secondary" type="button" data-participant-form-toggle="licencies">Ajouter depuis mes licenciés</button>
+                        <button class="btn btn-primary participant-action-toggle" type="button" data-participant-form-toggle="manual">Ajouter un participant</button>
+                        <button class="btn btn-secondary participant-action-toggle secondary" type="button" data-participant-form-toggle="licencies">Ajouter depuis mes licenciés</button>
                     </div>
 
                     <div id="participants-ajout" @class(['participant-form-panel', 'is-open' => $manualParticipantFormOpen]) data-participant-form-panel="manual">
@@ -4914,7 +5431,7 @@
                                 </div>
                             </div>
 
-                            <button type="submit">Ajouter un participant</button>
+                            <button class="btn btn-primary" type="submit">Ajouter un participant</button>
                         </form>
                     </div>
 
@@ -4970,7 +5487,7 @@
                                     @enderror
                                 </div>
 
-                                <button type="submit">Ajouter les licenciés sélectionnés</button>
+                                <button class="btn btn-primary" type="submit">Ajouter les licenciés sélectionnés</button>
                             </form>
                         @else
                             <p class="empty-state">Aucun licencié disponible pour ce club.</p>
@@ -5022,8 +5539,8 @@
                     </div>
 
                     <div class="participant-filter-actions">
-                        <button type="submit">Filtrer</button>
-                        <a class="secondary-button" href="{{ route('competitions.show', ['competition' => $competition, 'tab' => 'participants']) }}">Réinitialiser</a>
+                        <button class="btn btn-secondary" type="submit">Filtrer</button>
+                        <a class="btn btn-ghost" href="{{ route('competitions.show', ['competition' => $competition, 'tab' => 'participants']) }}">Réinitialiser</a>
                     </div>
                 </form>
             @endif
@@ -5082,7 +5599,7 @@
 	                                                        @if (! $registration->is_active)
 	                                                            <span class="state-badge withdrawn">{{ $registration->participationStatusLabel() }}</span>
 	                                                        @else
-	                                                            <span @class(['state-badge', 'validated' => $registration->is_validated, 'pending' => ! $registration->is_validated])>{{ $registration->participationStatusLabel() }}</span>
+	                                                            <span class="sr-only">{{ $registration->participationStatusLabel() }}</span>
 	                                                            @if ($registration->poule)
 	                                                                <span class="state-badge poule">Poule : {{ $registration->poule->name }}</span>
 	                                                                @if ($registration->poule->status === \App\Models\Poule::STATUS_FROZEN)
@@ -5105,7 +5622,7 @@
 		                                                            <form class="inline-form" method="POST" action="{{ route('competitions.participants.validate', [$competition, $registration]) }}">
 		                                                                @csrf
 	                                                                @method('PATCH')
-	                                                                <button type="submit">Valider</button>
+	                                                                <button class="btn btn-success btn-xs" type="submit">Valider</button>
 	                                                            </form>
 		                                                        @endif
 		                                                    @endif
@@ -5113,7 +5630,7 @@
                                                                 <form class="inline-form" method="POST" action="{{ route('competitions.participants.withdraw', [$competition, $registration]) }}" onsubmit="return confirm('Retirer ce participant de la compétition ?')">
                                                                     @csrf
                                                                     @method('PATCH')
-                                                                    <button class="withdraw-button" type="submit">Retirer</button>
+                                                                    <button class="btn btn-danger btn-xs" type="submit">Retirer</button>
                                                                 </form>
                                                             @endif
                                                         </div>
@@ -5130,13 +5647,13 @@
 	                                                                <form class="inline-form" method="POST" action="{{ route('competitions.participants.withdraw', [$competition, $registration]) }}" onsubmit="return confirm('Retirer ce participant de la compétition ?')">
 	                                                                    @csrf
 	                                                                    @method('PATCH')
-	                                                                    <button class="withdraw-button" type="submit">Retirer</button>
+	                                                                    <button class="btn btn-danger btn-xs" type="submit">Retirer</button>
                                                                 </form>
                                                             @elseif (! $registration->reactivateBlockedMessage())
                                                                 <form class="inline-form" method="POST" action="{{ route('competitions.participants.reactivate', [$competition, $registration]) }}">
                                                                     @csrf
                                                                     @method('PATCH')
-                                                                    <button class="reactivate-button" type="submit">Réactiver</button>
+                                                                    <button class="btn btn-success btn-xs" type="submit">Réactiver</button>
                                                                 </form>
                                                             @endif
                                                         </div>
@@ -5149,7 +5666,7 @@
                             </table>
                             @if ($hiddenParticipantRows > 0)
                                 <div class="participant-list-toggle">
-                                    <button type="button" data-participant-toggle="{{ $participantGroupId }}" data-collapsed-label="Voir les {{ $groupRegistrations->count() }} {{ \Illuminate\Support\Str::lower($groupTitle) }}" data-expanded-label="Réduire la liste">
+                                    <button class="btn btn-ghost btn-sm" type="button" data-participant-toggle="{{ $participantGroupId }}" data-collapsed-label="Voir les {{ $groupRegistrations->count() }} {{ \Illuminate\Support\Str::lower($groupTitle) }}" data-expanded-label="Réduire la liste">
                                         Voir les {{ $groupRegistrations->count() }} {{ \Illuminate\Support\Str::lower($groupTitle) }}
                                     </button>
                                 </div>
@@ -5223,7 +5740,7 @@
                     <div id="assistant-poules" class="poule-assistant">
                         <div class="poule-assistant-header">
                             <div>
-                                <h3><span aria-hidden="true">✨</span> Proposer des poules automatiquement</h3>
+                                <h3><span aria-hidden="true">✨</span> Assistant de génération</h3>
                                 <span class="sr-only">Assistant de génération des poules</span>
                                 <p class="section-intro">Le logiciel analyse les participants et propose une répartition équilibrée selon vos critères.</p>
                             </div>
@@ -5257,16 +5774,18 @@
                                     <input id="adult_access_age" name="adult_access_age" type="number" min="12" max="30" value="{{ $pouleAssistantCriteria['adult_access_age'] }}">
                                 </div>
                             </div>
-                            <div class="poule-assistant-advice">
-                                <span aria-hidden="true">💡</span>
-                                <span>Conseil : les critères peuvent être adaptés avant de figer les poules.</span>
-                            </div>
-                            <div class="poule-assistant-actions">
-                                <button type="submit">Proposer des poules <span class="sr-only">Analyser les participants</span></button>
-                                @if ($pouleAssistantResult)
-                                    <button class="secondary-button" type="submit">Recalculer</button>
-                                    <a class="secondary-button" href="{{ route('competitions.show', ['competition' => $competition, 'tab' => 'poules']) }}#assistant-poules">Fermer les suggestions</a>
-                                @endif
+                            <div class="poule-assistant-footer">
+                                <div class="poule-assistant-advice">
+                                    <span aria-hidden="true">💡</span>
+                                    <span>Critères modifiables avant de figer les poules.</span>
+                                </div>
+                                <div class="poule-assistant-actions">
+                                    @if ($pouleAssistantResult)
+                                        <a class="btn btn-ghost" href="{{ route('competitions.show', ['competition' => $competition, 'tab' => 'poules']) }}#assistant-poules">Fermer les suggestions</a>
+                                        <button class="btn btn-secondary" type="submit">Recalculer</button>
+                                    @endif
+                                    <button class="btn btn-primary" type="submit">Proposer des poules <span class="sr-only">Analyser les participants</span></button>
+                                </div>
                             </div>
                         </form>
 
@@ -5281,7 +5800,7 @@
                                             <input type="hidden" name="proposal_names[]" value="{{ $proposal['name'] }}">
                                             <input type="hidden" name="proposal_registration_ids[]" value="{{ $proposal['registrations']->pluck('id')->implode(',') }}">
                                         @endforeach
-                                        <button type="submit">Créer toutes les propositions</button>
+                                        <button class="btn btn-secondary" type="submit">Créer toutes les propositions</button>
                                     </form>
                                 </div>
 
@@ -5318,7 +5837,7 @@
                                                 @csrf
                                                 <input type="hidden" name="proposal_names[]" value="{{ $proposal['name'] }}">
                                                 <input type="hidden" name="proposal_registration_ids[]" value="{{ $proposal['registrations']->pluck('id')->implode(',') }}">
-                                                <button class="secondary-button" type="submit">Créer cette poule</button>
+                                                <button class="btn btn-secondary" type="submit">Créer cette poule</button>
                                             </form>
                                         </div>
                                     @endforeach
@@ -5345,46 +5864,33 @@
                             </div>
                         @endif
                     </div>
-
-                    <div class="manual-poule-action">
-                        <details id="creation-poule" class="form-accordion">
-                            <summary>Créer une poule manuellement</summary>
-
-                            <form method="POST" action="{{ route('competitions.poules.store', $competition) }}">
-                                @csrf
-
-                                <div class="form-grid">
-                                    <div>
-                                        <label for="poule_name">Nom de la poule</label>
-                                        <input id="poule_name" name="name" value="{{ old('name') }}" required>
-                                        @error('name')
-                                            <div class="error">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-                                </div>
-
-                                <button type="submit">Créer une poule</button>
-                            </form>
-                        </details>
-                    </div>
                 </div>
 
                 <div class="poule-assignment-layout">
                     <div class="assignment-column">
                 <div id="participants-disponibles" class="subsection">
-                    <h3>Participants disponibles</h3>
+                    <div class="poule-section-heading">
+                        <div>
+                            <h3>Participants disponibles</h3>
+                            <p class="section-intro">Participants validés, actifs et pas encore affectés à une poule.</p>
+                        </div>
+                    </div>
                     <p class="touch-help" data-touch-help>Appui long + glisser pour affecter</p>
-                    <p class="section-intro">Participants validés, actifs et pas encore affectés à une poule.</p>
 
                     @if ($eligiblePouleRegistrations->isNotEmpty())
+                        @php
+                            $visibleAvailableParticipants = 5;
+                            $hiddenAvailableParticipants = max(0, $eligiblePouleRegistrations->count() - $visibleAvailableParticipants);
+                        @endphp
                         <div id="available-participant-cards" class="participant-card-list" data-available-list>
                             @foreach ($eligiblePouleRegistrations as $registration)
                                 <div
-                                    class="participant-card"
+                                    @class(['participant-card', 'is-hidden' => $loop->iteration > $visibleAvailableParticipants])
                                     draggable="true"
                                     data-inscription-id="{{ $registration->id }}"
                                     data-source="available"
                                     data-assignable-card
+                                    data-available-participant-extra="{{ $loop->iteration > $visibleAvailableParticipants ? 'true' : 'false' }}"
                                     data-participant-name="{{ $registration->participantSource->last_name }} {{ $registration->participantSource->first_name }}"
                                     role="button"
                                     tabindex="0"
@@ -5410,6 +5916,20 @@
                                 </div>
                             @endforeach
                         </div>
+                        @if ($hiddenAvailableParticipants > 0)
+                            <div class="available-participants-toggle">
+                                <button
+                                    class="btn btn-ghost btn-sm"
+                                    type="button"
+                                    data-available-participants-toggle
+                                    aria-expanded="false"
+                                    data-collapsed-label="Voir les {{ $eligiblePouleRegistrations->count() }} participants disponibles"
+                                    data-expanded-label="Réduire la liste"
+                                >
+                                    Voir les {{ $eligiblePouleRegistrations->count() }} participants disponibles
+                                </button>
+                            </div>
+                        @endif
                         <p class="empty-state" data-available-empty hidden>Aucun participant disponible pour affectation</p>
                     @else
                         <div id="available-participant-cards" class="participant-card-list" data-available-list></div>
@@ -5420,13 +5940,39 @@
 
                     <div class="assignment-column">
 
-                @if ($competition->poules->isNotEmpty())
                     @foreach (['Poules en préparation' => $draftPoules, 'Poules figées' => $frozenPoules] as $pouleGroupTitle => $poules)
                         @php
                             $pouleGroupId = $pouleGroupTitle === 'Poules en préparation' ? 'poules-brouillon' : 'poules-figees';
                         @endphp
                         <div id="{{ $pouleGroupId }}" class="subsection">
-                            <h3>{{ $pouleGroupTitle }}</h3>
+                            <div class="poule-section-heading">
+                                <h3>{{ $pouleGroupTitle }}</h3>
+                                @if ($pouleGroupTitle === 'Poules en préparation')
+                                    <div class="poule-section-heading-actions">
+                                        <div class="manual-poule-action inline-manual-poule">
+                                            <details id="creation-poule" class="form-accordion">
+                                                <summary class="btn btn-secondary btn-sm">Créer une poule manuellement</summary>
+
+                                                <form method="POST" action="{{ route('competitions.poules.store', $competition) }}">
+                                                    @csrf
+
+                                                    <div class="form-grid">
+                                                        <div>
+                                                            <label for="poule_name">Nom de la poule</label>
+                                                            <input id="poule_name" name="name" value="{{ old('name') }}" required>
+                                                            @error('name')
+                                                                <div class="error">{{ $message }}</div>
+                                                            @enderror
+                                                        </div>
+                                                    </div>
+
+                                                    <button type="submit">Créer une poule</button>
+                                                </form>
+                                            </details>
+                                        </div>
+                                    </div>
+                                @endif
+                            </div>
 
                             @if ($poules->isNotEmpty())
                                 @foreach ($poules as $poule)
@@ -5450,7 +5996,7 @@
                                                     <div class="poule-title-row" data-rename-display>
 	                                                    <h3>{{ $poule->name }}</h3>
                                                         @if ($isOrganizer)
-	                                                            <button class="rename-poule-toggle poule-action-button" type="button" title="Renommer la poule" data-rename-open>✏️ Renommer</button>
+	                                                            <button class="btn btn-state btn-sm rename-poule-toggle" type="button" title="Renommer la poule" data-rename-open>✏️ Renommer</button>
                                                         @endif
                                                     </div>
 
@@ -5464,8 +6010,8 @@
                                                                 maxlength="100"
                                                                 required
                                                             >
-                                                            <button type="submit">Enregistrer</button>
-                                                            <button class="rename-poule-cancel" type="button" data-rename-cancel>Annuler</button>
+                                                            <button class="btn btn-success btn-sm" type="submit">Enregistrer</button>
+                                                            <button class="btn btn-ghost btn-sm rename-poule-cancel" type="button" data-rename-cancel>Annuler</button>
                                                         </form>
                                                     @endif
 
@@ -5485,7 +6031,7 @@
                                                         @csrf
                                                         @method('PATCH')
 	                                                        <button
-                                                                class="poule-action-button"
+                                                                class="btn btn-state btn-sm"
 	                                                            type="submit"
 	                                                            form="freeze_poule_{{ $poule->id }}"
 	                                                            formmethod="post"
@@ -5504,7 +6050,7 @@
                                                     >
                                                         @csrf
                                                         @method('PATCH')
-	                                                        <button class="withdraw-button" type="submit">Défiger</button>
+	                                                        <button class="btn btn-state btn-sm" type="submit">Défiger</button>
 	                                                    </form>
 	                                                @endif
 
@@ -5517,7 +6063,7 @@
                                                         >
                                                             @csrf
                                                             @method('DELETE')
-                                                            <button class="poule-action-button danger" type="submit" title="Supprimer la poule">🗑️ Supprimer</button>
+                                                            <button class="btn btn-danger btn-sm" type="submit" title="Supprimer la poule">🗑️ Supprimer</button>
                                                         </form>
                                                     @endif
 	                                            </div>
@@ -5547,7 +6093,7 @@
                                                             <span class="participant-card-meta">({{ $registration->club->name }})</span>
                                                         </div>
                                                         @if ($poule->status === \App\Models\Poule::STATUS_DRAFT)
-                                                            <button class="visual-remove-button" type="button" title="Retirer de la poule" data-remove-visual>✖</button>
+                                                            <button class="btn btn-icon btn-xs btn-icon-danger visual-remove-button" type="button" title="Retirer de la poule" data-remove-visual>✖</button>
                                                         @endif
                                                     </div>
                                                 @endforeach
@@ -5560,13 +6106,10 @@
                                     </div>
                                 @endforeach
                             @else
-                                <p class="empty-state">Aucune poule créée</p>
+                                <p class="empty-state">{{ $pouleGroupTitle === 'Poules figées' ? 'Aucune poule figée pour le moment.' : 'Aucune poule créée' }}</p>
                             @endif
                         </div>
                     @endforeach
-                @else
-                    <p class="empty-state">Aucune poule créée</p>
-                @endif
                     </div>
                 </div>
 
@@ -5578,7 +6121,7 @@
                                 <h3 id="assignment-modal-title">Affecter <span data-assignment-participant-name></span> à une poule</h3>
                                 <p class="section-intro">Choisissez une poule en préparation pour affecter ce participant.</p>
                             </div>
-                            <button class="assignment-modal-close" type="button" data-assignment-modal-close aria-label="Fermer">✕</button>
+                            <button class="btn btn-icon btn-sm assignment-modal-close" type="button" data-assignment-modal-close aria-label="Fermer">✕</button>
                         </div>
 
                         @if ($draftPoules->isNotEmpty())
@@ -5610,8 +6153,8 @@
                             </div>
 
                             <div class="assignment-modal-actions">
-                                <button class="secondary-button" type="button" data-assignment-modal-close>Annuler</button>
-                                <button type="button" data-assignment-submit disabled>Affecter à cette poule</button>
+                                <button class="btn btn-ghost" type="button" data-assignment-modal-close>Annuler</button>
+                                <button class="btn btn-primary" type="button" data-assignment-submit disabled>Affecter à cette poule</button>
                             </div>
 
                             @foreach ($draftPoules as $poule)
@@ -5635,7 +6178,7 @@
                                 Créez une poule avant d’affecter ce participant.
                             </div>
                             <div class="assignment-modal-actions">
-                                <button class="secondary-button" type="button" data-assignment-modal-close>Fermer</button>
+                                <button class="btn btn-ghost" type="button" data-assignment-modal-close>Fermer</button>
                             </div>
                         @endif
                     </div>
@@ -5649,7 +6192,7 @@
                 @endif
                 <p class="section-intro">Saisissez les résultats pour mettre à jour le classement.</p>
                 @if ($allCombats->isNotEmpty())
-                    <button class="print-combats-button" type="button" data-print-combats>Imprimer la feuille combats</button>
+                    <button class="btn btn-export" type="button" data-print-combats>Imprimer la feuille combats</button>
                 @endif
 
                 @if ($competition->poules->isNotEmpty())
@@ -5668,7 +6211,7 @@
                                                 <span @class(['poule-progress-badge', 'complete' => $pouleCombatsComplete])>
                                                     {{ $pouleCombatsComplete ? '✅ Terminée' : '⚠️ En cours — '.$pouleCombatsToEnterLabel }}
                                                 </span>
-                                                <a class="poule-action-button" href="{{ route('competitions.poules.print', [$competition, $poule]) }}" target="_blank" rel="noopener">Imprimer résultat poule</a>
+                                                <a class="btn btn-export" href="{{ route('competitions.poules.print', [$competition, $poule]) }}" target="_blank" rel="noopener">Imprimer résultat poule</a>
                                             @endif
 		                                </div>
 		
@@ -5731,7 +6274,7 @@
                                                         {{ $combat->statut === \App\Models\Combat::STATUS_FINISHED ? 'Terminé' : 'À saisir' }}
                                                     </span>
                                                 </span>
-                                                <button @class(['combat-fighter-button', 'selected' => $combat->resultat === \App\Models\Combat::RESULT_LEFT_WIN, $leftState, $leftWinnerClass]) type="button" data-result-button data-result-value="{{ \App\Models\Combat::RESULT_LEFT_WIN }}" @disabled($combat->statut === \App\Models\Combat::STATUS_FINISHED)>
+                                                <button @class(['combat-fighter-button', 'selected' => $combat->resultat === \App\Models\Combat::RESULT_LEFT_WIN, $leftState, $leftWinnerClass]) type="button" data-result-button data-result-value="{{ \App\Models\Combat::RESULT_LEFT_WIN }}" data-mobile-result-label="Rouge gagne" @disabled($combat->statut === \App\Models\Combat::STATUS_FINISHED)>
                                                     <span class="combat-color-chip red" aria-hidden="true"></span>
                                                     <span class="sr-only">🟥</span>
                                                     <span class="combat-fighter-text">
@@ -5755,7 +6298,7 @@
                                                         <button @class(['combat-choice-button', 'combat-result-none', 'selected' => $combat->resultat === \App\Models\Combat::RESULT_NO_CONTEST]) type="button" data-result-button data-result-value="{{ \App\Models\Combat::RESULT_NO_CONTEST }}" title="Pas de combat" @disabled($combat->statut === \App\Models\Combat::STATUS_FINISHED)>NF</button>
                                                     </div>
                                                 </div>
-                                                <button @class(['combat-fighter-button', 'selected' => $combat->resultat === \App\Models\Combat::RESULT_RIGHT_WIN, $rightState, $rightWinnerClass]) type="button" data-result-button data-result-value="{{ \App\Models\Combat::RESULT_RIGHT_WIN }}" @disabled($combat->statut === \App\Models\Combat::STATUS_FINISHED)>
+                                                <button @class(['combat-fighter-button', 'selected' => $combat->resultat === \App\Models\Combat::RESULT_RIGHT_WIN, $rightState, $rightWinnerClass]) type="button" data-result-button data-result-value="{{ \App\Models\Combat::RESULT_RIGHT_WIN }}" data-mobile-result-label="Bleu gagne" @disabled($combat->statut === \App\Models\Combat::STATUS_FINISHED)>
                                                     <span class="combat-color-chip blue" aria-hidden="true"></span>
                                                     <span class="sr-only">🟦</span>
                                                     <span class="combat-fighter-text">
@@ -5771,10 +6314,10 @@
                                                 </div>
 
 	                                                <div class="combat-actions">
-	                                                    <button type="submit" data-combat-validate @disabled($combat->statut === \App\Models\Combat::STATUS_FINISHED) title="Valider" aria-label="Valider" @if ($combat->statut !== \App\Models\Combat::STATUS_FINISHED) data-combat-saisie @endif>{{ $combat->statut === \App\Models\Combat::STATUS_FINISHED ? '✔' : 'Saisir' }}</button>
-	                                                    <button type="button" title="Modifier" aria-label="Modifier" data-combat-edit @disabled($combat->statut !== \App\Models\Combat::STATUS_FINISHED)>✏️</button>
-	                                                    <button class="combat-clear-button" type="submit" name="action" value="clear" formnovalidate title="Effacer" aria-label="Effacer" data-combat-clear @disabled($combat->statut !== \App\Models\Combat::STATUS_FINISHED)>🗑️</button>
-                                                        <button type="button" title="Annuler" aria-label="Annuler" data-combat-cancel disabled>✖</button>
+	                                                    <button class="btn btn-success btn-sm" type="submit" data-combat-validate @disabled($combat->statut === \App\Models\Combat::STATUS_FINISHED) title="Valider" aria-label="Valider" @if ($combat->statut !== \App\Models\Combat::STATUS_FINISHED) data-combat-saisie @endif>{{ $combat->statut === \App\Models\Combat::STATUS_FINISHED ? '✔' : 'Saisir' }}</button>
+	                                                    <button class="btn btn-icon btn-sm" type="button" title="Modifier" aria-label="Modifier" data-combat-edit @disabled($combat->statut !== \App\Models\Combat::STATUS_FINISHED)>✏️</button>
+	                                                    <button class="btn btn-icon btn-sm btn-icon-danger combat-clear-button" type="submit" name="action" value="clear" formnovalidate title="Effacer" aria-label="Effacer" data-combat-clear @disabled($combat->statut !== \App\Models\Combat::STATUS_FINISHED)>🗑️</button>
+                                                        <button class="btn btn-icon btn-sm" type="button" title="Annuler" aria-label="Annuler" data-combat-cancel disabled>✖</button>
 	                                                </div>
                                             </form>
 	                                    @endforeach
@@ -5786,7 +6329,7 @@
                     @endforeach
                 @else
                     <p class="empty-state">Aucune poule créée</p>
-                    <button class="poule-action-button" type="button" data-tab-link-target="poules">Aller aux poules</button>
+                    <button class="btn btn-secondary" type="button" data-tab-link-target="poules">Aller aux poules</button>
                 @endif
             </section>
 
@@ -5814,39 +6357,41 @@
                                         {{ $pouleCombatsComplete ? '✅ Terminée' : '⚠️ En cours — '.$pouleCombatsToEnterLabel }}
                                     </span>
                                 </div>
-                                <table class="participant-table">
-                                    <thead>
-                                        <tr>
-                                            <th>Rang</th>
-                                            <th>Participant</th>
-                                            <th>Club</th>
-                                            <th>J</th>
-                                            <th>V</th>
-                                            <th>N</th>
-                                            <th>D</th>
-                                            <th>NF</th>
-                                            <th>Points</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($poule->ranking() as $rankingRow)
+                                <div class="combat-ranking-table-scroll">
+                                    <table class="participant-table">
+                                        <thead>
                                             <tr>
-                                                <td>{{ $rankingRow['rank'] }}</td>
-                                                <td>
-                                                    {{ $rankingRow['registration']->participantSource->last_name }}
-                                                    {{ $rankingRow['registration']->participantSource->first_name }}
-                                                </td>
-                                                <td>{{ $rankingRow['registration']->club->name }}</td>
-                                                <td>{{ $rankingRow['played'] }}</td>
-                                                <td>{{ $rankingRow['wins'] }}</td>
-                                                <td>{{ $rankingRow['draws'] }}</td>
-                                                <td>{{ $rankingRow['losses'] }}</td>
-                                                <td>{{ $rankingRow['no_contests'] }}</td>
-                                                <td>{{ $rankingRow['points'] }}</td>
+                                                <th>Rang</th>
+                                                <th>Participant</th>
+                                                <th>Club</th>
+                                                <th>J</th>
+                                                <th>V</th>
+                                                <th>N</th>
+                                                <th>D</th>
+                                                <th>NF</th>
+                                                <th>Points</th>
                                             </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($poule->ranking() as $rankingRow)
+                                                <tr>
+                                                    <td>{{ $rankingRow['rank'] }}</td>
+                                                    <td>
+                                                        {{ $rankingRow['registration']->participantSource->last_name }}
+                                                        {{ $rankingRow['registration']->participantSource->first_name }}
+                                                    </td>
+                                                    <td>{{ $rankingRow['registration']->club->name }}</td>
+                                                    <td>{{ $rankingRow['played'] }}</td>
+                                                    <td>{{ $rankingRow['wins'] }}</td>
+                                                    <td>{{ $rankingRow['draws'] }}</td>
+                                                    <td>{{ $rankingRow['losses'] }}</td>
+                                                    <td>{{ $rankingRow['no_contests'] }}</td>
+                                                    <td>{{ $rankingRow['points'] }}</td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
                                 <p class="tab-hint">J = joués · V = victoires · N = nuls · D = défaites · NF = non faits</p>
                             </div>
                             @endif
@@ -6018,6 +6563,17 @@
                 });
             });
 
+            document.querySelectorAll('[data-available-participants-toggle]').forEach((button) => {
+                button.addEventListener('click', () => {
+                    const cards = Array.from(document.querySelectorAll('[data-available-participant-extra="true"]'));
+                    const shouldExpand = cards.some((card) => card.classList.contains('is-hidden'));
+
+                    cards.forEach((card) => card.classList.toggle('is-hidden', ! shouldExpand));
+                    button.textContent = shouldExpand ? button.dataset.expandedLabel : button.dataset.collapsedLabel;
+                    button.setAttribute('aria-expanded', String(shouldExpand));
+                });
+            });
+
             const competitionNameDisplay = document.querySelector('[data-competition-name-display]');
             const competitionNameForm = document.querySelector('[data-competition-name-form]');
             const competitionNameEdit = document.querySelector('[data-competition-name-edit]');
@@ -6092,6 +6648,11 @@
                     const isActive = button.dataset.tabTarget === activeTab;
                     button.classList.toggle('is-active', isActive);
                     button.setAttribute('aria-selected', String(isActive));
+                    if (isActive) {
+                        button.setAttribute('aria-current', 'page');
+                    } else {
+                        button.removeAttribute('aria-current');
+                    }
                 });
 
                 tabPanels.forEach((panel) => {
@@ -6850,68 +7411,22 @@
 	                storeCombatState(row);
 
 	                row.addEventListener('submit', (event) => {
-                    event.preventDefault();
-
                     const submitter = event.submitter;
 
                     if (! submitter || submitter.disabled) {
+                        event.preventDefault();
                         return;
                     }
 
                     const isClearAction = submitter.matches('[data-combat-clear]');
 
                     if (! isClearAction && ! row.querySelector('[data-result-input]').value) {
+                        event.preventDefault();
                         showToast('Sélectionnez un résultat.');
                         return;
                     }
 
-                    const formData = new FormData(row);
-                    formData.set('_method', 'PATCH');
-
-                    if (csrfToken) {
-                        formData.set('_token', csrfToken);
-                    }
-
-                    if (isClearAction) {
-                        formData.set('action', 'clear');
-                    }
-
-                    fetch(row.getAttribute('action'), {
-                        method: 'POST',
-                        body: formData,
-                        headers: {
-                            'Accept': 'application/json',
-                            'X-CSRF-TOKEN': csrfToken || '',
-                            'X-Requested-With': 'XMLHttpRequest',
-                        },
-                        credentials: 'same-origin',
-                    })
-                        .then((response) => {
-                            if (! response.ok) {
-                                return response.json()
-                                    .catch(() => ({ message: `Enregistrement impossible (${response.status}).` }))
-                                    .then((data) => {
-                                        throw new Error(data.message || `Enregistrement impossible (${response.status}).`);
-                                    });
-                            }
-
-                            return response.json();
-                        })
-                        .then((data) => {
-	                            if (isClearAction) {
-	                                resetCombatRow(row);
-	                                storeCombatState(row);
-	                                showToast(data.message || 'Résultat du combat effacé.');
-	                                return;
-	                            }
-
-	                            setCombatFinished(row, true);
-	                            storeCombatState(row);
-	                            showToast(data.message || 'Résultat du combat enregistré.');
-                        })
-                        .catch((error) => {
-                            showToast(error.message || 'Enregistrement impossible.');
-                        });
+                    window.sessionStorage.setItem(scrollStorageKey, String(window.scrollY));
                 });
             });
 

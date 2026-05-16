@@ -329,7 +329,7 @@
             <h1>Mes licenciés</h1>
             <p>{{ $currentUser->club?->name }}</p>
         </div>
-        <a class="primary-action" href="{{ route('licencies.create') }}">Ajouter un licencié</a>
+        <a class="btn btn-primary" href="{{ route('licencies.create') }}">Ajouter un licencié</a>
     </div>
 
     <div class="licencie-kpis">
@@ -375,7 +375,7 @@
                     <div class="error">{{ $message }}</div>
                 @enderror
             </div>
-            <button class="secondary-action" type="submit">Enregistrer</button>
+            <button class="btn btn-success" type="submit">Enregistrer</button>
         </form>
     </section>
 
@@ -423,11 +423,11 @@
                                 <td>{{ $licencie->poids }} kg</td>
                                 <td>
                                     <div class="actions-cell">
-                                        <a class="secondary-action icon-action" href="{{ route('licencies.edit', $licencie) }}" title="Modifier" aria-label="Modifier">✏️</a>
+                                        <a class="btn btn-icon btn-sm" href="{{ route('licencies.edit', $licencie) }}" title="Modifier" aria-label="Modifier">✏️</a>
                                         <form class="inline-form" method="POST" action="{{ route('licencies.destroy', $licencie) }}" onsubmit="return confirm('Supprimer ce licencié ?')">
                                             @csrf
                                             @method('DELETE')
-                                            <button class="danger-button icon-action" type="submit" title="Supprimer" aria-label="Supprimer">🗑️</button>
+                                            <button class="btn btn-icon btn-sm btn-icon-danger" type="submit" title="Supprimer" aria-label="Supprimer">🗑️</button>
                                         </form>
                                     </div>
                                 </td>

@@ -447,7 +447,7 @@
                         <div class="error">{{ $message }}</div>
                     @enderror
                 </div>
-                <button type="submit">Créer la compétition</button>
+                <button class="btn btn-primary" type="submit">Créer la compétition</button>
             </form>
         </section>
 
@@ -551,7 +551,7 @@
                                 @if ($actionsCount > 0)
                                     <span class="badge badge-actions-pending"><span class="sr-only">Actions : {{ $actionsCount }}</span>{{ $actionsCount }} action{{ $actionsCount > 1 ? 's' : '' }}</span>
                                 @endif
-                                <a class="primary-action" href="{{ $competitionUrl }}">
+                                <a @class(['btn', $roleLabel === 'Organisateur' ? 'btn-primary' : 'btn-secondary']) href="{{ $competitionUrl }}">
                                     {{ $roleLabel === 'Organisateur' ? 'Gérer' : 'Voir' }}
                                 </a>
                             </div>

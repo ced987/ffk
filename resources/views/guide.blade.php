@@ -137,13 +137,13 @@
         </div>
 
         <div class="guide-links">
-            <a href="/docs/guide-utilisateur.pdf" target="_blank">
+            <a class="btn btn-export" href="/docs/guide-utilisateur.pdf" target="_blank">
                 📄 Télécharger le guide complet (PDF)
             </a>
-            <a href="{{ route('guide.jeu-test-demo') }}">
+            <a class="btn btn-secondary" href="{{ route('guide.jeu-test-demo') }}">
                 🧪 Jeu de test démo
             </a>
-            <a href="{{ route('demo.reset') }}">
+            <a class="btn btn-danger" href="{{ route('demo.reset') }}">
                 ♻️ Réinitialiser cette démo
             </a>
         </div>

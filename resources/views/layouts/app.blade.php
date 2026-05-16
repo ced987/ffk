@@ -108,6 +108,10 @@
             stroke-linejoin: round;
         }
 
+        .nav-label-mobile {
+            display: none;
+        }
+
         .app-sidebar-footer {
             display: grid;
             gap: 12px;
@@ -278,22 +282,118 @@
                 position: static;
                 width: auto;
                 height: auto;
-                padding: 12px;
+                padding: 6px 8px;
                 border-right: 0;
                 border-bottom: 1px solid #dce1e7;
             }
 
             .app-brand {
-                width: auto;
+                width: 100%;
+                margin-bottom: 4px;
+                padding: 0;
+            }
+
+            .app-brand img {
+                max-height: 54px;
+                height: 54px;
+                max-width: 180px;
             }
 
             .app-nav {
-                grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+                gap: 5px;
+            }
+
+            .app-nav-link {
+                justify-content: center;
+                gap: 5px;
+                min-height: 34px;
+                padding: 6px 5px;
+                border-radius: 9px;
+                font-size: 12px;
+                line-height: 1.1;
+            }
+
+            .app-nav-icon {
+                width: 16px;
+                height: 16px;
+                flex-basis: 16px;
+            }
+
+            .app-nav-icon svg {
+                width: 16px;
+                height: 16px;
             }
 
             .app-sidebar-footer {
-                margin-top: 12px;
-                padding-top: 12px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-wrap: wrap;
+                gap: 3px 10px;
+                margin-top: 4px;
+                padding-top: 4px;
+                border-top: 1px solid rgba(255, 255, 255, 0.08);
+            }
+
+            .app-sidebar-footer .app-nav-link {
+                width: auto;
+                min-height: 0;
+                padding: 0;
+                border: 0;
+                border-radius: 0;
+                background: transparent;
+                color: #a8b5c8;
+                font-size: 10.5px;
+                font-weight: 650;
+                box-shadow: none;
+            }
+
+            .app-sidebar-footer .app-nav-link .app-nav-icon {
+                display: none;
+            }
+
+            .app-sidebar-footer .app-nav-link.is-active {
+                background: transparent;
+                color: #ffffff;
+                box-shadow: none;
+            }
+
+            .app-sidebar-club {
+                order: -1;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 4px;
+                width: 100%;
+                min-height: 0;
+                padding: 0;
+                border: 0;
+                border-radius: 0;
+                background: transparent;
+                text-align: center;
+            }
+
+            .app-sidebar-club-label {
+                color: #8393aa;
+                font-size: 10px;
+                font-weight: 650;
+                letter-spacing: 0;
+                text-transform: none;
+            }
+
+            .app-sidebar-club-label::after {
+                content: " :";
+            }
+
+            .app-sidebar-club-name {
+                min-width: 0;
+                overflow: hidden;
+                color: #cbd5e1;
+                font-size: 10.5px;
+                font-weight: 700;
+                text-overflow: ellipsis;
+                white-space: nowrap;
             }
 
             .app-header {
@@ -310,30 +410,76 @@
             .app-header-title-text {
                 white-space: normal;
             }
+
+            .nav-label-desktop {
+                display: none;
+            }
+
+            .nav-label-mobile {
+                display: inline;
+            }
         }
     </style>
     @stack('styles')
     <style>
+        .app-page {
+            --ui-navy: #0b1733;
+            --ui-text: #17202a;
+            --ui-muted: #64748b;
+            --ui-border: #dbe3ef;
+            --ui-soft: #f8fafc;
+            --ui-blue: #1d4ed8;
+            --ui-blue-soft: #eff6ff;
+            --ui-green: #15803d;
+            --ui-green-soft: #f0fdf4;
+            --ui-orange: #b45309;
+            --ui-orange-soft: #fff7ed;
+            --ui-red: #b91c1c;
+            --ui-red-soft: #fef2f2;
+        }
+
         .app-page main {
-            margin-top: 32px;
+            margin-top: 28px;
             margin-bottom: 32px;
         }
 
         .app-page h1 {
-            margin: 0 0 12px;
-            font-size: 26px;
-            line-height: 1.2;
+            margin: 0 0 10px;
+            color: var(--ui-text);
+            font-size: 28px;
+            font-weight: 850;
+            line-height: 1.16;
+            letter-spacing: 0;
         }
 
         .app-page h2 {
-            margin: 0 0 12px;
+            margin: 0 0 10px;
+            color: var(--ui-text);
             font-size: 18px;
+            font-weight: 800;
             line-height: 1.25;
+            letter-spacing: 0;
         }
 
         .app-page h3 {
-            margin: 0 0 10px;
+            margin: 0 0 8px;
+            color: var(--ui-text);
             font-size: 16px;
+            font-weight: 800;
+            line-height: 1.25;
+            letter-spacing: 0;
+        }
+
+        .app-page :is(p, li) {
+            color: #334155;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .app-page :is(label, .form-label) {
+            color: #475569;
+            font-size: 12px;
+            font-weight: 750;
             line-height: 1.25;
         }
 
@@ -347,17 +493,258 @@
             margin-top: 16px;
         }
 
+        .app-page .btn.btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            width: fit-content;
+            min-height: 34px;
+            padding: 7px 12px;
+            border: 1px solid transparent;
+            border-radius: 8px;
+            background: #ffffff;
+            color: var(--ui-text);
+            font: inherit;
+            font-size: 13px;
+            font-weight: 750;
+            line-height: 1.2;
+            text-align: center;
+            text-decoration: none;
+            vertical-align: middle;
+            white-space: nowrap;
+            cursor: pointer;
+            box-shadow: none;
+            transition: background-color 140ms ease, border-color 140ms ease, color 140ms ease, box-shadow 140ms ease, transform 140ms ease;
+        }
+
+        .app-page .btn.btn:hover {
+            text-decoration: none;
+        }
+
+        .app-page .btn.btn:focus-visible {
+            outline: 2px solid #93c5fd;
+            outline-offset: 2px;
+        }
+
+        .app-page .btn.btn:disabled,
+        .app-page .btn.btn[disabled],
+        .app-page .btn.btn[aria-disabled="true"] {
+            opacity: 0.55;
+            cursor: not-allowed;
+            pointer-events: none;
+            transform: none;
+        }
+
+        .app-page .btn.btn-primary {
+            border-color: var(--ui-navy);
+            background: var(--ui-navy);
+            color: #ffffff;
+        }
+
+        .app-page .btn.btn-primary:hover {
+            border-color: #111f42;
+            background: #111f42;
+            color: #ffffff;
+        }
+
+        .app-page .btn.btn-secondary {
+            border-color: #cbd5e1;
+            background: #ffffff;
+            color: var(--ui-navy);
+        }
+
+        .app-page .btn.btn-secondary:hover {
+            border-color: #94a3b8;
+            background: var(--ui-soft);
+            color: var(--ui-navy);
+        }
+
+        .app-page .btn.btn-ghost {
+            border-color: transparent;
+            background: transparent;
+            color: #475569;
+        }
+
+        .app-page .btn.btn-ghost:hover {
+            background: var(--ui-soft);
+            color: var(--ui-text);
+        }
+
+        .app-page .btn.btn-success {
+            border-color: #bbf7d0;
+            background: #ffffff;
+            color: var(--ui-green);
+        }
+
+        .app-page .btn.btn-success:hover {
+            border-color: #86efac;
+            background: var(--ui-green-soft);
+            color: #166534;
+        }
+
+        .app-page .btn.btn-danger {
+            border-color: #fecaca;
+            background: #ffffff;
+            color: var(--ui-red);
+        }
+
+        .app-page .btn.btn-danger:hover {
+            border-color: #fca5a5;
+            background: var(--ui-red-soft);
+            color: #991b1b;
+        }
+
+        .app-page .btn.btn-state {
+            border-color: #dbe3ef;
+            background: #ffffff;
+            color: #334155;
+        }
+
+        .app-page .btn.btn-state:hover {
+            border-color: #bfdbfe;
+            background: var(--ui-blue-soft);
+            color: #1e3a8a;
+        }
+
+        .app-page .btn.btn-export {
+            border-color: #cbd5e1;
+            background: #ffffff;
+            color: #334155;
+        }
+
+        .app-page .btn.btn-export:hover {
+            border-color: #94a3b8;
+            background: #f8fafc;
+            color: var(--ui-navy);
+        }
+
+        .app-page .btn.btn-sm {
+            min-height: 30px;
+            padding: 5px 10px;
+            border-radius: 7px;
+            font-size: 12px;
+        }
+
+        .app-page .btn.btn-xs {
+            min-height: 26px;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 800;
+        }
+
+        .app-page .btn.btn-icon {
+            width: 34px;
+            min-width: 34px;
+            height: 34px;
+            min-height: 34px;
+            padding: 0;
+            border-color: #cbd5e1;
+            background: #ffffff;
+            color: #334155;
+        }
+
+        .app-page .btn.btn-icon:hover {
+            border-color: #94a3b8;
+            background: var(--ui-soft);
+        }
+
+        .app-page .btn.btn-icon.btn-sm {
+            width: 30px;
+            min-width: 30px;
+            height: 30px;
+            min-height: 30px;
+            padding: 0;
+        }
+
+        .app-page .btn.btn-icon.btn-xs {
+            width: 26px;
+            min-width: 26px;
+            height: 26px;
+            min-height: 26px;
+            padding: 0;
+        }
+
+        .app-page .btn.btn-icon-danger {
+            border-color: #fecaca;
+            color: var(--ui-red);
+        }
+
+        .app-page .btn.btn-icon-danger:hover {
+            border-color: #fca5a5;
+            background: var(--ui-red-soft);
+            color: #991b1b;
+        }
+
+        .app-page .btn.btn-icon-success {
+            border-color: #bbf7d0;
+            color: var(--ui-green);
+        }
+
+        .app-page .btn.btn-icon-success:hover {
+            border-color: #86efac;
+            background: var(--ui-green-soft);
+            color: #166534;
+        }
+
         .app-page :is(button, .primary-action, .secondary-action, .poule-action-button, .print-combats-button) {
-            min-height: 36px;
-            padding: 8px 12px;
+            min-height: 34px;
+            padding: 7px 11px;
             border-width: 1px;
             border-style: solid;
-            border-radius: 7px;
+            border-radius: 8px;
             font: inherit;
-            font-weight: 700;
+            font-size: 13px;
+            font-weight: 750;
             line-height: 1.2;
             text-decoration: none;
             cursor: pointer;
+            box-shadow: none;
+            transition: background-color 140ms ease, border-color 140ms ease, color 140ms ease, box-shadow 140ms ease;
+        }
+
+        .app-page :is(.primary-action, .primary-button) {
+            border-color: var(--ui-blue);
+            background: var(--ui-blue);
+            color: #ffffff;
+        }
+
+        .app-page :is(.primary-action, .primary-button):hover {
+            background: #1e40af;
+            border-color: #1e40af;
+        }
+
+        .app-page :is(.secondary-action, .secondary-button) {
+            border-color: #cbd5e1;
+            background: #ffffff;
+            color: #334155;
+        }
+
+        .app-page :is(.secondary-action, .secondary-button):hover {
+            border-color: #94a3b8;
+            background: var(--ui-soft);
+        }
+
+        .app-page :is(.danger-button, .withdraw-button, .decline-button, .combat-clear-button) {
+            border-color: #fecaca;
+            background: #ffffff;
+            color: var(--ui-red);
+        }
+
+        .app-page :is(.danger-button, .withdraw-button, .decline-button, .combat-clear-button):hover {
+            background: var(--ui-red-soft);
+            border-color: #fca5a5;
+        }
+
+        .app-page :is(.text-link, .link-action) {
+            color: var(--ui-blue);
+            font-weight: 750;
+            text-decoration: none;
+        }
+
+        .app-page :is(.text-link, .link-action):hover {
+            text-decoration: underline;
         }
 
         .app-page :is(.inline-form, .combat-actions, .poule-actions, .competition-meta, .actions-cell) {
@@ -371,11 +758,12 @@
             display: inline-flex;
             align-items: center;
             width: fit-content;
-            padding: 3px 7px;
+            padding: 3px 8px;
             border-radius: 999px;
             font-size: 12px;
-            font-weight: 700;
+            font-weight: 750;
             line-height: 1.2;
+            white-space: nowrap;
         }
 
         .app-page :is(.visual-remove-button, .combat-choice-button, .combat-fighter-button, .combat-actions button) {
@@ -392,6 +780,67 @@
 
         .app-page :is(.competition-list, .dashboard-grid, .poule-list, .participant-list, .combat-list) {
             gap: 12px;
+        }
+
+        .app-page :is(.home-kpi, .licencie-kpi, .summary-item, .dashboard-card, .home-card, .licencie-card, .participant-section-card, .club-section-card, .club-kpi-card) {
+            border: 1px solid var(--ui-border);
+            border-radius: 10px;
+            background: #ffffff;
+            box-shadow: 0 8px 18px rgba(15, 23, 42, 0.035);
+        }
+
+        .app-page :is(.home-kpi, .licencie-kpi, .summary-item) {
+            padding: 14px;
+        }
+
+        .app-page :is(.home-kpi, .licencie-kpi, .summary-item) strong {
+            color: var(--ui-text);
+            font-size: 22px;
+            font-weight: 850;
+            line-height: 1.1;
+        }
+
+        .app-page :is(.home-kpi, .licencie-kpi, .summary-item) span:last-child {
+            color: var(--ui-muted);
+            font-size: 12px;
+            font-weight: 750;
+            line-height: 1.3;
+        }
+
+        .app-page :is(.home-kpi-icon, .licencie-kpi-icon) {
+            width: 32px;
+            height: 32px;
+            border-radius: 9px;
+            background: var(--ui-blue-soft);
+            color: var(--ui-blue);
+            font-size: 14px;
+            font-weight: 850;
+        }
+
+        .app-page table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .app-page th {
+            background: var(--ui-soft);
+            color: #475569;
+            font-size: 12px;
+            font-weight: 750;
+            line-height: 1.25;
+            text-align: left;
+        }
+
+        .app-page td {
+            color: #334155;
+            font-size: 13px;
+            line-height: 1.35;
+        }
+
+        .app-page th,
+        .app-page td {
+            padding: 8px 10px;
+            border-bottom: 1px solid #e5eaf0;
         }
     </style>
 </head>
@@ -456,7 +905,12 @@
                                 <svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
                             @endif
                         </span>
-                        <span>{{ $item['label'] }}</span>
+                        @if ($item['label'] === 'Mes licenciés')
+                            <span class="nav-label-desktop">{{ $item['label'] }}</span>
+                            <span class="nav-label-mobile">Licenciés</span>
+                        @else
+                            <span>{{ $item['label'] }}</span>
+                        @endif
                     </a>
                 @endforeach
             </nav>
